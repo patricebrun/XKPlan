@@ -1,0 +1,43 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block body %}
+    <h1>Tempsdevols list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Duree</th>
+                <th>Datetimemodification</th>
+                <th>Datetimecreation</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tempsDeVol in tempsDeVols %}
+            <tr>
+                <td><a href="{{ path('tempsdevol_show', { 'id': tempsDeVol.id }) }}">{{ tempsDeVol.id }}</a></td>
+                <td>{{ tempsDeVol.duree }}</td>
+                <td>{% if tempsDeVol.dateTimeModification %}{{ tempsDeVol.dateTimeModification|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if tempsDeVol.dateTimeCreation %}{{ tempsDeVol.dateTimeCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('tempsdevol_show', { 'id': tempsDeVol.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('tempsdevol_edit', { 'id': tempsDeVol.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('tempsdevol_new') }}">Create a new tempsDeVol</a>
+        </li>
+    </ul>
+{% endblock %}

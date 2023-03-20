@@ -1,0 +1,173 @@
+<div class="modal fade" id="topologieMessage" tabindex="-1" role="dialog"  aria-labelledby="ModalTopologieMessage">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="post" class="form-horizontal" role="form" action="#">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="ModalTopologieMessage">Type d'expédition des messages SITA</h4>
+                </div>
+                <div class="modal-body">
+                    <span class="help-block">Les messages à la norme SITA peuvent être expédiés par messagerie SITA ou par messagerie SMTP et en fonction du type de message.</span>
+
+                    <fieldset>
+                        <legend>1. Type de Message : </legend>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="radio-custom radio-white mb5">
+                                            <input id="asm_ssm" name="message_type" type="radio">
+                                            <label for="asm_ssm">Messages ASM/SSM</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="radio-custom radio-white mb5">
+                                            <input id="scr" name="message_type" type="radio">
+                                            <label for="scr">Messages SCR</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="radio-custom radio-white mb5">
+                                            <input id="ssim7" name="message_type" type="radio">
+                                            <label for="ssim7">Messages SSIM7</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-7">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="radio-custom radio-white mb5">
+                                            <input id="sita" name="messagerie_type" type="radio">
+                                            <label for="sita">Messagerie SITA</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="radio-custom radio-white mb5">
+                                            <input id="smtp" name="messagerie_type" type="radio">
+                                            <label for="smtp">Messagerie Smtp</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-6 control-label">Nom Expéditeur :</label>
+                                            <div class="col-md-6">
+                                                <div class="bs-component">
+                                                    <input type="text" id="nom_expediteur" name="nom_expediteur" class="form-control" disabled />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-6 control-label">Email Expéditeur :</label>
+                                            <div class="col-md-6">
+                                                <div class="bs-component">
+                                                    <input type="text" id="email_expediteur" name="email_expediteur" class="form-control" disabled />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>2. Ressources Globales SMTP : </legend>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="text-justify">
+                                    <strong>Remarque :</strong>
+                                    Quel que soit le type de messagerie associé à un type de message SITA, la messagerie ne sera invoquée que si les flux sont activés dans le gestionnaire des templates
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="nom_dns_smtp" class="col-md-5 control-label">Nom DNS du serveur SMTP :</label>
+                                    <div class="col-md-7">
+                                        <div class="bs-component">
+                                            <input type="text" id="nom_dns_smtp" name="nom_dns_smtp" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="login_smtp" class="col-md-5 control-label">Login SMTP :</label>
+                                    <div class="col-md-7">
+                                        <div class="bs-component">
+                                            <input type="text" id="login_smtp" name="login_smtp" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="password_smtp" class="col-md-5 control-label">Password SMTP :</label>
+                                    <div class="col-md-7">
+                                        <div class="bs-component">
+                                            <input type="text" id="password_smtp" name="password_smtp" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email_backup_smtp_bcc" class="col-md-5 control-label">Email backup (SMTP BCC) :</label>
+                                    <div class="col-md-7">
+                                        <div class="bs-component">
+                                            <input type="text" id="email_backup_smtp_bcc" name="email_backup_smtp_bcc" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-5 control-label">Sécurité du transport :</label>
+                                    <div class="col-md-7">
+                                        <div class="bs-component">
+                                            <div class="checkbox-custom mt5">
+                                                <input checked="" name="forcer_tls" id="forcer_tls" type="checkbox">
+                                                <label for="forcer_tls">Forcer l'utilisation de TLS.</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr class="short alt">
+
+                                <div class="form-group">
+                                    <label for="email_test" class="col-md-5 control-label">Envoyer un email de test à :</label>
+                                    <div class="col-md-4">
+                                        <div class="bs-component">
+                                            <div class="bs-component">
+                                                <input type="text" id="email_test" name="email_test" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="bs-component">
+                                            <button type="button" class="btn-default fluid-width btn">OK</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn-default btn">Enregistrer</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+

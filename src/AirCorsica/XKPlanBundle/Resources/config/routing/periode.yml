@@ -1,0 +1,24 @@
+periode_index:
+    path:     /
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Periode:index" }
+    methods:  GET
+
+periode_show:
+    path:     /{id}/show
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Periode:show" }
+    methods:  GET
+
+periode_new:
+    path:     /new
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Periode:new" }
+    methods:  [GET, POST]
+
+periode_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Periode:edit" }
+    methods:  [GET, POST]
+
+periode_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Periode:delete" }
+    methods:  DELETE

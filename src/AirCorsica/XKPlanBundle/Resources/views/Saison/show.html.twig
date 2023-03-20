@@ -1,0 +1,48 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block body %}
+    <h1>Saison</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ saison.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ saison.nom }}</td>
+            </tr>
+            <tr>
+                <th>Descriptif</th>
+                <td>{{ saison.descriptif }}</td>
+            </tr>
+            <tr>
+                <th>Visiblemenupopup</th>
+                <td>{% if saison.visibleMenuPopup %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Datetimemodification</th>
+                <td>{% if saison.dateTimeModification %}{{ saison.dateTimeModification|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Datetimecreation</th>
+                <td>{% if saison.dateTimeCreation %}{{ saison.dateTimeCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('saison_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('saison_edit', { 'id': saison.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

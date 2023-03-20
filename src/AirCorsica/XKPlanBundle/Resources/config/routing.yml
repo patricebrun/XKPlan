@@ -1,0 +1,141 @@
+air_corsica_xk_plan_generate_amos:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/amos.yml"
+    prefix: /amos
+
+air_corsica_xk_plan_typeavion:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/typeavion.yml"
+    prefix: /typeavion
+
+air_corsica_xk_plan_tempsdevol:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/tempsdevol.yml"
+    prefix:   /tempsdevol
+
+air_corsica_xk_plan_avion:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/avion.yml"
+    prefix:   /avion
+
+air_corsica_xk_plan_periodeimmobilisation:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/periodeimmobilisation.yml"
+    prefix:   /periodeimmobilisation
+
+air_corsica_xk_plan_aeroport:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/aeroport.yml"
+    prefix:   /aeroport
+
+air_corsica_xk_plan_ligne:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/ligne.yml"
+    prefix:   /ligne
+
+air_corsica_xk_plan_typedevol:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/typedevol.yml"
+    prefix:   /typedevol
+
+air_corsica_xk_plan_naturedevol:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/naturedevol.yml"
+    prefix:   /naturedevol
+
+air_corsica_xk_plan_compagnie:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/compagnie.yml"
+    prefix:   /compagnie
+
+air_corsica_xk_plan_affretement:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/affretement.yml"
+    prefix:   /affretement
+
+air_corsica_xk_plan_saison:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/saison.yml"
+    prefix: /saison
+
+air_corsica_xk_plan_periode:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/periode.yml"
+    prefix:   /periode
+
+air_corsica_xk_plan_periodesaison:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/periodesaison.yml"
+    prefix:   /periodesaison
+
+air_corsica_xk_plan_modelesousperiode:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/modelesousperiode.yml"
+    prefix:   /modelesousperiode
+
+air_corsica_xk_plan_groupesita:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/groupesita.yml"
+    prefix:   /groupesita
+
+air_corsica_xk_plan_adressesita:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/adressesita.yml"
+    prefix:   /adressesita
+
+air_corsica_xk_plan_pays:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/pays.yml"
+    prefix:   /pays
+
+air_corsica_xk_plan_vol:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/vol.yml"
+    prefix:   /vol
+
+air_corsica_xk_plan_periodedevol:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/periodedevol.yml"
+    prefix:   /periodedevol
+
+air_corsica_xk_plan_codesharevol:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/codesharevol.yml"
+    prefix:   /codesharevol
+
+air_corsica_xk_plan_codeinterne:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/codeinterne.yml"
+    prefix:   /codeinterne
+
+air_corsica_xk_plan_codeshareprecharge:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/codeshareprecharge.yml"
+    prefix:   /codeshareprecharge
+
+air_corsica_xk_plan_template:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/template.yml"
+    prefix:   /template
+
+air_corsica_xk_plan_utilisateur:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/utilisateur.yml"
+    prefix:   /utilisateur
+
+air_corsica_xk_plan_flux:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/flux.yml"
+    prefix:   /flux
+
+air_corsica_xk_plan_statistiques:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/statistiques.yml"
+    prefix:   /statistiques
+
+air_corsica_xk_plan_homepage:
+    path: /
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Default:index" }
+
+air_corsica_xk_plan_planningvol:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/planningvol.yml"
+    prefix:   /planningvol
+
+air_corsica_xk_plan_parametres:
+    resource: "@AirCorsicaXKPlanBundle/Resources/config/routing/parametres.yml"
+    prefix: /parametres
+
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+fos_user_profile:
+    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+    prefix: /profile
+
+fos_user_register:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix: /register
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /resetting
+
+fos_user_change_password:
+    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
+    prefix: /profile
+
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"

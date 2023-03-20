@@ -1,0 +1,99 @@
+<div class="theme-primary col-md-3" id="sidebar_message">
+    <div class="panel">
+        <form class="form-horizontal" role="form" action="" method="get">
+            <div class="panel-body ptn">
+                <div class="row tray-bin">
+                    <div class="col-md-12">
+                        <p class="text-center text-primary">
+                            Gestion des Messages<br /><img src="{{ asset('bundles/aircorsicaxkplan/assets/img/sita.png') }}" title="Messagrie SITA" alt="Messagrie SITA" class="mw150"  />
+                        </p>
+                    </div>
+                </div>
+
+                {% set template_id = app.request.session.get("template") %}
+                <div class="form-group">
+                    <label class="col-md-5 control-label">Template Actif :</label>
+                    <div class="col-md-7">
+                        <div class="bs-component">
+                            <p class="form-control-static text-muted">{{ render(controller('AirCorsicaXKPlanBundle:Template:displayTemplateName', { 'id': template_id })) }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                {#<hr class="short alt">#}
+
+                {#<div class="form-group">#}
+                    {#<label class="col-md-12">Type de message à expédier :</label>#}
+                {#</div>#}
+
+                {#<div class="form-group">#}
+                    {#<div class="col-md-12">#}
+                        {#<div class="radio-custom mb5">#}
+                            {#<input id="element_coche" name="type_element" checked="checked" type="radio">#}
+                            {#<label for="element_coche">Eléments cochés uniquement</label>#}
+                        {#</div>#}
+                    {#</div>#}
+                {#</div>#}
+
+                {#<div class="form-group">#}
+                    {#<div class="col-md-12">#}
+                        {#<div class="radio-custom mb5">#}
+                            {#<input id="element_tous" name="type_element" type="radio">#}
+                            {#<label for="element_tous">Tous les éléments (cochés ou non cochés)</label>#}
+                        {#</div>#}
+                    {#</div>#}
+                {#</div>#}
+
+                <hr class="short alt">
+
+                <div class="form-group">
+                    <label class="col-md-12">Actions sur les messages :</label>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <button {#type="submit"#} id="btnexpedier" class="btn btn-danger" name="expedier" value="expedier">Expédier</button>
+                    </div>
+                    <div class="col-md-9">
+                        <p class="text-justify text-danger">Envoie tous les messages concernés aux messageries SITA ou SMTP.</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <button {#type="submit"#} id="btnacquitter" class="btn btn-primary" name="acquitter" value="acquitter">Acquitter</button>
+                    </div>
+                    <div class="col-md-9">
+                        <p class="text-justify text-primary">N'envoie aucun message aux messageries mais les marque cependant comme envoyés.</p>
+                    </div>
+                </div>
+
+                <hr class="short alt">
+
+                {#<div class="form-group">#}
+                    {#<label class="col-md-12">Topologie de messagerie :</label>#}
+                {#</div>#}
+
+                {#<div class="form-group">#}
+                    {#<div class="col-md-12">#}
+                        {#<table class="table table-striped">#}
+                            {#<tr>#}
+                                {#<td>ASM/SSM : </td>#}
+                                {#<td><a class="btn btn-defaut btn-gradient" data-toggle="modal" data-target="#topologieMessage">SITA</a></td>#}
+                            {#</tr>#}
+                            {#<tr>#}
+                                {#<td>SCR : </td>#}
+                                {#<td><a class="btn btn-defaut btn-gradient" data-toggle="modal" data-target="#topologieMessage">SMTP</a></td>#}
+                            {#</tr>#}
+                            {#<tr>#}
+                                {#<td>SSIM7 :</td>#}
+                                {#<td><a class="btn btn-defaut btn-gradient" data-toggle="modal" data-target="#topologieMessage">SITA</a></td>#}
+                            {#</tr>#}
+                        {#</table>#}
+                    {#</div>#}
+                {#</div>#}
+
+            </div>
+        </form>
+    </div>
+</div>

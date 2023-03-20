@@ -1,0 +1,389 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/assets/admin-tools/admin-forms/less/admin-forms.less'
+    filter='less'
+    %}
+
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+
+    {% endstylesheets %}
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/DataTables-1.10.13/css/dataTables.bootstrap.css'
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/css/select2.css'
+    output='css/compiled/core.css'
+    %}
+
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+
+    {% endstylesheets %}
+{% endblock %}
+
+{% block title %}
+    {% set titre = 'Type Avion' %}
+    {{ titre }} - {{ parent() }}
+{% endblock %}
+
+{% block body_class %}
+    {% set attributes = 'admin-elements-page' %}
+    {{ attributes }}
+{% endblock %}
+
+{% block titre_contenu %}
+    {% set titre_contenu = 'Type Avion' %}
+    {{ titre_contenu }}
+{% endblock %}
+
+{% block btn_actions %}
+    <div class="topbar-right">
+        <div class="ib topbar-dropdown">
+            <a href="{{ path('typeavion_index') }}" class="btn btn-success btn-gradient dark btn-block"><i class="glyphicon glyphicon-circle-arrow-left"></i> Retour</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <!-- Begin: Content -->
+    <div id="content" class="animated fadeIn">
+        <div class="row">
+
+            <div class="theme-primary col-md-4">
+
+                <!-- Input Fields -->
+                <div class="panel">
+                    {{ form_start(edit_form) }}
+
+                    <div class="panel-heading">
+                            <span class="panel-icon">
+                              <i class="glyphicon glyphicon-edit"></i>
+                            </span>
+                        <span class="panel-title">Edition Type Avion</span>
+                    </div>
+                    <div class="panel-body">
+
+                        {# Les erreurs générales du formulaire. #}
+                        {% if not edit_form.vars.valid %}
+                            <ul>
+                                {# Loop through every form item #}
+                                {% for child in edit_form.children %}
+                                    {# Display the errors of the form item #}
+                                    {%for error in child.vars.errors%}
+                                        <li>{{error.message}}</li>
+                                    {%endfor%}
+                                {%endfor%}
+                            </ul>
+                        {%endif%}
+
+                        {{ form_widget(edit_form) }}
+
+                    </div>
+                    <div class="panel-footer text-right">
+                        <button type="submit" class="btn-default btn">Enregistrer</button>
+                    </div>
+                    {{ form_end(edit_form) }}
+                </div>
+                <div class="panel">
+                    <div class="panel-heading">
+                        <span class="panel-icon">
+                          <i class="glyphicon glyphicon-edit"></i>
+                        </span>
+                        <span class="panel-title">Gestion des temps de vol</span>
+                    </div>
+                    <div class="panel-body">
+                        <form action="{{ path("tempsdevol_new") }}" method="post" role="form" class="form-horizontal" id="form_temps_de_vol">
+                            <input type="hidden" name="id_type" value="{{ typeAvion.id }}">
+                            <fieldset>
+                                <legend>Paramètres : </legend>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Ligne :</label>
+                                    <div class="col-md-8">
+                                        <select id="ligneAller" class="select2-single form-control combine" name="aeroport_aller" data-placeholder="Ligne Aller" style="width: 100px;float: left;margin-right: 30px;">
+                                            <option value=""></option>
+                                            {% for aeroport in aeroports %}
+                                                <option data-aeroport-depart="{{ aeroport.id }}" value="{{ aeroport.id }}">{{ aeroport.codeIATA }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        Vers :
+                                        <select id="ligneRetour" class="select2-single form-control combine" name="aeroport_retour" data-placeholder="Ligne Retour" style="width: 115px;">
+                                            <option value=""></option>
+                                            {% for aeroport in aeroports %}
+                                                <option data-aeroport-arrivee="{{ aeroport.id }}" value="{{ aeroport.id }}">{{ aeroport.codeIATA }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label required" for="ligne">Saison : </label>
+                                    <div class="col-lg-8">
+                                        <div class="bs-component">
+                                            <select id="saison" name="saison" class="select2-single form-control">
+                                                {% for saison in saisons %}
+                                                    <option value="{{ saison.id }}">{{ saison.nom }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-4"></div>
+                                    <div class="col-lg-8">
+                                        <div class="checkbox-custom mb5">
+                                            <input type="checkbox" id="retour" name="retour"  value="1">
+                                            <label for="retour" >
+                                                Inclure le retour dans les opérations
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                            <fieldset>
+                                <legend>1) Initialisation </legend>
+                                <div class="form-group"><label class="col-lg-10 control-label required">Valeurs par défaut : </label>
+                                    <div class="col-lg-2">
+                                        <div class="bs-component">
+                                            {#<div class="select-bg form-inline">#}
+                                                <input type="text" name="tempsDeVolDefaut" id="tempsDeVolDefaut" value="" class="select-bg form-control">
+                                                {#<select id="heure" name="heure" class="form-control">#}
+                                                    {#{% for i in 0..23 %}#}
+                                                        {#<option value="{{ i }}">{% if  i <= 9 %} 0{{ i }}{%  else %} {{ i }} {% endif %}</option>#}
+                                                    {#{% endfor %}#}
+                                                {#</select> H :#}
+                                                {#<select id="minute" name="minute" class="form-control">#}
+                                                    {#{% for i in 0..59 %}#}
+                                                        {#<option value="{{ i }}">{% if  i <= 9 %} 0{{ i }}{%  else %} {{ i }} {% endif %}</option>#}
+                                                    {#{% endfor %}#}
+                                                {#</select> M#}
+                                            {#</div>#}
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-success btn-gradient dark btn-block" name="init_values" id="b_init">Initialiser les valeurs >></button>
+                                <button class="btn btn-success btn-gradient dark btn-block" name="del_values" id="d_del_all" data-id="{{ typeAvion.id }}">Effacer les valeurs existantes >></button>
+                            </fieldset>
+                            <fieldset style="margin-top: 20px;">
+                                <legend>2) Duplication</legend>
+                                <span id="helpBlock" class="help-block">Dupliquer les temps de vols existant selon la ligne source et la periode source vers les paramètres suivants : </span>
+
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Ligne :</label>
+                                    <div class="col-md-8">
+                                        <select  class="select2-single form-control combine" id="aeroportDepartSource" name="aeroport_aller_source" data-placeholder="Ligne Aller" style="width: 100px;float: left;margin-right: 30px;">
+                                            <option value=""></option>
+                                            {% for aeroport in aeroports %}
+                                                <option  data-aeroport-depart="{{ aeroport.id }}" value="{{ aeroport.id }}">{{ aeroport.codeIATA }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        Vers :
+                                        <select  class="select2-single form-control combine" id="aeroportDepartCible" name="aeroport_retour_source" data-placeholder="Ligne Retour" style="width: 115px;">
+                                            <option value=""></option>
+                                            {% for aeroport in aeroports %}
+                                                <option data-aeroport-arrivee="{{ aeroport.id }} "value="{{ aeroport.id }}">{{ aeroport.codeIATA }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label required" for="ligne">Periode SOURCE : </label>
+                                    <div class="col-lg-8">
+                                        <div class="bs-component">
+                                            <select id="periode_saison_source" name="periode_saison_source" class="select2-single form-control">
+                                                {% for saison in saisons %}
+                                                    {% for periodeSaison in saison.periodesSaison %}
+                                                        <option value="{{ periodeSaison.id }}">{{ periodeSaison.nom }}</option>
+                                                    {% endfor %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label required" for="ligne">Periode CIBLE : </label>
+                                    <div class="col-lg-8">
+                                        <div class="bs-component">
+                                            <select id="periode_saison_cible" name="periode_saison_cible" class="select2-single form-control">
+                                                {% for saison in saisons %}
+                                                    {% for periodeSaison in saison.periodesSaison %}
+                                                        <option value="{{ periodeSaison.id }}">{{ periodeSaison.nom }}</option>
+                                                    {% endfor %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-lg-4"></div>
+                                    <div class="col-lg-8">
+                                        <div class="checkbox-custom mb5">
+                                            <input type="checkbox"  name="retour_source"  value="1" id="retour_duplication">
+                                            <label for="retour_duplication" >
+                                                Inclure le retour dans les opérations
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button data-id="{{ typeAvion.id }}" class="btn btn-success btn-gradient dark btn-block" id="b_copie" name="copie_values">Recopier les valeurs >></button>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="theme-primary col-md-8">
+
+                <!-- Input Fields -->
+                <div class="panel">
+
+                    <div class="panel-heading">
+                            <span class="panel-icon">
+                              <i class="glyphicon glyphicon-edit"></i>
+                            </span>
+                        <span class="panel-title">Temps de vol</span>
+                    </div>
+                    <div class="panel-body">
+                        <form method="get" action="" id="form-update-tdv">
+                            <input type="hidden" id="form-update-tdv-heure" value="" name="heure">
+                            <input type="hidden" id="form-update-tdv-minute" value="" name="minute">
+                        </form>
+                        <!--<table class="table fs13 datatable" id="datatable" cellspacing="0" width="100%">-->
+                        <table class="table table-striped table-hover admin-form fs13 datatable" id="datatable" cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th>Saison</th>
+                                <th>Début</th>
+                                <th>Fin</th>
+                                <th>A. départ</th>
+                                <th>A. arrivée</th>
+                                <th>Ligne</th>
+                                <th>Hr</th>
+                                <th>mn</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tfoot style="display: table-header-group;">
+                            <tr>
+                                <th>Saison</th>
+                                <th></th>
+                                <th></th>
+                                <th>Départ</th>
+                                <th>Arrivée</th>
+                                <th>Ligne</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            </tfoot>
+                            <tbody>
+                                {% for tdv in typeAvion.tempsDeVol %}
+                                        {% if tdv.saison.dateFin|date('Y') > 2018 %}
+                                        <tr>
+                                            <td>{{ tdv.saison.nom }}</td>
+                                            <td>{{ tdv.saison.dateDebut|date('d/m/Y') }}</td>
+                                            <td>{{ tdv.saison.dateFin|date('d/m/Y') }}</td>
+                                            <td>{{ tdv.ligne.aeroportDepart.codeIATA }}</td>
+                                            <td>{{ tdv.ligne.aeroportArrivee.codeIATA }}</td>
+                                            <td>{{ tdv.ligne }}</td>
+                                            <td><input type="number" value="{{ tdv.convertDuree()['h'] }}" name="heure" step="1" min="0" max="10" size="2" id="heure-{{ tdv.id }}"></td>
+                                            <td><input type="number" value="{{ tdv.convertDuree()['m'] }}" name="minute" step="5" min="0" max="60" size="2" id="minute-{{ tdv.id }}"></td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-warning btn-submit-tdv" data-id="{{ tdv.id }}">
+                                                    <i class="glyphicon glyphicon-check"></i>
+                                                </button>
+                                                <a href="{{ path('tempsdevol_delete', { 'id': tdv.id }) }}" class="btn  btn-danger confirm">
+                                                    <i class="glyphicon glyphicon-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% endif %}
+
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End: Content -->
+
+{% endblock %}
+
+{% block jquery_custom %}
+    // Init Select2
+    $(".select2-single").select2({
+    language: "fr",
+    allowClear: true
+    });
+
+    $('#ligneAller').on('select2:select', function (evt) {
+        $('#ligneRetour').focus();
+        $('#ligneRetour').select2('open');
+    });
+
+    $('#ligneRetour').on('select2:select', function (evt) {
+        $('#saison').focus();
+        $('#saison').select2('open');
+    });
+
+    $('#aeroportDepartSource').on('select2:select', function (evt) {
+        $('#aeroportDepartCible').focus();
+        $('#aeroportDepartCible').select2('open');
+    });
+
+    $('#aeroportDepartCible').on('select2:select', function (evt) {
+        $('#periode_saison_source').focus();
+        $('#periode_saison_source').select2('open');
+    });
+
+    $('#periode_saison_source').on('select2:select', function (evt) {
+        $('#periode_saison_cible').focus();
+        $('#periode_saison_cible').select2('open');
+    });
+
+    $.mask.definitions['H'] = "[0-2]";
+    $.mask.definitions['h'] = "[0-9]";
+    $.mask.definitions['M'] = "[0-5]";
+    $.mask.definitions['m'] = "[0-9]";
+
+    $('#tempsDeVolDefaut').mask("Hh:Mm", {
+        completed: function() {
+            var currentMask = $(this).mask();
+            if (isNaN(parseInt(currentMask))) {
+                $(this).val("");
+            } else if (parseInt(currentMask) > 2359) {
+                $(this).val("23:59");
+            };
+        }
+    });
+
+{% endblock %}
+
+{% block javascripts_libs %}
+    <!-- Theme Javascript LIBS -->
+    {% javascripts
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/js/select2.full.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/js/i18n/fr.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/DataTables-1.10.13/js/jquery.dataTables.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/DataTables-1.10.13/js/dataTables.bootstrap.min.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/vendor/plugins/jquerymask/jquery.maskedinput.min.js') }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block javascripts_custom %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/assets/js/typeAvion.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/assets/js/custom_datatables.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,315 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/assets/admin-tools/admin-forms/less/admin-forms.less'
+    filter='less'
+    %}
+
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+
+    {% endstylesheets %}
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/css/select2.css'
+    output='css/compiled/core.css'
+    %}
+
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+
+    {% endstylesheets %}
+
+{% endblock %}
+
+{% block title %}
+    {% set titre = 'Vol' %}
+    {{ titre }} - {{ parent() }}
+{% endblock %}
+
+{% block body_class %}
+    {% set attributes = 'admin-elements-page' %}
+    {{ attributes }}
+{% endblock %}
+
+{% block titre_contenu %}
+    {% set titre_contenu = 'Vol' %}
+    {{ titre_contenu }}
+{% endblock %}
+
+{% block btn_actions %}
+    <div class="topbar-right">
+        <div class="ib topbar-dropdown">
+            <a href="{{ path('vol_editeur') }}" class="btn btn-success btn-gradient dark btn-block"><i class="glyphicon glyphicon-circle-arrow-left"></i> Retour</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+
+
+    <!-- Begin: Content -->
+    <div id="content" class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="theme-primary mw1100 center-block">
+
+                    <!-- Input Fields -->
+                    <div class="panel">
+                        <form name="aircorsica_xkplanbundle_vol" method="post" class="form-horizontal" role="form">
+
+                            <input type="hidden" id="aircorsica_xkplanbundle_vol__token" name="aircorsica_xkplanbundle_vol[_token]" value="JruJbMH03jXMTjX4oNl1hjFNDcMYoXYXlhCjM9rYs38"/>
+                            <div class="panel-heading">
+                                    <span class="panel-icon">
+                                      <i class="glyphicon glyphicon-plus"></i>
+                                    </span>
+                                <span class="panel-title">Création Vol</span>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <fieldset>
+                                            <legend>Identification</legend>
+
+                                            <div class="form-group">
+                                                <label for="lignes" class="col-md-4 control-label">Lignes :</label>
+                                                <div class="col-md-8">
+                                                    <select id="lignes" class="select2 form-control" data-placeholder="Selectionner une ligne">
+                                                        <option value=""></option>
+                                                        <option value="AJA-BCN">AJA-BCN</option>
+                                                        <option value="AJA-BIA">AJA-BIA</option>
+                                                        <option value="AJA-BOD">AJA-BOD</option>
+                                                        <option value="AJA-BRU">AJA-BRU</option>
+                                                        <option value="AJA-CDG">AJA-CDG</option>
+                                                        <option value="AJA-CFE">AJA-CFE</option>
+                                                        <option value="AJA-CLY">AJA-CLY</option>
+                                                        <option value="AJA-DLE">AJA-DLE</option>
+                                                        <option value="AJA-FCO">AJA-FCO</option>
+                                                        <option value="AJA-FSC">AJA-FSC</option>
+                                                        <option value="AJA-XFM">AJA-XFM</option>
+                                                        <option value="AJA-LDE">AJA-LDE</option>
+                                                        <option value="AJA-LIS">AJA-LIS</option>
+                                                        <option value="AJA-LYS">AJA-LYS</option>
+                                                        <option value="AJA-MAD">AJA-MAD</option>
+                                                        <option value="AJA-MPL">AJA-MPL</option>
+                                                        <option value="AJA-MRS">AJA-MRS</option>
+                                                        <option value="AJA-NAP">AJA-NAP</option>
+                                                        <option value="AJA-NCE">AJA-NCE</option>
+                                                        <option value="AJA-NTE">AJA-NTE</option>
+                                                        <option value="AJA-OPO">AJA-OPO</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-4 control-label" for="numero">Numéro :</label>
+                                                <div class="col-md-8">
+                                                    <div class="bs-component">
+                                                        <input value="XK" type="text" id="numero" name="numero" class="form-control" placeholder="Saisir numéro vol" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="codes_shares" class="col-md-4 control-label">Codes Shares :</label>
+                                                <div class="col-md-8">
+                                                    <select id="codes_shares" name="codes_shares" class="select2 form-control" data-placeholder="Codes Shares" multiple>
+                                                        <option value=""></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-md-8 col-md-offset-4">
+                                                    <div class="input-group">
+                                                        <input type="text" name="add_codeshare" id="add_codeshare" class="form-control" placeholder="Ajouter un CodeShare supplémentaire">
+                                                        <div class="input-group-btn">
+                                                            <button class="btn btn-dark btn-add-codeshare" type="button">
+                                                                <i class="glyphicon glyphicon-plus"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="naturesDeVol" class="col-md-4 control-label">Natures de vols :</label>
+                                                <div class="col-md-8">
+                                                    <select id="naturesDeVol" name="naturesDeVol" class="select2 form-control" data-placeholder="Sélectionner Natures de vol" multiple>
+                                                        <option value=""></option>
+                                                        <option value="1">XK : Bord à bord service public</option>
+                                                        <option value="2">AF : Franchisé service public</option>
+                                                        <option value="3">MEP technique</option>
+                                                        <option value="4">MEP commercial</option>
+                                                        <option value="5">Affretement</option>
+                                                        <option value="6">Repositionning</option>
+                                                        <option value="7">Join Venture</option>
+                                                        <option value="8">Convoyage</option>
+                                                        <option value="9">Vol de Contrôle et Réception</option>
+                                                        <option value="10">Crew</option>
+                                                        <option value="11">MEP</option>
+                                                        <option value="12">DIV</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="type_vol" class="col-md-4 control-label">Type de vol :</label>
+                                                <div class="col-md-8">
+                                                    <select id="type_vol" class="select2 form-control" data-placeholder="Selectionner Type de vol">
+                                                        <option value=""></option>
+                                                        <option value="XK">XK Air Corsica</option>
+                                                        <option value="AIRF">Air France</option>
+                                                        <option value="TAP">TAP</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="compagnie" class="col-md-4 control-label">Compagnie :</label>
+                                                <div class="col-md-8">
+                                                    <select id="compagnie" class="select2 form-control" data-placeholder="Selectionner Compagnie">
+                                                        <option value=""></option>
+                                                        <option value="XK">XK Air Corsica</option>
+                                                        <option value="AIRF">Air France</option>
+                                                        <option value="TAP">TAP</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="affretement" class="col-md-4 control-label">Affrètement :</label>
+                                                <div class="col-md-8">
+                                                    <select id="affretement" class="select2 form-control" data-placeholder="Selectionner un affretement">
+                                                        <option value=""></option>
+                                                        <option value="1">Aucun</option>
+                                                        <option value="2">Affrètement Commercial</option>
+                                                        <option value="3">Affrètement technique</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <fieldset>
+                                            <legend>Caratéristiques</legend>
+
+                                            <div class="form-group">
+                                                <label for="avion" class="col-md-3 control-label">Avion :</label>
+                                                <div class="col-md-3">
+                                                    <select id="avion" class="select2 form-control" data-placeholder="Selectionner Avion">
+                                                        <option value=""></option>
+                                                        <option value="1">Avion 1</option>
+                                                        <option value="2">Avion 2</option>
+                                                        <option value="3">Avion 3</option>
+                                                    </select>
+                                                </div>
+
+                                                <label for="type_vol" class="col-md-3 control-label">Type de vol :</label>
+                                                <div class="col-md-3">
+                                                    <input type="text" name="temps_vol" id="temps_vol" class="form-control" readonly>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-4 control-label">Jour de validité :</label>
+                                                <div class="col-md-8">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon prn pln">
+                                                            <input type="checkbox" class="jour_all jour_none" name="lun"> 1
+                                                        </span>
+                                                        <span class="input-group-addon prn pln">
+                                                            <input type="checkbox" class="jour_all jour_none" name="mar"> 2
+                                                        </span>
+                                                        <span class="input-group-addon prn pln">
+                                                            <input type="checkbox" class="jour_all jour_none" name="mer"> 3
+                                                        </span>
+                                                        <span class="input-group-addon prn pln">
+                                                            <input type="checkbox" class="jour_all jour_none" name="jeu"> 4
+                                                        </span>
+                                                        <span class="input-group-addon prn pln">
+                                                            <input type="checkbox" class="jour_all jour_none" name="ven"> 5
+                                                        </span>
+                                                        <span class="input-group-addon prn pln">
+                                                            <input type="checkbox" class="jour_all jour_none" name="sam"> 6
+                                                        </span>
+                                                        <span class="input-group-addon prn pln">
+                                                            <input type="checkbox" class="jour_all jour_none" name="dim"> 7
+                                                        </span>
+                                                        <div class="input-group-btn prn pln">
+                                                            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <ul class="dropdown-menu" role="menu">
+                                                                <li><a id="jour_all" href="#">Tous les jours</a></li>
+                                                                <li><a id="semaine" href="#">Les jours de la semaine</a></li>
+                                                                <li><a id="weekend" href="#">Les Week Ends</a></li>
+                                                                <li class="divider"></li>
+                                                                <li><a id="jour_none" href="#">Aucun jour de la semaine</a></li>
+                                                            </ul>
+                                                        </div>
+                                                        <input type="text" class="form-control dn">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </fieldset>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="commentaires" class="col-md-2 control-label">Comentaires :</label>
+                                            <div class="col-md-10">
+                                                <textarea class="form-control" name="commentaires" id="commentaires" rows="2"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel-footer text-right">
+                                <button type="submit" class="btn-default btn">Ajouter</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End: Content -->
+{% endblock %}
+
+{% block javascripts_libs %}
+    <!-- Theme Javascript LIBS -->
+    {% javascripts
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/js/select2.full.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/js/i18n/fr.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block jquery_custom %}
+    // Init Select2
+    $(".select2").select2({
+    language: "fr",
+    tags: true
+    });
+
+    $(".btn-add-codeshare").on("click", function(){
+    var add_codeshare_val = $("#add_codeshare").val();
+    // Set the value, creating a new option if necessary
+    if (!$("#codes_shares").find("option[value=" + add_codeshare_val + "]").length) {
+    // Create the DOM option that is pre-selected by default
+    var newCodeShare = new Option(add_codeshare_val, add_codeshare_val, true, true);
+    // Append it to the select
+    $("#codes_shares").append(newCodeShare).trigger('change');
+    }
+    });
+{% endblock %}

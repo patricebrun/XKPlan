@@ -1,0 +1,89 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/assets/admin-tools/admin-forms/less/admin-forms.less'
+    filter='less'
+    output='css/compiled/admin-forms.css'
+    %}
+
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+
+    {% endstylesheets %}
+{% endblock %}
+
+{% block title %}
+    {% set titre = 'Nature de vol' %}
+    {{ titre }} - {{ parent() }}
+{% endblock %}
+
+{% block body_class %}
+    {% set attributes = 'admin-elements-page' %}
+    {{ attributes }}
+{% endblock %}
+
+{% block titre_contenu %}
+    {% set titre_contenu = 'Nature de vol' %}
+    {{ titre_contenu }}
+{% endblock %}
+
+{% block btn_actions %}
+    <div class="topbar-right">
+        <div class="ib topbar-dropdown">
+            <a href="{{ path('naturedevol_index') }}" class="btn btn-success btn-gradient dark btn-block"><i class="glyphicon glyphicon-circle-arrow-left"></i> Retour</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+
+
+    <!-- Begin: Content -->
+    <div id="content" class="animated fadeIn">
+        <div class="row">
+
+            <div class="theme-primary mw1000 center-block">
+
+                <!-- Input Fields -->
+                <div class="panel">
+                    {{ form_start(form) }}
+
+                    <div class="panel-heading">
+                            <span class="panel-icon">
+                              <i class="glyphicon glyphicon-plus"></i>
+                            </span>
+                        <span class="panel-title">Création Nature de vol</span>
+                    </div>
+                    <div class="panel-body">
+
+                        {# Les erreurs générales du formulaire. #}
+                        {% if not form.vars.valid %}
+                            <ul>
+                                {# Loop through every form item #}
+                                {% for child in form.children %}
+                                    {# Display the errors of the form item #}
+                                    {%for error in child.vars.errors%}
+                                        <li>{{error.message}}</li>
+                                    {%endfor%}
+                                {%endfor%}
+                            </ul>
+                        {% endif %}
+
+                        {{ form_widget(form) }}
+
+                    </div>
+                    <div class="panel-footer text-right">
+                        <button type="submit" class="btn-default btn">Ajouter</button>
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End: Content -->
+{% endblock %}
+
+
+

@@ -1,0 +1,29 @@
+affretement_index:
+    path:     /
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Affretement:index" }
+    methods:  GET
+
+affretement_show:
+    path:     /{id}/show
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Affretement:show" }
+    methods:  GET
+
+affretement_new:
+    path:     /new
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Affretement:new" }
+    methods:  [GET, POST]
+
+affretement_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Affretement:edit" }
+    methods:  [GET, POST]
+
+affretement_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Affretement:delete" }
+    #methods:  DELETE
+
+affretement_deletemasse:
+    path:     /deletemasse
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Affretement:deletemasse" }
+    methods:  [GET, POST]

@@ -1,0 +1,115 @@
+{% use "AirCorsicaXKPlanBundle:Form:bootstrap_3_layout.html.twig" %}
+
+{% block form_start -%}
+    {% set attr = attr|merge({class: (attr.class|default('') ~ ' form-horizontal')|trim}) %}
+    {{- parent() -}}
+{%- endblock form_start %}
+
+{# Custom #}
+{#% block color_widget %}
+    {% spaceless %}
+        <div class="input-group colorpicker-component color-picker cursor">
+            <span class="input-group-addon">
+                <i></i>
+            </span>
+            <input {{ block('widget_attributes') }} class="form-control" value="{{ value }}"/>
+        </div>
+    {% endspaceless %}
+{% endblock %#}
+
+{% block color_widget %}
+    {% spaceless %}
+        <div class="admin-form">
+            <label class="field sfcolor">
+                <input {{ block('widget_attributes') }} class="gui-input colorpicker2" value="{{ value }}"/>
+            </label>
+        </div>
+    {% endspaceless %}
+{% endblock %}
+
+{# Labels #}
+
+{% block form_label -%}
+{% spaceless %}
+    {% if label is same as(false) %}
+        <div class="{{ block('form_label_class') }}"></div>
+    {% else %}
+        {% set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' ' ~ block('form_label_class'))|trim}) %}
+        {{- parent() -}}
+    {% endif %}
+{% endspaceless %}
+{%- endblock form_label %}
+
+{% block form_label_class -%}
+col-lg-3
+{%- endblock form_label_class %}
+
+{# Rows #}
+
+{% block form_row -%}
+    <div class="form-group{% if (not compound or force_error|default(false)) and not valid %} has-error{% endif %}">
+        {{- form_label(form) -}}
+        <div class="{{ block('form_group_class') }}">
+            <div class="bs-component">
+                {{- form_widget(form) -}}
+                {{- form_errors(form) -}}
+            </div>
+        </div>
+{##}</div>
+{%- endblock form_row %}
+
+
+
+
+{% block checkbox_row -%}
+    {{- block('checkbox_radio_row') -}}
+{%- endblock checkbox_row %}
+
+{% block radio_row -%}
+    {{- block('checkbox_radio_row') -}}
+{%- endblock radio_row %}
+
+{% block checkbox_radio_row -%}
+{% spaceless %}
+    <div class="form-group{% if not valid %} has-error{% endif %}">
+        <div class="{{ block('form_label_class') }}"></div>
+        <div class="{{ block('form_group_class') }}">
+            {{ form_widget(form) }}
+            {{ form_errors(form) }}
+        </div>
+    </div>
+{% endspaceless %}
+{%- endblock checkbox_radio_row %}
+
+{% block submit_row -%}
+{% spaceless %}
+    <div class="form-group">
+        <div class="{{ block('form_label_class') }}"></div>
+        <div class="{{ block('form_group_class') }}">
+            {{ form_widget(form) }}
+        </div>
+    </div>
+{% endspaceless %}
+{% endblock submit_row %}
+
+{% block reset_row -%}
+{% spaceless %}
+    <div class="form-group">
+        <div class="{{ block('form_label_class') }}"></div>
+        <div class="{{ block('form_group_class') }}">
+            <div class="bs-component">
+                {{ form_widget(form) }}
+            </div>
+        </div>
+    </div>
+{% endspaceless %}
+{% endblock reset_row %}
+
+{% block form_group_class -%}
+col-lg-9
+{%- endblock form_group_class %}
+
+
+
+
+

@@ -1,0 +1,42 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block body %}
+    <h1>Periodes list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Datedebut</th>
+                <th>Datefin</th>
+                <th>Datetimemodification</th>
+                <th>Datetimecreation</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for periode in periodes %}
+            <tr>
+                <td>{{ periode.id }}</td>
+                <td>{% if periode.dateDebut %}{{ periode.dateDebut|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if periode.dateFin %}{{ periode.dateFin|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if periode.dateTimeModification %}{{ periode.dateTimeModification|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if periode.dateTimeCreation %}{{ periode.dateTimeCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('periode_edit', { 'id': periode.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('periode_new') }}">Create a new periode</a>
+        </li>
+    </ul>
+{% endblock %}

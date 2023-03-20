@@ -1,0 +1,543 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/vendor/plugins/fullcalendar/fullcalendar.css'
+    'bundles/aircorsicaxkplan/vendor/plugins/fullcalendar/scheduler.css'
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/css/select2.css'
+    'bundles/aircorsicaxkplan/vendor/plugins/datepicker/css/bootstrap-datetimepicker.css'
+    %}
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+    {% endstylesheets %}
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/assets/admin-tools/admin-forms/less/admin-forms.less'
+    'bundles/aircorsicaxkplan/vendor/plugins/contextmenu/jquery.contextMenu.min.css'
+    filter='less'
+    %}
+
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+
+
+    {% endstylesheets %}
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/vendor/plugins/fullcalendar/fullcalendar.print.css'
+    %}
+    <link rel="stylesheet" type="text/css" media="print" href="{{ asset_url }}" />
+
+    {% endstylesheets %}
+
+{% endblock %}
+
+{% block javascripts_custom %}
+    {{ parent() }}
+
+    {% javascripts
+    'bundles/aircorsicaxkplan/vendor/plugins/nprogress/nprogress.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    {% javascripts
+    'bundles/aircorsicaxkplan/assets/js/custom_planning.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+{% endblock %}
+
+{% block title %}
+    {% set titre = 'Planning Vol' %}
+    {{ titre }} - {{ parent() }}
+{% endblock %}
+
+{% block body_class %}
+    {% set attributes = 'calendar-page' %}
+    {{ attributes }}
+{% endblock %}
+
+{% block titre_contenu %}
+    {% set titre_contenu = 'Planning Vol' %}
+    {{ titre_contenu }}
+{% endblock %}
+
+{% block btn_actions %}
+
+
+    <!--<script src='bundles/aircorsicaxkplan/vendor/plugins/nprogress/nprogress.js'></script>
+    <link rel='stylesheet' href='nprogress.css'/>-->
+
+    <style type="text/css">
+
+        .loader {
+             border: 12px solid #f3f3f3; /* Light grey */
+             border-top: 12px solid #3498db; /* Blue */
+             border-radius: 50%;
+             width: 50px;
+             height: 50px;
+             animation: spin 2s linear infinite;
+         }
+
+        .loaderHebdo {
+            border: 8px solid #f3f3f3; /* Light grey */
+            border-top: 8px solid #FBB81F; /* Orange */
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert-dismissable {
+            clear:both !important;
+            margin-bottom:15px !important;
+        }
+        .blocplanningshebdomadaire {
+            margin-left:0px !important;
+            margin-right:0px !important;
+            margin-bottom:-5px !important;
+        }
+        .planningprincipal {
+            margin-left:5px !important;
+            margin-right:5px !important;
+            margin-top:-15px !important;
+            margin-bottom:0px !important;
+            padding:0px !important;
+            background-color:#ffffff !important;
+        }
+        .navbar {
+            margin-bottom:0px !important;
+            padding:0px !important;
+            min-height:0px !important;
+        }
+        .fc-toolbar{
+            margin-top:15px;
+            margin-bottom:3px !important;
+        }
+        .alt {
+            margin-top:3px !important;
+            margin-bottom:0px !important;
+            padding:0px !important;
+            min-height:40px !important;
+        }
+        .breadcrumb{
+            margin-top:12px;
+            font-size:1.0em;
+        }
+        .tooltip.right .tooltip-arrow{
+            top:50%;
+            left:0;
+            margin-top:-5px;
+            border-top:5px solid transparent;
+            border-bottom:5px solid transparent;
+            border-right:5px solid #000
+        }
+        .tooltip.left .tooltip-arrow{
+            top:50%;
+            right:0;
+            margin-top:-5px;
+            border-top:5px solid transparent;
+            border-bottom:5px solid transparent;
+            border-left:5px solid #000
+        }
+        .tooltip.top .tooltip-arrow{
+            bottom:0;
+            left:50%;
+            margin-left:-5px;
+            border-left:5px solid transparent;
+            border-right:5px solid transparent;
+            border-top:5px solid #000
+        }
+        .tooltip.bottom .tooltip-arrow{
+            top:0;
+            left:50%;
+            margin-left:-5px;
+            border-left:5px solid transparent;
+            border-right:5px solid transparent;
+            border-bottom:5px solid #000
+        }
+    </style>
+
+
+    <div class="topbar-right" style="margin-top:5px !important;">
+        <div class="ib topbar-dropdown mr15">
+            <div class="input-w">
+                <div style="float:left; margin-top:7px; margin-right:3px; font-weight: 700;max-width: 100%;margin-bottom: 5px;"><u>Modification</u>:</div>
+                <div class="btn-group" role="group" aria-label="...">
+                    <button id="sw_ponctuelle" type="button" class="btn {% if typedemodification == 0 %}btn-success{% else %}btn-default{% endif %}" style="{% if typedemodification == 0 %}cursor:default;{% else %}cursor:pointer;{% endif %}">Ponctuelle</button>
+                    <button id="sw_saisoncourante" type="button" class="btn {% if typedemodification == 1 %}btn-success{% else %}btn-default{% endif %}" style="{% if typedemodification == 1 %}cursor:default;{% else %}cursor:pointer;{% endif %}">Saison</button>
+                    <button id="sw_periode" type="button" class="btn {% if typedemodification == 2 %}btn-success{% else %}btn-default{% endif %}" style="{% if typedemodification == 2 %}cursor:default;{% else %}cursor:pointer;{% endif %}">Période</button>
+                </div>
+            </div>
+        </div>
+        <div class="wrapperDatePicker" style="display: inline;">
+            <div class="ib topbar-dropdown mr15" style="margin-left:-10px;width:140px;">
+                <div class="input-w" id="bloccustomdatedebut" style="{% if typedemodification != 2 %}display:none;{% endif %}">
+                    <label for="date" class="control-label">du:</label>
+                    <input type="text" id="periodecustomdatedebut" class="datepickerCPD w100 form-control" style="padding-right:10px;" value="{{ periodecustom.debut }}"{% if typedemodification != 2 %} disabled{% endif %} placeholder="">
+                </div>
+            </div>
+            <div class="ib topbar-dropdown mr15" style="margin-left:-25px;width:140px;">
+                <div class="input-w" id="bloccustomdatefin" style="{% if typedemodification != 2 %}display:none;{% endif %}">
+                    <label for="date" class="control-label">au:</label>
+                    <input type="text" id="periodecustomdatefin" class="datepickerCPF w100 form-control" style="padding-right:10px;" value="{{ periodecustom.fin }}"{% if typedemodification != 2 %} disabled{% endif %} placeholder="">
+                </div>
+            </div>
+        </div>
+        <div class="ib topbar-dropdown mr15">
+            <div class="wrapperDatePicker input-w">
+                <label for="date" class="control-label"><u>Travail sur</u>:</label>
+                <input type="text" id="date" class="datepicker1 w100 form-control" style="padding-right:10px;" placeholder="">
+            </div>
+        </div>
+        <div class="ib topbar-dropdown mr15">
+            <label for="saisonselect1" class="control-label"><u>Saison</u>:</label>
+            <select id="saisonselect1" class="select2-single form-control"> <!--data-placeholder="Choissisez une saison"--> >
+                {% for unesaison in asaisons %}
+                    <optgroup label="{{ unesaison.nom }}">
+                        {% for uneperiode in unesaison.aperiodes %}
+                            <option data-datedebutperiodesaison="{{ uneperiode.data.datedebut|date('Y-m-d H:i:s') }}" data-datefinperiodesaison="{{ uneperiode.data.datefin|date('Y-m-d H:i:s') }}" value="{{ uneperiode.data.id }}" {% if uneperiode.selected == 1 %}selected{% endif %}>{#{{ unesaison.nom }} :#} {{ uneperiode.data.nom }}</option>
+                        {% endfor %}
+                    </optgroup>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="ib topbar-dropdown mr15">
+            <label for="templateselect2" class="control-label"><u>Template</u>:</label>
+            <select id="templateselect2" class="select2-single form-control" data-placeholder="">
+                {% for untemplate in atemplates %}
+                    <option value="{{ untemplate.id }}" {% if untemplate.id == templateCourantId %}selected{% endif %}>{{ untemplate.libelle }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <!-- Begin: Content -->
+    <div id="parametresutilisationplanningvol" data-selectedIdSaison="{{ idSaisonSelected }}" data-userisgranted="{% if not is_granted('ROLE_ADMIN') %}false{% else %}true{% endif %}" data-typedeplanning="{{ typedeplanning }}" data-typedemodificationplanning="{{ typedemodification }}" data-interactionsourisplanning="{{ interactionsourisplanning }}" data-aselectionvolsplanning="{{ aselectionvolsplanning }}" data-dateplanningencouredition="{{ dateplanningencouredition }}" data-zoominterface="{{ zoominterface }}" {#data-timelinesechellevisualisation="{{ timelinesechellevisualisation }}"#} style="display:none;"></div>
+    {#<div id="ajaxmethodsurls" data-savemodificationavionvolponctuelle-route="{{ path('planningvol_savemodificationavionvolponctuelle') }}" data-savemodificationavionvolsaisoncourante-route="{{ path('planningvol_savemodificationavionvolsaisoncourante') }}" data-setparametresplanningvol-route="{{ path('planningvol_setparametresplanningvol') }}" data-settemplatechangesessionvar-route="{{ path('planningvol_settemplatechangesessionvar') }}" data-gettodayvolsasjson-route="{{ path('planningvol_gettodayvolsasjson') }}" data-getavionsasjson-route="{{ path('planningvol_getavionsasjson') }}" style="display:none;"></div>#}
+    <div id="content" class="animated fadeIn planningprincipal">
+        <div id='bloccalendrierhebdomadaire' class="blocplanningshebdomadaire" style="display:none;{#{% if typedeplanning == 0 %}display:none;{% endif %}#}">
+            <div id="spinnercalendrierhebdomadaire" style="position:relative;font-size:1.5em;clear:both;text-align:center;padding-top:15px;"> </div>
+
+            <div id="leplanninghebdomadaire" style="margin-top:-5px;height: 194px;overflow: hidden;position: relative;width: 100%;">
+
+                <div id="BlockPlanningHebdo_0" style="cursor:pointer;padding-right:1px;float:left;width:16%;text-align:center;">
+                    <div id="infodebutfinsaison_0" style="font-size:0.9em;">&nbsp;</div>
+                    <div id="PlHebd_0" data-weekday="0" data-datedecejour="" style="cursor:pointer;width:95%;margin-bottom:10px;" {% if numerodujourcourant == 0 %}class="badge badge-success"{% endif %}>
+                        <span>Lundi </span>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id='PlH_0_calendar' class="admin-theme"></div> <!-- Calendrier Mercredi -->
+                        </div>
+                    </div>
+                </div>
+
+                <div id="BlockPlanningHebdo_1" style="cursor:pointer;padding-right:1px;float:left;width:14%;text-align:center;">
+                    <div id="infodebutfinsaison_1" style="font-size:0.9em;">&nbsp;</div>
+                    <div id="PlHebd_1" data-weekday="1" data-datedecejour="" style="cursor:pointer;width:95%;margin-bottom:10px;" {% if numerodujourcourant == 1 %}class="badge badge-success"{% endif %}>
+                        <span>Mardi </span>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id='PlH_1_calendar' class="admin-theme"></div> <!-- Calendrier Mercredi -->
+                        </div>
+                    </div>
+                </div>
+
+                <div id="BlockPlanningHebdo_2" style="cursor:pointer;padding-right:1px;float:left;width:14%;text-align:center;">
+                    <div id="infodebutfinsaison_2" style="font-size:0.9em;">&nbsp;</div>
+                    <div id="PlHebd_2" data-weekday="2" data-datedecejour="" style="cursor:pointer;width:95%;margin-bottom:10px;" {% if numerodujourcourant == 2 %}class="badge badge-success"{% endif %}>
+                        <span>Mercredi </span>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id='PlH_2_calendar' class="admin-theme"></div> <!-- Calendrier Mercredi -->
+                        </div>
+                    </div>
+                </div>
+
+                <div id="BlockPlanningHebdo_3" style="cursor:pointer;padding-right:1px;float:left;width:14%;text-align:center;">
+                    <div id="infodebutfinsaison_3" style="font-size:0.9em;">&nbsp;</div>
+                    <div id="PlHebd_3" data-weekday="3" data-datedecejour="" style="cursor:pointer;width:95%;margin-bottom:10px;" {% if numerodujourcourant == 3 %}class="badge badge-success"{% endif %}>
+                        <span>Jeudi </span>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id='PlH_3_calendar' class="admin-theme"></div> <!-- Calendrier Mercredi -->
+                        </div>
+                    </div>
+                </div>
+
+                <div id="BlockPlanningHebdo_4" style="cursor:pointer;padding-right:1px;float:left;width:14%;text-align:center;">
+                    <div id="infodebutfinsaison_4" style="font-size:0.9em;">&nbsp;</div>
+                    <div id="PlHebd_4" data-weekday="4" data-datedecejour="" style="cursor:pointer;width:95%;margin-bottom:10px;" {% if numerodujourcourant == 4 %}class="badge badge-success"{% endif %}>
+                        <span>Vendredi </span>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id='PlH_4_calendar' class="admin-theme"></div> <!-- Calendrier Mercredi -->
+                        </div>
+                    </div>
+                </div>
+
+                <div id="BlockPlanningHebdo_5" style="cursor:pointer;padding-right:1px;float:left;width:14%;text-align:center;">
+                    <div id="infodebutfinsaison_5" style="font-size:0.9em;">&nbsp;</div>
+                    <div id="PlHebd_5" data-weekday="5" data-datedecejour="" style="cursor:pointer;width:95%;margin-bottom:10px;" {% if numerodujourcourant == 5 %}class="badge badge-success"{% endif %}>
+                        <span>Samedi </span>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id='PlH_5_calendar' class="admin-theme"></div> <!-- Calendrier Mercredi -->
+                        </div>
+                    </div>
+                </div>
+
+                <div id="BlockPlanningHebdo_6" style="cursor:pointer;float:left;width:14%;text-align:center;">
+                    <div id="infodebutfinsaison_6" style="font-size:0.9em;">&nbsp;</div>
+                    <div id="PlHebd_6" data-weekday="6" data-datedecejour="" style="cursor:pointer;width:95%;margin-bottom:10px;" {% if numerodujourcourant == 6 %}class="badge badge-success"{% endif %}>
+                        <span>Dimanche </span>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id='PlH_6_calendar' class="admin-theme"></div> <!-- Calendrier Mercredi -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+       <br/>
+
+
+        <div class="row">
+            <div class="col-lg-12" style="margin-top:-10px;">
+                <!-- Calendar -->
+                <div id='calendar' class="admin-theme"></div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Remplacement de l'utilisation des bootbox -->
+    <!-- vue modal caché pour la validation des déplacements des vols selectionnés dans le  planning -->
+    <div class="modal fade " id="myMouseSelectionMoveModal" role="dialog" aria-labelledby="myMouseSelectionMoveModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myMouseSelectionMoveModalLabel"></h4>
+                </div>
+                <div id="myMouseSelectionMoveModalBody" class="modal-body">
+                <!-- Contenu du modal -->
+                </div>
+                <div class="modal-footer">
+                <!-- Contenu du footer -->
+                <button type="button" id="mouseSelectionMoveANNULER" class="btn btn-success pull-left" data-dismiss="modal">Annuler</button>
+                <button type="button" id="mouseSelectionMoveVALIDER" class="btn btn-danger pull-right" data-dismiss="modal">Changer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- vue modal caché pour la modification ponctuelle d'un vol à partir du planning -->
+    <div class="modal fade" id="myModifJournalierePonctuelleModal" role="dialog" aria-labelledby="myModifJournalierePonctuelleLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-lg ui-draggable ui-draggable-handle">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div id="myModifJournalierePonctuelleHeader" class="modal-header" style="display:none;">
+                    <!-- Contenu  -->
+                    <button type="button" class="close" data-dismiss="modal"><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModifJournalierePonctuelleLabel"></h4>
+                </div>
+                <!-- Modal Body -->
+                <div id="myModifJournalierePonctuelleBody" class="modal-body">
+                    <!-- Contenu  -->
+                </div>
+                <!-- Modal Footer -->
+                <div id="myModifJournalierePonctuelleFooter" class="modal-footer" style="display:none;">
+                    <!-- Contenu  -->
+                    <button type="button" id="modifjournaliereponctuelleANNULER" class="btn btn-success pull-left" data-dismiss="modal">Annuler</button>
+                    <button type="button" id="modifjournaliereponctuelleEXECUTER" class="btn btn-danger pull-right" data-dismiss="modal">Modifier</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- vue modal caché pour lavisualisation d'un vol à partir du planning -->
+    <div class="modal fade" id="myVisualisationVolModal" role="dialog" aria-labelledby="myVisualisationVolModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-lg ui-draggable ui-draggable-handle">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div id="myVisualisationVolModalHeader" class="modal-header" style="display:none;">
+                    <!-- Contenu  -->
+                    <button type="button" class="close" data-dismiss="modal"><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myVisualisationVolModalLabel"><i class="glyphicon glyphicon-eye-open fa-lg"></i> <strong>INFORMATIONS DU VOL XK727</strong></h4>
+                </div>
+                <!-- Modal Body -->
+                <div id="myVisualisationVolModalBody" class="modal-body">
+                    <!-- Contenu  -->
+                </div>
+                <!-- Modal Footer -->
+                <div id="myVisualisationVolModalFooter" class="modal-footer" style="display:none;">
+                    <!-- Contenu  -->
+                    <button type="button" id="myVisualisationVolModalFERMER" class="btn btn-success pull-right" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+       <!-- vue modal caché pour l'impression du planning -->
+    <div class="modal fade " id="myPDFPrinterModal" role="dialog" aria-labelledby="myPDFPrinterModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- Contenu du header du modal -->
+                    <button type="button" class="close" data-dismiss="modal"><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myPDFPrinterModalLabel"><i class="glyphicon glyphicon-print fa-lg"></i> <strong>PARAMETRAGE IMPRESSION PDF</strong></h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="lundiplanninghebdomadairecourant" value="{{ lundiplanninghebdomadairecourant }}">
+                    <input type="hidden" id="dimancheplanninghebdomadairecourant" value="{{ dimancheplanninghebdomadairecourant }}">
+                    <input type="hidden" id="userHasCancelPrinting" value="false">
+                    <input type="hidden" id="tousslesavionsaircorsica" value="{{ avionsaircorsica }}">
+                    <!-- Contenu du coprs du modal -->
+
+                    <div style="margin-left:10px;">
+                        <p><i><u>Choix de la période de planning à imprimer</u>:</i></p>
+                        <input  type="radio" id="radio_jr" name="options1" checked="checked" style="margin-bottom:5px;"> Imprimer le planning du jour en cours d'édition<br/>
+                        <input  type="radio" id="radio_per" name="options1"> Imprimer les plannings situés sur ces plages de dates:
+                        <div style="margin-left:25px;margin-top:5px;">Du <input type="text" disabled="disabled" id="printdatedebut" class="datepickerPrintD w100" style="padding-right:10px;" value="{{ lundiplanninghebdomadairecourant }}" > au <input type="text" disabled="disabled" id="printdatefin" class="datepickerPrintF w100" style="padding-right:10px;" value="{{ dimancheplanninghebdomadairecourant }}" ></div>
+                    </div>
+                    <div style="margin-left:10px;"><br/>
+                        <p><i><u>Restreindre l'impression aux jours de la semaine suivants</u>:</i></p>
+                        Jours de la semaine: <input type="checkbox" id="chkbx_jsem1" name="options2" checked="checked" style="margin-right:5px;">1
+                                             <input type="checkbox" id="chkbx_jsem2" name="options3" checked="checked" style="margin-left:15px;margin-right:5px;">2
+                                             <input type="checkbox" id="chkbx_jsem3" name="options4" checked="checked" style="margin-left:15px;margin-right:5px;">3
+                                             <input type="checkbox" id="chkbx_jsem4" name="options5" checked="checked" style="margin-left:15px;margin-right:5px;">4
+                                             <input type="checkbox" id="chkbx_jsem5" name="options6" checked="checked" style="margin-left:15px;margin-right:5px;">5
+                                             <input type="checkbox" id="chkbx_jsem6" name="options7" checked="checked" style="margin-left:15px;margin-right:5px;">6
+                                             <input type="checkbox" id="chkbx_jsem7" name="options8" checked="checked" style="margin-left:15px;margin-right:5px;">7
+                                             <span id="raccourciseoptionsjours" style="margin-left:15px;border: 0.2em solid #cccccc;padding-right:2px;padding-left:2px;"><i class="glyphicon glyphicon-chevron-down"></i></span>
+                    </div>
+                    <div style="margin-left:10px;"><br/>
+                        <p><i><u>Restreindre l'impression aux avions suivants</u>:</i></p>
+                        <input  type="radio" id="radio_tsav" name="options9" data-valoption="0" style="margin-bottom:5px;"> Tous les avions<br/>
+                        <input  type="radio" id="radio_tsavavvol" name="options9" data-valoption="2" style="margin-bottom:5px;"> Tous les avions qui ont des vols<br/>
+                        <input  type="radio" id="radio_tsavavvoletimmo" name="options9" data-valoption="1" checked="checked" style="margin-bottom:5px;"> Tous les avions qui ont des vols ou sont immobilisés<br/>
+                        <input  type="radio" id="radio_selav" name="options9" data-valoption="3"> Uniquement les avions selectionnés suivants:
+                        <div style="margin-top:5px;">
+                            <div style="margin-left:40px;margin-right:5px;">Avions:</div>
+                            <div id="blocavionsaselectionner" style="margin-left:40px;margin-right:5px;overflow:auto; height: 3px;/*130px;*/ width: 500px; border: 1px solid #AAAAAA">
+                                        {% for unavion in aavions %}
+                                            <input type="checkbox" id="chkbx_pavion{{ unavion.id }}" value="{{ unavion.id }}" style="margin-left:15px;margin-right:5px;margin-bottom:3px;">{{ unavion.title }}<br/>
+                                        {% endfor %}
+                            </div>
+                        </div>
+                        <div style="margin-left:40px;margin-top:3px;">
+                            <button type="button" disabled="disabled" id="printavionsaircorsica" class="fc-button fc-corner-left fc-corner-right">Cocher AirCorsica</button>
+                            <button type="button" disabled="disabled" id="printavionsall" class="fc-button fc-corner-left fc-corner-right" style="margin-right:5px;">Tout cocher</button>
+                            <button type="button" disabled="disabled" id="printavionsnone" class="fc-button fc-corner-left fc-corner-right">Tout décocher</button>
+                        </div>
+                    </div>
+
+                    <div style="margin-left:10px;"><br/>
+                        <p><i><u>En-tête du document</u>:</i></p>
+                        <div>
+                            <input type="checkbox" id="chkbx_enteteaircorsica" name="options17" style="margin-right:5px;">Compagnie
+                            <input type="checkbox" id="chkbx_entetejoursemaine" name="options18" checked="checked" style="margin-left:15px;margin-right:5px;">Jour de la semaine
+                            <input type="checkbox" id="chkbx_entetenumerosemaine" name="options19" checked="checked" style="margin-left:15px;margin-right:5px;">Numero de semaine
+                            <input type="checkbox" id="chkbx_entetesaison" name="options20" checked="checked" style="margin-left:15px;margin-right:5px;">Saison<br/>
+                            <input type="checkbox" id="chkbx_entetetypehoraire" name="options21" checked="checked" style="margin-right:5px;">Type d'horaire
+                            <input type="checkbox" id="chkbx_entetedateimpression" name="options22" checked="checked" style="margin-left:8px;margin-right:5px;">Date et heure d'impression
+                            <input type="checkbox" id="chkbx_entetenumerodepage" name="options23" style="margin-left:8px;margin-right:5px;">Numérotation
+                        </div>
+                    </div>
+
+                    <div style="margin-left:10px;"><br/>
+                        <p><i><u>Corps du document</u>:</i></p>
+                        <div>
+                            <input  type="checkbox" id="chkbx_trchhorairesupjourcournt" name="options25" checked="checked" style="margin-bottom:5px;"> Afficher les tranches horaires du lendemains des vols de nuit<br/>
+                            <input  type="checkbox" id="chkbx_trchhoraire" name="options14" checked="checked" style="margin-bottom:5px;"> Recadrer le début et la fin des tranches horaires en fonction de l'éxistence de vols<br/>
+                            <input  type="checkbox" id="chkbx_fontautoresize" name="options15" checked="checked" style="margin-bottom:5px;"> Adapter la taille de la police en fonction de la durée des vols<br/>
+                            <input  type="checkbox" id="chkbx_reperesdurees" name="options24" checked="checked" style="margin-bottom:5px;"> Inclure les repères visuel indiquant la durée des vols<br/>
+                            <input  type="checkbox" id="chkbx_vlscourtoverflow" name="options16" checked="checked" style="margin-bottom:5px;"> Permettre le débordement du texte des vols courts d'une durée <= <input id="inp_dureemaxivolscourts" name="option24" class="w30" style="margin-left:3px;margin-bottom:5px;" value="45"> minutes
+                        </div>
+                    </div>
+
+                    <div style="margin-left:10px;"><br/>
+                        <p><i><u>Paramêtres d'impression</u>:</i></p>
+                        Impression: <input  type="radio" id="radio_nb" name="options10" style="margin-left:10px;margin-bottom:10px;"> Noir et blanc<input  type="radio" id="radio_coul" name="options10" style="margin-left:5px;margin-bottom:10px;" checked="checked"> Impression Couleur<br/>
+                        Marges: <input id="inp_mgauche" name="option11" class="w30" style="margin-left:10px;margin-bottom:5px;" value="0"> gauche,<input  id="inp_mtop" name="option12" class="w30" style="margin-left:15px;margin-bottom:5px;" value="0"> haute<input  id="inp_mdroite" name="option13" class="w30" style="margin-left:15px;margin-bottom:5px;" value="0"> droite
+                    </div>
+
+                    <br/><b>Génération du PDF:</b> Un jour &#126; 15s / Une semaine &#126; 45s / Un mois &#126; 2mn25s.<br/>
+                    <b>Attention:</b> Pendant la génération du PDF, XKPlan sera inacessible!<br/>
+
+                </div>
+                <div class="modal-footer">
+                    {#<!-- Contenu du footer -->#}
+                    <button type="button" id="impressionANNULER" class="btn btn-success pull-left" data-dismiss="modal">Annuler</button>
+                    <button type="button" id="impressionLANCER" class="btn btn-danger pull-right" data-dismiss="modal">Imprimer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- vue modal caché pour le spinner d'attente du planning principal -->
+    <div class="modal" id="mySpinnerModal" role="dialog" aria-labelledby="mySpinnerModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="top:45%;left:15%;padding-bottom:45%;">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                {#<div class="modal-header">#}
+                    {#<!-- Contenu du header du modal -->#}
+                {#</div>#}
+                <div class="modal-body">
+                    {#<div class="text-center"><i class="fa fa-spin fa-spinner text-warning" style="font-size:2.25em;"></i> <span style="font-size:1.5em;">Chargement...</span></div>#}
+                    <div class="text-center" style="height:50px;"><div class="loader" style="float:left;"></div><div id="mySpinnerlabel" style="padding-top:10px;float:right;font-size:1.2em;">Chargement jour courant...</div></div>
+                </div>
+                {#<div class="modal-footer">#}
+                    {#&#123;&#35;<!-- Contenu du footer -->&#35;&#125;#}
+                {#</div>#}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block javascripts_libs %}
+    <!-- Theme Javascript LIBS -->
+    {% javascripts
+    'bundles/aircorsicaxkplan/vendor/plugins/fullcalendar/lib/moment.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/fullcalendar/fullcalendar.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/fullcalendar/scheduler.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/fullcalendar/locale-all.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/js/select2.full.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/js/i18n/fr.js'
+    'bundles/aircorsicaxkplan/assets/admin-tools/admin-forms/js/jquery-ui-monthpicker.min.js'
+    'bundles/aircorsicaxkplan/assets/admin-tools/admin-forms/js/jquery-ui-datepicker.min.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+
+    <script type="text/javascript"
+            src="{{ asset('bundles/aircorsicaxkplan/vendor/plugins/contextmenu/jquery.contextMenu.min.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ asset('bundles/aircorsicaxkplan/vendor/plugins/contextmenu/jquery.ui.position.js') }}"></script>
+
+
+    {% endjavascripts %}
+{% endblock %}

@@ -1,0 +1,139 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+parameters:
+    locale: fr
+# http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+    messagereplyaddress: 'programme@aircorsica.com'
+    codeaeroportdattacheaircorsica: 'AJA'
+    #numeromessageriesita: '500'
+    codeemetteursita: 'AJASPXK'
+    adressesitaaltea: 'MUCSCXK'
+    emailsitaaltea: 'jean-joseph.canale@sitec.fr'
+
+framework:
+    #esi:             ~
+    translator:      { fallbacks: ["%locale%"] }
+    secret:          "%secret%"
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: ~
+    validation:      { enable_annotations: true }
+    #serializer:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+    default_locale:  "%locale%"
+    trusted_hosts:   ~
+    trusted_proxies: ~
+    session:
+        # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
+        handler_id:  session.handler.native_file
+        #save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
+        save_path: ~
+    fragments:       ~
+    http_method_override: true
+    assets: ~
+
+# Twig Configuration
+twig:
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+
+    exception_controller:  twig.controller.exception:showAction
+
+    form_themes:
+        # Default:
+        #- AirCorsicaXKPlanBundle:Form:form_div_layout.html.twig
+        # Bootstrap:
+        #- AirCorsicaXKPlanBundle:Form:bootstrap_3_layout.html.twig
+        - AirCorsicaXKPlanBundle:Form:bootstrap_3_horizontal_layout.html.twig
+        - AirCorsicaXKPlanBundle:Form:form_datepicker_type.html.twig
+        #- AirCorsicaXKPlanBundle:Form:form_datepicker_type.html.twig
+        # Foundation
+        #- AirCorsicaXKPlanBundle:Form:foundation_5_layout.html.twig
+        # Example:
+        #- AirCorsicaXKPlanBundle:Form:custom_fields.html.twig'
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   pdo_mysql
+        host:     "%database_host%"
+        port:     "%database_port%"
+        dbname:   "%database_name%"
+        user:     "%database_user%"
+        password: "%database_password%"
+        charset:  UTF8
+        mapping_types:
+                    enum: string
+        # if using pdo_sqlite as your database driver:
+        #   1. add the path in parameters.yml
+        #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
+        #   2. Uncomment database_path in parameters.yml.dist
+        #   3. Uncomment next line:
+        #     path:     "%database_path%"
+
+    orm:
+        auto_generate_proxy_classes: "%kernel.debug%"
+        naming_strategy: doctrine.orm.naming_strategy.underscore
+        auto_mapping: true
+        mappings:
+            gedmo_tree:
+                type: annotation
+                prefix: Gedmo\Tree\Entity
+                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity"
+                alias: GedmoTree # (optional) it will default to the name set for the mapping
+                is_bundle: false
+
+#doctrine_migrations:
+#    dir_name: "%kernel.root_dir%/DoctrineMigrations"
+#    namespace: AirCorsica\XKPlanBundle\Migrations
+ #   table_name: migration_versions
+ #   name: XKPLAN Migrations
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: "%mailer_transport%"
+    host:      "%mailer_host%"
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
+#    spool:     { type: memory }
+
+# fos_user Configuration
+fos_user:
+    db_driver:     orm                                        # Le type de BDD à utiliser, nous utilisons l'ORM Doctrine
+    firewall_name: main                                       # Le nom du firewall derrière lequel on utilisera ces utilisateurs
+    user_class:   AirCorsica\XKPlanBundle\Entity\Utilisateur  # La classe de l'entité User que nous utilisons
+    registration:
+        form:
+            type: AirCorsica\XKPlanBundle\Form\RegistrationFormType
+        confirmation:
+            enabled: false
+    profile:
+        form:
+            type: AirCorsica\XKPlanBundle\Form\ProfileFormType
+    change_password:
+        form:
+            type: AirCorsica\XKPlanBundle\Form\ChangePasswordFormType
+
+# Assetic control
+assetic:
+    debug:          '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    filters:
+        cssrewrite: ~
+        less:
+            node: /usr/bin/node
+            node_paths: [/usr/bin/node, /usr/lib/node_modules]
+
+stof_doctrine_extensions:
+    orm:
+        default:
+            blameable: true
+            timestampable: true
+            tree: true

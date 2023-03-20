@@ -1,0 +1,175 @@
+
+
+{% block body %}
+    <!-- Begin: Content -->
+
+    <!-- Contenu du coprs du modal -->
+    <div class="row">
+        <div class="col-md-12">
+            <form name="showvol_form" method="post" action="#" class="form-horizontal" role="form">
+
+                <!-- Champs formulaire -->
+                <div class="panel-body">
+                    <div class="row">
+
+                        <!-- Partie gauche -->
+                        <div class="col-md-6">
+                            <fieldset>
+                                <legend>Identification</legend>
+
+                                {#<!-- Ligne -->#}
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label required">Ligne</label>
+                                    <div class="col-lg-2">
+                                        <div class="bs-component">
+                                            <input type="text" size="7" value="{{ aeroport_depart }}" readonly="readonly" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="bs-component">
+                                            <input type="text" size="7" value="{{ aeroport_arrivee }}" readonly="readonly" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5">&nbsp;</div>
+                                </div>
+
+                                {#<!-- Numero -->#}
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label">Numero</label>
+                                    <div class="col-lg-9">
+                                        <div class="bs-component">
+                                            <input type="text" value="{{ numero_vol }}" readonly="readonly" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Codes share vol -->
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label" style="padding-top:0px;">Codes share vol</label>
+                                    <div class="col-lg-9">
+                                        <div class="bs-component" style="border-width:1px;border-style:solid;border-color:#BCBDBD;padding:4px;height:40px;">
+                                            {%- for key, child in array_codeshare %}
+                                                <span class="badge" style=background-color:#C2C2C2;margin-top:5px;">{{ child }}</span>&nbsp;
+                                            {% endfor -%}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Type de vol -->
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label">Type de vol</label>
+                                    <div class="col-lg-9">
+                                        <div class="bs-component">
+                                            <input type="text" value="{{ type_vol }}" readonly="readonly" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Compagnie -->
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label">Compagnie</label>
+                                    <div class="col-lg-9">
+                                        <div class="bs-component">
+                                            <input type="text" value="{{ compagnie }}" readonly="readonly" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Affretement -->
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label">Affretement</label>
+                                    <div class="col-lg-9">
+                                        <div class="bs-component">
+                                            <input type="text" value="{{ affretement }}" readonly="readonly" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                        </div>
+
+                        <!-- Partie droite -->
+                        <div class="col-md-6">
+                            <fieldset>
+                                <legend>Caractéristiques</legend>
+
+                                {#<!-- Avion -->#}
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label" style="color:#3BA3D7;">Avion</label>
+                                    <div class="col-lg-9">
+                                        <div class="bs-component">
+                                            <input type="text" size="13" value="{{ nom_avion }}" readonly="readonly" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Temps 1/2 tour -->
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label" style="padding-top:0px;">Temps 1/2 tour</label>
+                                    <div class="col-lg-9">
+                                        <div class="bs-component">
+                                            <input type="text" value="{{ tempsdemitour_avionorigine }}" readonly="readonly" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Période de validité -->
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label required" style="padding-top:0px;">Période de validité</label>
+                                    <div class="col-lg-4">
+                                        <div class="bs-component">
+                                            <input type="text" size="13" value="{{ periodevalidite_debut }}" readonly="readonly" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="bs-component">
+                                            <input type="text" size="13" value="{{ periodevalidite_fin }}" readonly="readonly" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">&nbsp;</div>
+                                </div>
+
+                                <!-- Décolage et attérissage -->
+                                <div class="form-group">
+                                    <p class="help-block col-lg-offset-3" id="infos-tdv" style="padding-left: 10px;">{{ tempsdevol }} </p>
+                                    <label class="col-lg-3 control-label required">Décollage</label>
+                                    <div class="col-lg-3">
+                                        <div class="bs-component">
+                                            <input type="text" required="required" class="select-bg form-control" value="{{ decollage }}" readonly="readonly" class="form-control">
+                                        </div>
+                                    </div>
+                                    <label class="col-lg-3 control-label required">Attérissage</label>
+                                    <div class="col-lg-3">
+                                        <div class="bs-component">
+                                            <input type="text" required="required" class="select-bg form-control" value="{{ atterissage }}" readonly="readonly" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Jours de validité -->
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label required" style="padding-top:0px;">Jours de validité</label>
+                                    <div class="col-lg-9">
+                                        <div class="input-group">
+                                            <div class="bs-component" style="display:inline;">
+                                                {%- for key, child in jourdevalidite %}
+                                                    <span class="input-group-addon" style="padding-top:0px;padding-bottom:0px;">
+                                                    <input type="checkbox" size="1" value="{{ child }}" {% if child != '-' %} checked {% endif %} disabled readonly="readonly" class="form-control">{{ key + 1 }}
+                                                </span>
+                                                {% endfor -%}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- End: Content -->
+{% endblock %}

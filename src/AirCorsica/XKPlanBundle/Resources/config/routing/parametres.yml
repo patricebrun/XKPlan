@@ -1,0 +1,11 @@
+parametres_index:
+    path:     /
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Parametres:index" }
+    methods:  GET
+
+parametres_saveparameters:
+    path:     /saveparameters
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Parametres:saveParametres" }
+    methods:  [POST]
+    options:
+      expose: true

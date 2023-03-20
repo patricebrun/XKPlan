@@ -1,0 +1,223 @@
+vol_index:
+    path:     /
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:index" }
+    methods:  GET
+
+vol_verificateurcoherence:
+    path:     /coherencevols
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:verificateurcoherence" }
+    methods:  [GET, POST]
+
+vol_verificateurcoherencetopdf:
+    path:     /verificateurcoherencetopdf
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:verificateurcoherencetopdf" }
+    methods:  [GET, POST]
+    options:
+        expose: true
+
+vol_verificateurperiode:
+    path:     /verificateurperiode
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:verificateurperiode" }
+    methods:  [GET, POST]
+
+vol_messagerie:
+    path:     /messagerie
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:messagerie" }
+    methods:  [GET, POST]
+    options:
+        expose: true
+
+vol_acquitter:
+    path:     /acquitter
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:acquitter" }
+    methods:  [GET, POST]
+    options:
+        expose: true
+
+vol_expedier:
+    path:     /expedier
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:expedier" }
+    methods:  [GET, POST]
+    options:
+        expose: true
+
+#vol_majdestinatairesmessagealtea:
+#    path:     /majdestinatairesmessagealtea
+#    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:majdestinatairesmessagealtea" }
+#    methods:  [GET, POST]
+#    options:
+#        expose: true
+
+vol_majpartietextemessagealtea:
+    path:     /majpartietextemessagealtea
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:majpartietextemessagealtea" }
+    methods:  [GET, POST]
+    options:
+        expose: true
+
+vol_historique:
+    path:     /historique
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:historique" }
+    methods:  GET
+
+vol_liste:
+    path:     /liste
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:liste" }
+    methods:  [GET, POST]
+    options:
+            expose: true
+
+vol_updatemasse:
+    path:     /updatemasse
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:updatemasse" }
+    methods:  [POST]
+
+vol_editeur:
+    path:     /editeur
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:editeur" }
+    methods:  [GET, POST]
+
+vol_timetable:
+    path:     /timetable
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:timetable" }
+    methods:  [GET, POST]
+
+vol_timetabletocsv:
+    path:     /timetabletocsv
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:timetabletocsv" }
+    methods:  [GET]
+    options:
+        expose: true
+
+vol_timetabletopdf:
+    path:     /timetabletopdf
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:timetabletopdf" }
+    methods:  [GET]
+    options:
+        expose: true
+
+vol_show:
+    path:     /{id}/show
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:show" }
+    methods:  GET
+
+vol_modal:
+    path:     /edit/{id}
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:edit" }
+    methods:  [GET, POST]
+    options:
+        expose: true
+
+vol_modal_new:
+    path:     /new
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:new" }
+    methods:  GET
+    options:
+        expose: true
+
+vol_create:
+    path:     /create
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:create" }
+    methods:  [GET, POST]
+
+vol_new:
+    path:     /new
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:new" }
+    methods:  [GET, POST]
+    options:
+        expose: true
+
+vol_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:edit" }
+    methods:  [GET, POST]
+
+vol_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:delete" }
+    methods:  DELETE
+
+vol_ajaxcancelhistoriqueAction:
+    path:     /{id}/cancelhistorique
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:ajaxcancelhistorique" }
+    methods:  GET
+    options:
+        expose: true
+
+vol_getidligne:
+    path:     /ajaxGetIdLigneAction/{aeroport_depart}/{aeroport_arrivee}
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:ajaxGetIdLigne" }
+    methods:  GET
+    options:
+        expose: true
+
+vol_gettdv:
+    path:     /ajaxGetTempdsDeVolAction/{aeroport_depart}/{aeroport_arrivee}/{avion}/{dateDebut}/{dateFin}
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:ajaxGetTempdsDeVol" }
+    methods:  GET
+    options:
+        expose: true
+
+vol_getcodessharevol:
+    path:     /getcodessharesvolAction/{id}
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:ajaxGetCodesSharesVol" }
+    methods:  GET
+    options:
+        expose: true
+
+vol_getcodessharesprecharges:
+    path:     /getcodessharesprechargesAction/{libelle}
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:ajaxGetCodesSharesPrecharges" }
+    methods:  GET
+    options:
+        expose: true
+
+vol_modification_ponctuel:
+    path:     /edit/{id}/{date}
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:edit" }
+    methods:  GET
+    options:
+        expose: true
+
+vol_modification_globale:
+    path:     /edit/{id}
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:edit" }
+    methods:  GET
+    options:
+        expose: true
+
+vol_delestage_ponctuel:
+    path:     /delestageponctuel/{id}/{date}
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:delestagePonctuel" }
+    methods:  GET
+    options:
+        expose: true
+
+vol_delestage_periode:
+    path:     /delestageperiode/{id}
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:delestagePeriode" }
+    methods:  GET
+    options:
+        expose: true
+
+vol_messagerie_add_adresse_sita:
+    path:     /ajout-destinataire-sita
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:ajoutDestinataireMessagerie" }
+    methods:  [GET, POST]
+    options:
+        expose: true
+
+
+vol_messagerie_setnewadressesita:
+    path:     /setnewadressesita
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:setnewadressesita" }
+    methods:  [POST]
+    options:
+      expose: true
+
+#vol_messagerie_setnewmicrotime:
+#    path:     /setnewmicrotime
+#    defaults: { _controller: "AirCorsicaXKPlanBundle:Vol:setnewmicrotime" }
+#    methods:  [POST]
+#    options:
+#      expose: true

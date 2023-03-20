@@ -1,0 +1,45 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block body %}
+    <h1>Vols list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Numero</th>
+                <th>Commentaire</th>
+                <th>Datetimemodification</th>
+                <th>Datetimecreation</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for vol in vols %}
+            <tr>
+                <td><a href="{{ path('vol_show', { 'id': vol.id }) }}">{{ vol.id }}</a></td>
+                <td>{{ vol.numero }}</td>
+                <td>{{ vol.commentaire }}</td>
+                <td>{% if vol.dateTimeModification %}{{ vol.dateTimeModification|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if vol.dateTimeCreation %}{{ vol.dateTimeCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('vol_show', { 'id': vol.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('vol_edit', { 'id': vol.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vol_new') }}">Create a new vol</a>
+        </li>
+    </ul>
+{% endblock %}

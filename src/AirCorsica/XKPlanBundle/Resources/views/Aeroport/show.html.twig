@@ -1,0 +1,138 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/assets/admin-tools/admin-forms/less/admin-forms.less'
+    filter='less'
+    output='css/compiled/admin-forms.css'
+    %}
+
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+
+    {% endstylesheets %}
+{% endblock %}
+
+{% block title %}
+    {% set titre = 'Aéroport' %}
+    {{ titre }} - {{ parent() }}
+{% endblock %}
+
+{% block body_class %}
+    {% set attributes = 'admin-elements-page' %}
+    {{ attributes }}
+{% endblock %}
+
+{% block titre_contenu %}
+    {% set titre_contenu = 'Aéroport' %}
+    {{ titre_contenu }}
+{% endblock %}
+
+{% block btn_actions %}
+    <div class="topbar-right">
+        <div class="ib topbar-dropdown">
+            <a href="{{ path('aeroport_index') }}" class="btn btn-success btn-gradient dark btn-block"><i class="glyphicon glyphicon-circle-arrow-left"></i> Retour</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+
+    {#{ dump(edit_form) }#}
+    <!-- Begin: Content -->
+    <div id="content" class="animated fadeIn">
+        <div class="row">
+
+            <div class="theme-primary mw1000 center-block">
+                <div class="form-horizontal">
+                    <!-- Input Fields -->
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <span class="panel-icon">
+                              <i class="glyphicon glyphicon-edit"></i>
+                            </span>
+                            <span class="panel-title">Consultation Aéroport</span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">Id</label>
+                                <div class="col-lg-8">
+                                    <div class="bs-component">
+                                        <input type="text" id="aeroport_id" name="aeroport_id" class="form-control" value="{{ aeroport.id }}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">Code IATA</label>
+                                <div class="col-lg-8">
+                                    <div class="bs-component">
+                                        <input type="text" id="aeroport_codeIATA" name="aeroport_codeIATA" class="form-control" value="{{ aeroport.codeIATA }}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">Temps demi-tour</label>
+                                <div class="col-lg-8">
+                                    <div class="bs-component">
+                                        <input type="text" id="aeroport_tempsDemiTour" name="aeroport_tempsDemiTour" class="form-control" value="{{ aeroport.tempsDemiTour }}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">Pays</label>
+                                <div class="col-lg-8">
+                                    <div class="bs-component">
+                                        <input type="text" id="aeroport_pays" name="aeroport_pays" class="form-control" value="{{ aeroport.pays }}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">Coordonné</label>
+                                <div class="col-lg-8">
+                                    <div class="bs-component">
+                                        <input type="text" id="aeroport_coordonne" name="aeroport_coordonne" class="form-control" value="{% if aeroport.coordonne %}Oui{% else %}Non{% endif %}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">Notes</label>
+                                <div class="col-lg-8">
+                                    <div class="bs-component">
+                                        <textarea id="aeroport_notes" name="aeroport_notes" class="form-control" disabled>{{ aeroport.notes }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">Date modification</label>
+                                <div class="col-lg-8">
+                                    <div class="bs-component">
+                                        <input type="text" id="aeroport_dateTimeModification" name="aeroport_dateTimeModification" class="form-control" value="{% if aeroport.dateTimeModification %}{{ aeroport.dateTimeModification|date('Y-m-d H:i:s') }}{% endif %}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">Date création</label>
+                                <div class="col-lg-8">
+                                    <div class="bs-component">
+                                        <input type="text" id="aeroport_dateTimeCreation" name="aeroport_dateTimeCreation" class="form-control" value="{% if aeroport.dateTimeCreation %}{{ aeroport.dateTimeCreation|date('Y-m-d H:i:s') }}{% endif %}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End: Content -->
+
+{% endblock %}
+

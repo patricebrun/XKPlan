@@ -1,0 +1,65 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{#<form action="{{ path("fos_user_security_check") }}" method="post">#}
+    {#{% if csrf_token %}#}
+        {#<input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />#}
+    {#{% endif %}#}
+
+    {#<label for="username">{{ 'security.login.username'|trans }}</label>#}
+    {#<input type="text" id="username" name="_username" value="{{ last_username }}" required="required" />#}
+
+    {#<label for="password">{{ 'security.login.password'|trans }}</label>#}
+    {#<input type="password" id="password" name="_password" required="required" />#}
+
+    {#<input type="checkbox" id="remember_me" name="_remember_me" value="on" />#}
+    {#<label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>#}
+
+    {#<input type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />#}
+{#</form>#}
+
+
+<div class="panel mt30 mb25">
+    {% if error %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            Informations d'identification invalides
+        </div>
+    {% endif %}
+    <form action="{{ path("fos_user_security_check") }}" method="post" id="contact">
+        {% if csrf_token %}
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+        {% endif %}
+        <div class="panel-body p25 pb15">
+            <!-- Username Input -->
+            <div class="section">
+                <label for="username" class="field-label text-muted fs18 mb10">Utilisateur</label>
+                <label for="username" class="field prepend-icon">
+                    <input type="text" name="_username" id="username" class="gui-input" placeholder="Nom Utilisateur" value="{{ last_username }}" required>
+                    <label for="username" class="field-icon">
+                        <i class="fa fa-user"></i>
+                    </label>
+                </label>
+            </div>
+
+            <!-- Password Input -->
+            <div class="section">
+                <label for="username" class="field-label text-muted fs18 mb10">Mot de passe</label>
+                <label for="password" class="field prepend-icon">
+                    <input type="password" name="_password" id="password" class="gui-input" placeholder="Mot de passe" required>
+                    <label for="password" class="field-icon">
+                        <i class="fa fa-lock"></i>
+                    </label>
+                </label>
+            </div>
+        </div>
+
+        <div class="panel-footer clearfix">
+            <button type="submit" class="button btn-primary mr10 pull-right" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}">Connexion</button>
+            <label class="switch ib switch-primary mt10">
+                <input type="checkbox" id="remember_me" name="_remember_me" value="on" checked/>
+                <label for="remember" data-on="Oui" data-off="Non"></label>
+                <span>Se souvenir de moi?</span>
+            </label>
+        </div>
+
+    </form>
+</div>

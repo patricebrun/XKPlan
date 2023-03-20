@@ -1,0 +1,44 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block body %}
+    <h1>Groupesitum</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ groupeSITum.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ groupeSITum.nom }}</td>
+            </tr>
+            <tr>
+                <th>Groupegenerique</th>
+                <td>{% if groupeSITum.groupeGenerique %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Datetimemodification</th>
+                <td>{% if groupeSITum.dateTimeModification %}{{ groupeSITum.dateTimeModification|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Datetimecreation</th>
+                <td>{% if groupeSITum.dateTimeCreation %}{{ groupeSITum.dateTimeCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('groupesita_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('groupesita_edit', { 'id': groupeSITum.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

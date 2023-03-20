@@ -1,0 +1,29 @@
+ligne_index:
+    path:     /
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Ligne:index" }
+    methods:  GET
+
+ligne_show:
+    path:     /{id}/show
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Ligne:show" }
+    methods:  GET
+
+ligne_new:
+    path:     /new
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Ligne:new" }
+    methods:  [GET, POST]
+
+ligne_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Ligne:edit" }
+    methods:  [GET, POST]
+
+ligne_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Ligne:delete" }
+    #methods:  DELETE
+
+ligne_deletemasse:
+    path:     /deletemasse
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Ligne:deletemasse" }
+    methods:  [GET, POST]

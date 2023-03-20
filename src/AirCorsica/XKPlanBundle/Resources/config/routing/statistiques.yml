@@ -1,0 +1,21 @@
+statistiques:
+    path: /
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Statistiques:index" }
+
+statistiques_export_pdf_generaux:
+    path: /exportpdfgeneraux
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Statistiques:exportpdfgeneraux" }
+    options:
+      expose: true
+
+statistiques_export_pdf_ligne:
+    path: /exportpdfligne
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Statistiques:exportpdfligne" }
+    options:
+      expose: true
+
+statistiques_export_pdf_avion:
+    path: /exportpdfavion
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Statistiques:exportpdfavion" }
+    options:
+      expose: true

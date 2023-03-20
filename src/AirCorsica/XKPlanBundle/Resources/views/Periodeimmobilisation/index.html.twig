@@ -1,0 +1,38 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block body %}
+    <h1>Periodeimmobilisations list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Datetimemodification</th>
+                <th>Datetimecreation</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for periodeImmobilisation in periodeImmobilisations %}
+            <tr>
+                <td>{{ periodeImmobilisation.id }}</td>
+                <td>{% if periodeImmobilisation.dateTimeModification %}{{ periodeImmobilisation.dateTimeModification|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if periodeImmobilisation.dateTimeCreation %}{{ periodeImmobilisation.dateTimeCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('periodeimmobilisation_edit', { 'id': periodeImmobilisation.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('periodeimmobilisation_new') }}">Create a new periodeImmobilisation</a>
+        </li>
+    </ul>
+{% endblock %}

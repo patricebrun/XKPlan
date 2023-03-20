@@ -1,0 +1,24 @@
+periodeimmobilisation_index:
+    path:     /
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PeriodeImmobilisation:index" }
+    methods:  GET
+
+periodeimmobilisation_show:
+    path:     /{id}/show
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PeriodeImmobilisation:show" }
+    methods:  GET
+
+periodeimmobilisation_new:
+    path:     /new
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PeriodeImmobilisation:new" }
+    methods:  [GET, POST]
+
+periodeimmobilisation_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PeriodeImmobilisation:edit" }
+    methods:  [GET, POST]
+
+periodeimmobilisation_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PeriodeImmobilisation:delete" }
+    methods:  DELETE

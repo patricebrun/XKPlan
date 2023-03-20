@@ -1,0 +1,87 @@
+<div class="modal fade" id="modalSaison" tabindex="-1" role="dialog"  aria-labelledby="ModalLabelSaison">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="post" class="form-horizontal" role="form" action="{{ path("saison_new_from_modal") }}">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="ModalLabelSaison">Création de nouvelle saison</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <span class="help-block">
+                            Vous avez demandé la création d'une nouvelle saison IATA. Merci de renseigner les paramètres nécessaires à sa création.
+                        </span>
+                        <div class="form-group">
+                            <label class="col-lg-5 control-label">Année de la saison</label>
+                            <div class="col-lg-7">
+                                <div class="bs-component">
+                                    <select name="annee" class="form-control select2-single" id="select-saison">
+                                        <option value="">Année</option>
+                                        <option value="2017">2017</option>
+                                        <option value="2018">2018</option>
+                                        <option value="2019">2019</option>
+                                        <option value="2020">2020</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2022">2022</option>
+                                        <option value="2023">2023</option>
+                                        <option value="2024">2024</option>
+                                        <option value="2025">2025</option>
+                                        <option value="2026">2026</option>
+                                        <option value="2027">2027</option>
+                                        <option value="2028">2028</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-5 control-label">Type de saison</label>
+                            <label class="radio-inline">
+                                <input type="radio" name="saison"  value="ete" checked>  Eté IATA
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="saison"  value="hiver">  Hiver IATA
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-5 control-label">Futur code saison</label>
+                            <div class="col-lg-2">
+                                <div class="bs-component">
+                                    <input type="text"  id="code-saison" name="codeSaison" required="required"  class="form-control" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-5 control-label">Futur date début</label>
+                            <div class="col-lg-3">
+                                <div class="bs-component">
+                                    <input type="text"  id="date-debut-saison" name="dateDebut" required="required"  class="form-control" value="" readonly>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <span class="help-block">Dernier dimanche de mars (inclus)</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-5 control-label">Futur date fin</label>
+                            <div class="col-lg-3">
+                                <div class="bs-component">
+                                    <input type="text"  id="date-fin-saison" name="dateFin" required="required"  class="form-control" value="" readonly>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <span class="help-block">Dernier samedi d'octobre (inclus)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn-default btn">Ajouter</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+

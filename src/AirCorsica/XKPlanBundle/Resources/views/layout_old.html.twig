@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    {% include 'AirCorsicaXKPlanBundle::page_head_displaystyles.html.twig' %}
+
+    {% block head %}
+        {% include 'AirCorsicaXKPlanBundle::page_head.html.twig' %}
+    {% endblock %}
+
+    {% block style %}
+        {% include 'AirCorsicaXKPlanBundle::page_head_style.html.twig' %}
+    {% endblock %}
+
+    {% block script %}
+        {% include 'AirCorsicaXKPlanBundle::page_head_script.html.twig' %}
+    {% endblock %}
+</head>
+
+{% block body %}
+    <!-------------------------------------------------------------+
+      <body> Helper Classes:
+    ---------------------------------------------------------------+
+      '.sb-l-o' - Sets Left Sidebar to "open"
+      '.sb-l-m' - Sets Left Sidebar to "minified"
+      '.sb-l-c' - Sets Left Sidebar to "closed"
+
+      '.sb-r-o' - Sets Right Sidebar to "open"
+      '.sb-r-c' - Sets Right Sidebar to "closed"
+    ---------------------------------------------------------------+
+     Example: <body class="example-page sb-l-o sb-r-c">
+     Results: Sidebar left Open, Sidebar right Closed
+    --------------------------------------------------------------->
+    <body class="">
+
+
+
+
+    {% block main_area %}
+        <!-- Start: Main -->
+        <div id="main">
+
+            {% block header %}
+                {% include 'AirCorsicaXKPlanBundle::page_header.html.twig' %}
+            {% endblock %}
+
+            {% block sidebar %}
+                {% include 'AirCorsicaXKPlanBundle::page_menu.html.twig' %}
+            {% endblock %}
+
+            <!-- Start: Content-Wrapper -->
+            <section id="content_wrapper">
+                {% if app.request.get('_route') == 'air_corsica_xk_plan_homepage' %}
+                    <a href="{{ path('air_corsica_xk_plan_homepage') }}" class="YouAreHere">My Link</a>
+                {% else %}
+                    <a href="{{ path('air_corsica_xk_plan_homepage') }}">My Link</a>
+                {% endif %}
+
+                {# On affiche les messages flash que définissent les contrôleurs du bundle #}
+                {% for key, messages in app.session.flashbag.all() %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ key }}">
+                            {{ message|trans({}, 'FOSUserBundle') }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
+                {# On définit ce block, dans lequel vont venir s'insérer les autres vues du bundle #}
+                {% block fos_user_content %}
+                {% endblock fos_user_content %}
+
+
+                {% block content %}
+                {% endblock %}
+            </section>
+
+        </div>
+        <!-- End: Main -->
+    {% endblock %}
+
+
+
+    {% block footer %}
+        {% include "AirCorsicaXKPlanBundle::page_footer.html.twig" %}
+    {% endblock %}
+
+    {% block footer_script %}
+        {% include "AirCorsicaXKPlanBundle::page_footer_script.html.twig" %}
+    {% endblock %}
+
+    </body>
+{% endblock %}
+</html>

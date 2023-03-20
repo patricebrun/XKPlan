@@ -1,0 +1,257 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/assets/admin-tools/admin-forms/less/admin-forms.less'
+    filter='less'
+    %}
+
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+
+    {% endstylesheets %}
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/DataTables-1.10.13/css/dataTables.bootstrap.css'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/Buttons-1.2.4/css/buttons.bootstrap.min.css'
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/css/select2.css'
+    output='css/compiled/core.css'
+    %}
+
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+
+    {% endstylesheets %}
+
+{% endblock %}
+
+{% block title %}
+    {% set titre = 'Relevé des incohérences de Vols' %}
+    {{ titre }} - {{ parent() }}
+{% endblock %}
+
+{% block titre_contenu %}
+    {% set titre_contenu = 'Incohérences de Vols' %}
+    {{ titre_contenu }}
+{% endblock %}
+
+{% block btn_actions %}
+    {% set url_retour = app.request.headers.get('referer') %}
+    <div class="topbar-right">
+        <div class="ib topbar-dropdown">
+            <a href="{{ url_retour }}" class="btn btn-success btn-gradient dark btn-block"><i class="glyphicon glyphicon-circle-arrow-left"></i> Retour</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <!-- Begin: Content -->
+    <div id="content" class="animated fadeIn">
+        <div class="row">
+
+            <div class="theme-primary col-md-12">
+
+                <!-- Input Fields -->
+                <div class="panel">
+
+                    <form class="form-horizontal" action="#" method="post" id="vérificateur-coherence-vol">
+                        {% for id in aIdSelectionne %}
+                            <input type="checkbox" class="hidden" checked="checked" value="{{ id }}" class="ids_vol" name="ids_vol[]">
+                        {% endfor %}
+                        <div class="panel-heading">
+                                <span class="panel-icon">
+                                  <i class="glyphicon glyphicon-list"></i>
+                                </span>
+                            <span class="panel-title">Paramètres</span>
+                        </div>
+                        <div class="panel-body">
+                            {% for flash_message in app.session.flashBag.get('info_coherence') %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ flash_message|raw }}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="panel-body">
+                            <p class="text-justify">Voici la liste des incohérences de vols pour les vols selectionnés sur le template courant et le template courant sur la période saisonnière</p>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="periode_saison">Période Saison :</label>
+                                    <div class="col-md-9">
+                                        <div class="bs-component">
+                                            <select name="periode_saison" id="periode_saison" class="select2-single form-control" data-placeholder="Sélectionnez Période">
+                                                <option value=""></option>
+                                                {% for saison in saisons %}
+                                                    {% for periode in saison.periodesSaison %}
+                                                        {% if not periode == null %}
+                                                            {% if not periodeSaison == null and periode.id == periodeSaison.id %}
+                                                                {% set selected = "selected='selected'" %}
+                                                            {% else %}
+                                                                {% set selected = "" %}
+                                                            {% endif %}
+                                                            <option value="{{ periode.id }}" {{ selected }}>{{ periode.nom }}</option>
+                                                        {% endif %}
+
+                                                    {% endfor %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+                                    <div class="col-md-6">
+                                        <div class="bs-component">
+                                            <div class="checkbox-custom checkbox-disabled mt5">
+                                                <input name="valide_horaires_vol" type="hidden" value="true"/>
+                                                <input checked="" disabled="" name="valide_horaires_vol" id="valide_horaires_vol" type="checkbox">
+                                                <label for="valide_horaires_vol">Vérifier la validité des horaires de vols</label>
+                                            </div>
+                                        </div>
+                                        <div class="bs-component">
+                                            <div class="checkbox-custom checkbox-disabled mt5">
+                                                <input name="valide_sens_vol" type="hidden" value="true"/>
+                                                <input checked="" disabled="" name="valide_sens_vol" id="valide_sens_vol" type="checkbox">
+                                                <label for="valide_sens_vol">Vérifier la cohérence des sens de vols</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="bs-component">
+                                            <div class="checkbox-custom checkbox-disabled mt5">
+                                                <input name="valide_numero_vol" type="hidden" value="true"/>
+                                                <input checked="" disabled="" name="valide_numero_vol" id="valide_numero_vol" type="checkbox">
+                                                <label for="valide_numero_vol">Vérifier l'unicité des numéro de vols</label>
+                                            </div>
+                                        </div>
+                                        <div class="bs-component">
+                                            <div class="checkbox-custom checkbox-disabled mt5">
+                                                <input name="valide_temps_demi_tour" type="hidden" value="true"/>
+                                                <input checked="" disabled="" name="valide_temps_demi_tour" id="valide_temps_demi_tour" type="checkbox">
+                                                <label for="valide_temps_demi_tour">Vérifier les temps de 1/2 tour</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel-footer text-right">
+                            <button type="submit" class="btn btn-default" id="vérification_coherence" name="vérification_coherence" value="vérification_coherence">
+                                Actualiser
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+
+                <!-- Input Fields -->
+                <div class="panel">
+
+                    <div class="panel-heading">
+                            <span class="panel-icon">
+                              <i class="glyphicon glyphicon-list"></i>
+                            </span>
+                        <span class="panel-title">Vérification de la cohérence des vols selectionnés</span>
+                    </div>
+
+                    <div class="panel-body">
+                        <table class="table admin-form fs13 datatable" id="datatable1" cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th class="no-sort">N° de vol</th>
+                                <th class="no-sort">Date début</th>
+                                <th class="no-sort">Date fin</th>
+                                <th class="no-sort">H. D.</th>
+                                <th class="no-sort">H. A.</th>
+                                <th class="no-sort">Jours validié</th>
+                                <th class="no-sort">Départ</th>
+                                <th class="no-sort">Arrivée</th>
+                                <th class="no-sort">Avion</th>
+                                <th class="no-sort" style="width: 40px">1/2 T</th>
+                                <th class="no-sort">Message</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for coherence in aCoherence %}
+                                    {#<span class="h2">Numéro de vol {{ coherence.vol.numero }} du {{ coherence.vol.periodeDeVol.dateDebut|date("d/m/y") }} au {{ coherence.vol.periodeDeVol.dateFin|date("d/m/y") }}</span>#}
+
+                                            <tr class="header">
+                                                <td>{{ coherence.vol.numero }}</td>
+                                                <td>{{ coherence.vol.periodeDeVol.dateDebut|date("d/m/y") }}</td>
+                                                <td>{{ coherence.vol.periodeDeVol.dateFin|date("d/m/y") }}</td>
+                                                <td>{{ coherence.vol.periodeDeVol.decollage|date("H:i") }}</td>
+                                                <td>{{ coherence.vol.periodeDeVol.atterissage|date("H:i") }}</td>
+                                                <td>{{ coherence.vol.periodeDeVol.JoursDeValidite|join(' ') }}</td>
+                                                <td>{{ coherence.vol.ligne.aeroportDepart.codeIATA }}</td>
+                                                <td>{{ coherence.vol.ligne.aeroportArrivee.codeIATA }}</td>
+                                                <td>{{ coherence.vol.avion.typeAvion.codeIATA }}</td>
+                                                <td>{{ coherence.vol.avion.typeAvion.tempsDemiTour }}</td>
+                                                <td></td>
+                                            </tr>
+                                        {% for volErreurCoherence in coherence.aVolsErreurs %}
+                                            <tr class="text-danger {% if loop.index is divisibleby(2) %}odd{% else %}even{% endif %}">
+                                                <td>{{ volErreurCoherence.vol.numero }}</td>
+                                                <td>{{ volErreurCoherence.vol.periodeDeVol.dateDebut|date("d/m/y") }}</td>
+                                                <td>{{ volErreurCoherence.vol.periodeDeVol.dateFin|date("d/m/y") }}</td>
+                                                <td>{{ volErreurCoherence.vol.periodeDeVol.decollage|date("H:i") }}</td>
+                                                <td>{{ volErreurCoherence.vol.periodeDeVol.atterissage|date("H:i") }}</td>
+                                                <td>{{ volErreurCoherence.vol.periodeDeVol.JoursDeValidite|join(' ') }}</td>
+                                                <td>{{ volErreurCoherence.vol.ligne.aeroportDepart.codeIATA }}</td>
+                                                <td>{{ volErreurCoherence.vol.ligne.aeroportArrivee.codeIATA }}</td>
+                                                <td>{{ volErreurCoherence.vol.avion.typeAvion.codeIATA }}</td>
+                                                <td>{{ volErreurCoherence.vol.avion.typeAvion.tempsDemiTour }}</td>
+                                                <td class="strong">{{ volErreurCoherence.recommandations[0] }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <!--<table class="table fs13 datatable" id="datatable1" cellspacing="0" width="100%">-->
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- End: Content -->
+
+{% endblock %}
+
+{% block jquery_custom %}
+    // Init Select2 - Basic Single
+    $(".select2-single").select2({
+    language: "fr",
+    allowClear: true
+    });
+{% endblock %}
+
+{% block javascripts_libs %}
+    <!-- Theme Javascript LIBS -->
+    {% javascripts
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/JSZip-2.5.0/jszip.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/pdfmake-0.1.18/build/pdfmake.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/pdfmake-0.1.18/build/vfs_fonts.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/DataTables-1.10.13/js/jquery.dataTables.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/DataTables-1.10.13/js/dataTables.bootstrap.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/Buttons-1.2.4/js/dataTables.buttons.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/Buttons-1.2.4/js/buttons.bootstrap.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/Buttons-1.2.4/js/buttons.html5.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/js/select2.full.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/js/i18n/fr.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block javascripts_custom %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/assets/js/custom_datatables_verif_coherence_vol.js') }}"></script>
+{% endblock %}

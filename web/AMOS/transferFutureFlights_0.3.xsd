@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Swiss AviationSoftware Ltd. -->
+<!-- P.O.Box, CH-4002 Basel, Switzerland -->
+<!-- http://www.swiss-as.com -->
+<!-- SWISS AviationSoftware, 2009 (XPIS) -->
+<!-- ***AMOS_AUTO_GENERATION*** -->
+<!-- ***AMOS_CHANGELOG_START***
+Version 0.2 - AMOS 9.30
+21/01/2009 - Copied from futureFlightsImport.xsd
+05/09/2011 - VECH - changed facet for IATA/ICAO Airport Codes from max. 3 characters to max. 4 characters.
+
+Version 0.3 - AMOS 10.10
+31/01/2012	- VECH - renamed tags/fields according to given schema
+31/01/2012	- VECH - added ETD and ETA fields (optional)
+05/04/2012	- XCOI - updated version numbers.
+05/04/2012	- CGS  - renamed tag "rae_suffix" to "flightSuffix" and relocated it. Adjusted documentation.
+08/10/2013 - added field mappings
+27/03/2014 - added AMOS mime type annotations
+15/12/2016 - XCOI - adapted field mappings 
+
+***AMOS_CHANGELOG_END***-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" version="2012_01">
+	<xsd:element name="future_flights">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="flights_for_date_and_aircraft" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="sched_departure_date">
+								<xsd:annotation>
+									<xsd:documentation>
+									Scheduled departure date.
+									</xsd:documentation>
+									<xsd:appinfo>AMOS_DATABASE_IMPORT=ac_future_flights.sched_departure_date</xsd:appinfo>
+									<xsd:appinfo>AMOS_MIMETYPE=D_DATE</xsd:appinfo>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="AMOS_DATE_DAY">
+											<xsd:attribute name="data_mode" type="xsd:string" use="required" fixed="only_non_arrived_legs"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="aircraft_registration">
+								<xsd:annotation>
+									<xsd:documentation>
+									This code has to be the same code as the code of the aircraft in the AMOS database table "aircraft".
+									</xsd:documentation>
+									<xsd:appinfo>AMOS_DATABASE_IMPORT=ac_future_flights.ac_registr</xsd:appinfo>
+									<xsd:appinfo>AMOS_MIMETYPE=E_AC</xsd:appinfo>
+								</xsd:annotation>
+								<xsd:simpleType>
+									<xsd:restriction base="xsd:string">
+										<xsd:minLength value="1"/>
+										<xsd:maxLength value="6"/>
+									</xsd:restriction>
+								</xsd:simpleType>
+							</xsd:element>
+							<xsd:element name="leg" type="leg" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>All the future legs for the specified date and aircraft.	</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name="used_date_format" type="xsd:string" use="required" fixed="amos_standard">
+				<xsd:annotation>
+					<xsd:appinfo>AMOS_NO_DB_IMPORT</xsd:appinfo>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="published_at" type="AMOS_DATE_MILLISECONDS" use="required">
+				<xsd:annotation>
+					<xsd:appinfo>AMOS_NO_DB_IMPORT</xsd:appinfo>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="amos_xsd_layout_version" type="xsd:string" use="required" fixed="2012_01">
+				<xsd:annotation>
+					<xsd:appinfo>AMOS_NO_DB_IMPORT</xsd:appinfo>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="leg">
+		<xsd:sequence>
+			<xsd:element name="carrier">
+				<xsd:annotation>
+					<xsd:documentation>Operator of the flights, this is part of the usual flight number.</xsd:documentation>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=ac_future_flights.fn_carrier</xsd:appinfo>
+					<xsd:appinfo>AMOS_MIMETYPE=A_VENDOR</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:minLength value="1"/>
+						<xsd:maxLength value="3"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="flightNumber">
+				<xsd:annotation>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=ac_future_flights.fn_number</xsd:appinfo>
+					<xsd:appinfo>AMOS_MIMETYPE=D_INTEGER</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:positiveInteger">
+						<xsd:maxInclusive value="9999"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="flightSuffix" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A special suffix, which is appended to the usual flight number. See the A in LX123A, when for example a flight needs a "Restart" after a preceding "Air Turnback / Inflight Return" and the Operator (for whatever reason) does not want to assign a different flightnumber to the "Restart" flight.</xsd:documentation>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=ac_future_flights.fn_suffix</xsd:appinfo>
+					<xsd:appinfo>AMOS_MIMETYPE=D_TEXT</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:length value="1"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="serviceType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>IATA Code for the type of flight, e.g. training, charter or regular schedule flights.
+				Valid codes currently include:
+				J (scheduled flight, passenger, normal service)
+				S (scheduled flight, passenger, shuttle mode)
+				F (scheduled flight, cargo/mail, loose loaded cargo and/or preloaded devices)
+				M (scheduled flight, cargo/mail, mail only)
+				Q (scheduled flight, passenger/cargo in cabin)
+				G (additional flight, passenger, normal service)
+				B (additional flight, passenger, shuttle mode)
+				A (additional flight, cargo/mail)
+				R (additional flight, passenger/cargo in cabin)
+				C (charter flight, passenger only)
+				O (charter flight, charter requiring special handling like migrants, immigrant flights)
+				H (charter flight, cargo and/or mail)
+				L (charter flight, passenger and cargo and/or mail)
+				P (other flights, non-revenue like positioning, ferry, delivery, demo)
+				T (other flights, technical test)
+				K (other flights, training)
+				D (other flights, general aviation)
+				E (other flights, government charter)
+				W (other flights, military)
+				X (other flights, technical stop)
+				I (other flights, state/diplomatic/air ambulance)
+				N (other flights, business aviation/air taxi)
+				Y (reserved for special internal company purposes)
+				Z (reserved for special internal company purposes)</xsd:documentation>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=ac_future_flights.service_type</xsd:appinfo>
+					<xsd:appinfo>AMOS_MIMETYPE=D_TEXT</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:enumeration value="J"/>
+						<xsd:enumeration value="S"/>
+						<xsd:enumeration value="F"/>
+						<xsd:enumeration value="M"/>
+						<xsd:enumeration value="Q"/>
+						<xsd:enumeration value="G"/>
+						<xsd:enumeration value="B"/>
+						<xsd:enumeration value="A"/>
+						<xsd:enumeration value="R"/>
+						<xsd:enumeration value="C"/>
+						<xsd:enumeration value="O"/>
+						<xsd:enumeration value="H"/>
+						<xsd:enumeration value="L"/>
+						<xsd:enumeration value="P"/>
+						<xsd:enumeration value="T"/>
+						<xsd:enumeration value="K"/>
+						<xsd:enumeration value="D"/>
+						<xsd:enumeration value="E"/>
+						<xsd:enumeration value="W"/>
+						<xsd:enumeration value="X"/>
+						<xsd:enumeration value="I"/>
+						<xsd:enumeration value="N"/>
+						<xsd:enumeration value="Y"/>
+						<xsd:enumeration value="Z"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="scheduledDepartureDateTime" type="AMOS_DATE_MINUTES">
+				<xsd:annotation>
+					<xsd:documentation>Scheduled departure date and time. Also known as STD in OPS Terminology (Scheduled Time of Departure). Departure here means going Off-Block at the Gate.</xsd:documentation>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=ac_future_flights.sched_departure_date</xsd:appinfo>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=ac_future_flights.sched_departure_time</xsd:appinfo>
+					<xsd:appinfo>AMOS_MIMETYPE=D_DATE_TIME</xsd:appinfo>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="estimatedDepartureDateTime" type="AMOS_DATE_MINUTES" minOccurs="0">
+				<xsd:annotation>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=ac_future_flights.estim_departure_date</xsd:appinfo>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=ac_future_flights.estim_departure_time</xsd:appinfo>
+					<xsd:appinfo>AMOS_MIMETYPE=D_DATE_TIME</xsd:appinfo>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="scheduledDepartureAirport">
+				<xsd:annotation>
+					<xsd:documentation>Scheduled departure airport code (3-letter IATA or 4-letter ICAO Code).</xsd:documentation>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=ac_future_flights.sched_departure_airport</xsd:appinfo>
+					<xsd:appinfo>AMOS_MIMETYPE=A_STATION</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:minLength value="1"/>
+						<xsd:maxLength value="4"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="departureStand" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Information about the position of the aircraft on the departure airport, e.g. Gate "B27".</xsd:documentation>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=leg_additional.departure_stand</xsd:appinfo>
+					<xsd:appinfo>AMOS_MIMETYPE=D_TEXT</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:minLength value="1"/>
+						<xsd:maxLength value="6"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="scheduledArrivalDateTime" type="AMOS_DATE_MINUTES">
+				<xsd:annotation>
+					<xsd:documentation>Scheduled arrival date and time. Also known as STA in OPS Terminology (Scheduled Time of Arrival). Arrival here means going On-Block at the Gate.</xsd:documentation>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=ac_future_flights.sched_arrival_date</xsd:appinfo>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=ac_future_flights.sched_arrival_time</xsd:appinfo>
+					<xsd:appinfo>AMOS_MIMETYPE=D_DATE_TIME</xsd:appinfo>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="estimatedArrivalDateTime" type="AMOS_DATE_MINUTES" minOccurs="0">
+				<xsd:annotation>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=ac_future_flights.estim_arrival_date</xsd:appinfo>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=ac_future_flights.estim_arrival_time</xsd:appinfo>
+					<xsd:appinfo>AMOS_MIMETYPE=D_DATE_TIME</xsd:appinfo>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="scheduledArrivalAirport">
+				<xsd:annotation>
+					<xsd:documentation>Scheduled arrival airport code (3-letter IATA or 4-letter ICAO Code).</xsd:documentation>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=ac_future_flights.sched_arrival_airport</xsd:appinfo>
+					<xsd:appinfo>AMOS_MIMETYPE=A_STATION</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:minLength value="1"/>
+						<xsd:maxLength value="4"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="arrivalStand" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Information about the position of the aircraft on the arrival airport, e.g. Gate "B27".</xsd:documentation>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=leg_additional.arrival_stand</xsd:appinfo>
+					<xsd:appinfo>AMOS_MIMETYPE=D_TEXT</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:minLength value="1"/>
+						<xsd:maxLength value="6"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="estimatedLegDuration">
+				<xsd:annotation>
+					<xsd:documentation>The estimated leg duration for this leg, calculated in minutes.
+Note, that this value can be taken into account for matters of forecast calculation.
+
+The suggested strategy to fill this value is like this:
+If you know roughly about the usual raw flight time (i.e. the difference in minutes between the value of landing date time and the value of airborne date time) of this scheduled leg, then fill in this particular value. Otherwise, use the difference in minutes between the value in the tag sched_arrival_date_time and the tag sched_departure_date_time.
+					</xsd:documentation>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=ac_future_flights.estim_leg_duration</xsd:appinfo>
+					<xsd:appinfo>AMOS_MIMETYPE=D_INTEGER</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:positiveInteger">
+						<xsd:maxExclusive value="1200"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="legCycles">
+				<xsd:annotation>
+					<xsd:documentation>Cycles for this leg, i.e. how many touchdowns this leg will have.
+				Note, that this value can be taken into account for matters of forecast calculation.			</xsd:documentation>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=ac_future_flights.leg_cycles</xsd:appinfo>
+					<xsd:appinfo>AMOS_MIMETYPE=D_INTEGER</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:positiveInteger">
+						<xsd:maxExclusive value="100"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="estimatedTotalAircraftMinutesAtTouchdown" type="xsd:nonNegativeInteger" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The estimated "Total Aircraft Hours" of the aircraft at the time of touchdown of this leg.
+					To prevent misinterpretations, this value needs to be provided in dimension "minutes".
+					Note, that if this value is provided, it can be taken into account for matters of forecast calculation.
+					If your OPS system is capable to fill this XML element, then it is strongly recommended 	to do so. That way, AMOS does not need to calculate the estimated "Total Aircraft Hours" of each leg on its own.			Also note, that this XML element is an "all or nothing" optional value, i.e. if for one leg this XML element is given, then all other legs in the XML document should be equipped with this XML element as well.
+					</xsd:documentation>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=ac_future_flights.sched_tah_at_arrival</xsd:appinfo>
+					<xsd:appinfo>AMOS_MIMETYPE=D_INTEGER</xsd:appinfo>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="estimatedTotalAircraftCyclesAtTouchdown" type="xsd:nonNegativeInteger" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The estimated "Total Aircraft Cycles" of the aircraft at the time of touchdown of this leg.
+Note, that if this value is provided, it can be taken into account for matters of forecast calculation.			
+If your OPS system is capable to fill this XML element, then it is strongly recommended to do so. That way, AMOS does not need to calculate the estimated "Total Aircraft Cycles" of each leg on its own.
+					Also note, that this XML element is an "all or nothing" optional value, i.e. if for one leg this XML element is given, then all other legs in the XML document should be equipped with this XML element as well.			</xsd:documentation>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=ac_future_flights.sched_tac_at_arrival</xsd:appinfo>
+					<xsd:appinfo>AMOS_MIMETYPE=D_INTEGER</xsd:appinfo>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="externalSystemLegId" type="xsd:positiveInteger" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A key to uniquely identify this leg in the data delivering system (e.g. Netline Leg Id).
+
+Don't use this tag, if your legacy system cannot generate a unique id for a leg.		</xsd:documentation>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=ac_future_flights.ext_system_leg_id</xsd:appinfo>
+					<xsd:appinfo>AMOS_MIMETYPE=D_INTEGER</xsd:appinfo>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="sticker" type="sticker" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="crewMember" type="crew_member" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="sticker">
+		<xsd:sequence>
+			<xsd:element name="header">
+				<xsd:annotation>
+					<xsd:documentation>Short text as header of the sticker.</xsd:documentation>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=leg_sticker.header</xsd:appinfo>
+					<xsd:appinfo>AMOS_MIMETYPE=D_TEXT</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:minLength value="1"/>
+						<xsd:maxLength value="40"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="stickerText">
+				<xsd:annotation>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=leg_sticker.sticker_text</xsd:appinfo>
+					<xsd:appinfo>AMOS_MIMETYPE=D_TEXT</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:minLength value="1"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="crew_member">
+		<xsd:sequence>
+			<xsd:element name="letterCode">
+				<xsd:annotation>
+					<xsd:documentation>Letter code of the crew member, i.e. trigramme. (3/4LC)				</xsd:documentation>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=leg_crewmember.letter_code</xsd:appinfo>
+					<xsd:appinfo>AMOS_MIMETYPE=D_TEXT</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:minLength value="1"/>
+						<xsd:maxLength value="6"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="functionCode">
+				<xsd:annotation>
+					<xsd:documentation>Crew function on flight (Captain, Cabin Att., etc...).´		</xsd:documentation>
+					<xsd:appinfo>AMOS_DATABASE_IMPORT=leg_crewmember.function_code</xsd:appinfo>
+					<xsd:appinfo>AMOS_MIMETYPE=D_TEXT</xsd:appinfo>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:minLength value="1"/>
+						<xsd:maxLength value="3"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="AMOS_DATE_DAY">
+		<xsd:annotation>
+			<xsd:documentation>
+			The format of this data type is required to follow the pattern: yyyy-MM-dd
+			An example date could be 2006-03-20
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="10"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="AMOS_DATE_MINUTES">
+		<xsd:annotation>
+			<xsd:documentation>
+			The format of this data type is required to follow the pattern: yyyy-MM-dd HH:mm
+			An example date could be 2006-03-20 08:40
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="16"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="AMOS_DATE_MILLISECONDS">
+		<xsd:annotation>
+			<xsd:documentation>
+			The format of this data type is required to follow the pattern: yyyy-MM-dd HH:mm:ss.SSS
+			An example date could be 2006-03-20 08:40:22.698
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="23"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

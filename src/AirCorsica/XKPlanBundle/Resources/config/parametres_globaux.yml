@@ -1,0 +1,8 @@
+parameters:
+    messagereplyaddress: programme@aircorsica.com
+    codeaeroportdattacheaircorsica: sdfdsfdsf
+    codeemetteursita: AJASPXK
+    adressesitaaltea: MUCSCXK
+    emailsitaaltea: jean-joseph.canale@sitec.fr
+    emailsitassim7: sdhkjdsf@sdfsdf.fr
+    app.amos.xsd.path: '%kernel.root_dir%/../web/AMOS/transferFutureFlights_0.3.xsd'

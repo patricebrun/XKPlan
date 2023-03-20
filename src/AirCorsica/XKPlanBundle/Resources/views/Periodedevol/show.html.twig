@@ -1,0 +1,48 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block body %}
+    <h1>Periodedevol</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ periodeDeVol.id }}</td>
+            </tr>
+            <tr>
+                <th>Joursdevalidite</th>
+                <td>{{ periodeDeVol.joursDeValidite }}</td>
+            </tr>
+            <tr>
+                <th>Decollage</th>
+                <td>{% if periodeDeVol.decollage %}{{ periodeDeVol.decollage|date('H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Atterissage</th>
+                <td>{% if periodeDeVol.atterissage %}{{ periodeDeVol.atterissage|date('H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Datetimemodification</th>
+                <td>{% if periodeDeVol.dateTimeModification %}{{ periodeDeVol.dateTimeModification|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Datetimecreation</th>
+                <td>{% if periodeDeVol.dateTimeCreation %}{{ periodeDeVol.dateTimeCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('periodedevol_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('periodedevol_edit', { 'id': periodeDeVol.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

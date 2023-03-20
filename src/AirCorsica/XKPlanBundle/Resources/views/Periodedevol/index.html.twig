@@ -1,0 +1,44 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block body %}
+    <h1>Periodedevols list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Joursdevalidite</th>
+                <th>Decollage</th>
+                <th>Atterissage</th>
+                <th>Datetimemodification</th>
+                <th>Datetimecreation</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for periodeDeVol in periodeDeVols %}
+            <tr>
+                <td><a href="">{{ periodeDeVol.id }}</a></td>
+                {#<td>{{ periodeDeVol.joursDeValidite }}</td>#}
+                <td>{% if periodeDeVol.decollage %}{{ periodeDeVol.decollage|date('H:i:s') }}{% endif %}</td>
+                <td>{% if periodeDeVol.atterissage %}{{ periodeDeVol.atterissage|date('H:i:s') }}{% endif %}</td>
+                <td>{% if periodeDeVol.dateTimeModification %}{{ periodeDeVol.dateTimeModification|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if periodeDeVol.dateTimeCreation %}{{ periodeDeVol.dateTimeCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            {#<a href="{{ path('periodedevol_edit', { 'id': periodeDeVol.id }) }}">edit</a>#}
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('periodedevol_new') }}">Create a new periodeDeVol</a>
+        </li>
+    </ul>
+{% endblock %}

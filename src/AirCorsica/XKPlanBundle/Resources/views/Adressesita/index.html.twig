@@ -1,0 +1,47 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block body %}
+    <h1>Adressesitas list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Adressesita</th>
+                <th>Libelle</th>
+                <th>Suividemandeslot</th>
+                <th>Datetimemodification</th>
+                <th>Datetimecreation</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for adresseSITum in adresseSITAs %}
+            <tr>
+                <td><a href="{{ path('adressesita_show', { 'id': adresseSITum.id }) }}">{{ adresseSITum.id }}</a></td>
+                <td>{{ adresseSITum.adresseSITA }}</td>
+                <td>{{ adresseSITum.libelle }}</td>
+                <td>{% if adresseSITum.suiviDemandeSlot %}Yes{% else %}No{% endif %}</td>
+                <td>{% if adresseSITum.dateTimeModification %}{{ adresseSITum.dateTimeModification|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if adresseSITum.dateTimeCreation %}{{ adresseSITum.dateTimeCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('adressesita_show', { 'id': adresseSITum.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('adressesita_edit', { 'id': adresseSITum.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('adressesita_new') }}">Create a new adresseSITum</a>
+        </li>
+    </ul>
+{% endblock %}

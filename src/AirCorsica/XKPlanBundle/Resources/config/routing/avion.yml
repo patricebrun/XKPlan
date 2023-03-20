@@ -1,0 +1,29 @@
+avion_index:
+    path:     /
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Avion:index" }
+    methods:  GET
+
+avion_show:
+    path:     /{id}/show
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Avion:show" }
+    methods:  GET
+
+avion_new:
+    path:     /new
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Avion:new" }
+    methods:  [GET, POST]
+
+avion_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Avion:edit" }
+    methods:  [GET, POST]
+
+avion_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Avion:delete" }
+    #methods:  DELETE
+
+avion_deletemasse:
+    path:     /deletemasse
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Avion:deletemasse" }
+    methods:  [GET, POST]

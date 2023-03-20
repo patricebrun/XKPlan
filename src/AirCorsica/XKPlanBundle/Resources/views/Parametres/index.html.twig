@@ -1,0 +1,145 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+
+{% block stylesheets %}
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/assets/admin-tools/admin-forms/less/admin-forms.less'
+    filter='less'
+    output='css/compiled/admin-forms.css' %}
+
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+
+    {% endstylesheets %}
+
+{% endblock %}
+
+{% block title %}
+    {% set titre = 'Paramètres Globaux' %}
+    {{ titre }} - {{ parent() }}
+{% endblock %}
+
+{% block body_class %}
+    {% set attributes = 'admin-elements-page' %}
+    {{ attributes }}
+{% endblock %}
+
+{% block titre_contenu %}
+    {% set titre_contenu = 'Paramètres Globaux' %}
+    {{ titre_contenu }}
+{% endblock %}
+
+{% block body %}
+
+    {% set template_id = app.request.session.get("template") %}
+
+    <!-- Begin: Content -->
+    <div id="content" class="animated fadeIn">
+        <div class="row">
+            <!-- Begin: Content -->
+            <div class="col-md-12">
+                <!-- Begin .page-tabs -->
+                <div class="page-tabs">
+                    <ul class="nav nav-tabs">
+                        <li {% if request.attributes.get('_route') == 'template_index' %}class="active"{% endif %}>
+                            <a href="{{ path('template_index') }}?id={{ template_id }}">Gestion des templates</a>
+                        </li>
+                        <li {% if request.attributes.get('_route') == 'utilisateur_index' %}class="active"{% endif %}>
+                            <a href="{{ path('utilisateur_index') }}">Gestion Utilisateurs</a>
+                        </li>
+                        <li {% if request.attributes.get('_route') == 'parametres_index' %}class="active"{% endif %}>
+                            <a href="{{ path('parametres_index') }}">Paramètres Globaux</a>
+                        </li>
+                        <!--<li>
+                            <a href="#">Obligation de service public</a>
+                        </li>-->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="theme-primary mw1000 center-block">
+                <div class="panel panel-visible">
+                    <form id="aircorsica_xkplanbundle_parametres_form" name="aircorsica_xkplanbundle_parametres" class="form-horizontal" role="form" action="" method="get">
+                        {% if csrf_token %}
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                        {% endif %}
+
+                        <div class="panel-heading">
+                            <span class="panel-icon">
+                              <i class="glyphicon glyphicon-tasks"></i>
+                            </span>
+                            <span class="panel-title">Listing Paramètres Globaux</span>
+                        </div>
+                        <div class="panel-body">
+                            <div id="aircorsica_xkplanbundle_parametres">
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label" for="aircorsica_xkplanbundle_parametres_messagereplyaddress">Adresse Message Reply</label>
+                                    <div class="col-lg-9">
+                                        <div class="bs-component">
+                                            <input type="text" id="aircorsica_xkplanbundle_parametres_messagereplyaddress" name="parametres_messagereplyaddress" value="{{ messagereplyaddress }}" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label" for="aircorsica_xkplanbundle_parametres_codeaeroportdattacheaircorsica">Code Aéroport d'attache Air Corsica</label>
+                                    <div class="col-lg-9">
+                                        <div class="bs-component">
+                                            <input type="text" id="aircorsica_xkplanbundle_parametres_codeaeroportdattacheaircorsica" name="parametres_codeaeroportdattacheaircorsica" value="{{ codeaeroportdattacheaircorsica }}" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label" for="aircorsica_xkplanbundle_parametres_codeemetteursita">Code Emetteur SITA</label>
+                                    <div class="col-lg-9">
+                                        <div class="bs-component">
+                                            <input type="text" id="aircorsica_xkplanbundle_parametres_codeemetteursita" name="parametres_codeemetteursita" value="{{ codeemetteursita }}" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label" for="aircorsica_xkplanbundle_parametres_adressesitaaltea">Adresse SITA Altea</label>
+                                    <div class="col-lg-9">
+                                        <div class="bs-component">
+                                            <input type="text" id="aircorsica_xkplanbundle_parametres_adressesitaaltea" name="parametres_adressesitaaltea" value="{{ adressesitaaltea }}" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label" for="aircorsica_xkplanbundle_parametres_emailsitaaltea">Email SITA Altea</label>
+                                    <div class="col-lg-9">
+                                        <div class="bs-component">
+                                            <input type="text" id="aircorsica_xkplanbundle_parametres_emailsitaaltea" name="parametres_emailsitaaltea" value="{{ emailsitaaltea }}" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label" for="aircorsica_xkplanbundle_parametres_emailsitassim7">Email SITA SSIM7</label>
+                                    <div class="col-lg-9">
+                                        <div class="bs-component">
+                                            <input type="text" id="aircorsica_xkplanbundle_parametres_emailsitassim7" name="parametres_emailsitassim7" value="{{ emailsitassim7 }}" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer text-right">
+                            <button type="submit" class="btn-default btn validForm" name="enregistrer">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End: Content -->
+{% endblock %}
+
+{% block javascripts_custom %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,172 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+
+{% block stylesheets %}
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/assets/admin-tools/admin-forms/less/admin-forms.less'
+    filter='less'
+    output='css/compiled/admin-forms.css' %}
+
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+
+    {% endstylesheets %}
+
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/DataTables-1.10.13/css/dataTables.bootstrap.css'
+    output='css/compiled/dataTables.css'
+    %}
+
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+
+    {% endstylesheets %}
+
+{% endblock %}
+
+{% block title %}
+    {% set titre = 'Gestion des Utilisateurs' %}
+    {{ titre }} - {{ parent() }}
+{% endblock %}
+
+{% block body_class %}
+    {% set attributes = 'admin-elements-page' %}
+    {{ attributes }}
+{% endblock %}
+
+{% block titre_contenu %}
+    {% set titre_contenu = 'Préférences' %}
+    {{ titre_contenu }}
+{% endblock %}
+
+{% block btn_actions %}
+    <div class="topbar-right">
+        <div class="ib topbar-dropdown">
+            <a href="{{ path('fos_user_registration_register') }}" class="btn btn-success btn-gradient dark btn-block"{% if not is_granted('ROLE_ADMIN') %} disabled {% endif %}><i class="glyphicon glyphicon-plus"></i> Ajouter</a>
+        </div>
+        <div class="ib topbar-dropdown">
+            <a id="supprimer_items" href="{{ path("utilisateur_deletemasse") }}" class="btn btn-danger btn-gradient dark btn-block"><i class="glyphicon glyphicon-trash"></i> Supprimer Sélection</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+
+    {% set template_id = app.request.session.get("template") %}
+
+    <!-- Begin: Content -->
+    <div id="content" class="animated fadeIn">
+        <div class="row">
+            <!-- Begin: Content -->
+            <div class="col-md-12">
+                <!-- Begin .page-tabs -->
+                <div class="page-tabs">
+                    <ul class="nav nav-tabs">
+                        <li {% if request.attributes.get('_route') == 'template_index' %}class="active"{% endif %}>
+                            <a href="{{ path('template_index') }}?id={{ template_id }}">Gestion des templates</a>
+                        </li>
+                        <li {% if request.attributes.get('_route') == 'utilisateur_index' %}class="active"{% endif %}>
+                            <a href="{{ path('utilisateur_index') }}">Gestion Utilisateurs</a>
+                        </li>
+                        <li {% if request.attributes.get('_route') == 'parametres_index' %}class="active"{% endif %}>
+                            <a href="{{ path('parametres_index') }}">Paramètres Globaux</a>
+                        </li>
+                        <!--<li>
+                            <a href="#">Obligation de service public</a>
+                        </li>-->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-visible">
+                    <div class="panel-heading">
+                    <span class="panel-icon">
+                      <i class="glyphicon glyphicon-tasks"></i>
+                    </span>
+                        <span class="panel-title">Listing Utilisateurs</span>
+                    </div>
+                    <div class="panel-body">
+                        <!--<table class="table admin-form theme-white tc-checkbox-1 fs13 datatable" id="datatable" cellspacing="0" width="100%">-->
+                        <table class="table table-striped table-hover admin-form tc-checkbox-1 fs13 datatable" id="datatable" cellspacing="0" width="100%">
+
+                            <thead>
+                            <tr>
+                                <th class="no-sort text-center">
+                                    <label class="option block mn">
+                                        <input type="checkbox" id="tout_cocher" name="tout_cocher" />
+                                        <span class="checkbox mn"></span>
+                                    </label>
+                                </th>
+                                <th>Id</th>
+                                <th>Username</th>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Habilitation</th>
+                                <th class="no-sort">Modifier</th>
+                                <th class="no-sort">Supprimer</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for user in users %}
+                                <tr>
+                                    <td class="text-center">
+                                        <label class="option block mn">
+                                            <input class="check" value="{{ user.id }}" type="checkbox" />
+                                            <span class="checkbox mn"></span>
+                                        </label>
+                                    </td>
+                                    <td>{{ user.id }}</td>
+                                    <td>{{ user.username }}</td>
+                                    <td>{{ user.nom }}</td>
+                                    <td>{{ user.prenom }}</td>
+                                    <td>
+                                        {% if 'ADMIN' in user.roles[0] %}
+                                            Lecture / Ecriture
+                                        {% else %}
+                                            Lecture
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="{{ path('utilisateur_edit', {'id': user.id}) }}" class="btn btn-lg btn-warning">
+                                                <i class="glyphicon glyphicon-edit"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="{{ path('utilisateur_delete', { 'id': user.id }) }}" class="btn btn-lg btn-danger confirm">
+                                                <i class="glyphicon glyphicon-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End: Content -->
+{% endblock %}
+
+{% block javascripts_libs %}
+    <!-- Theme Javascript LIBS -->
+    {% javascripts
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/DataTables-1.10.13/js/jquery.dataTables.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/DataTables-1.10.13/js/dataTables.bootstrap.min.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block javascripts_custom %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/assets/js/custom_datatables.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% set totalVol = 0 %}
+{% set totalSiege = 0 %}
+{% set totalHeure = 0 %}
+
+<h1 style="text-align: center;">Imprimé le {{ "now"|date("d/m/Y H:i:s") }}</h1>
+<div class="panel-body">
+    <table   cellpadding="10" width="100%" style="text-align: center;">
+        <thead >
+        <tr style="background-color: #DEDEDE;">
+            <th >Date</th>
+            <th>Nbre de Vols</th>
+            <th >Nbre d'offres en sièges</th>
+            <th >Temps de vol</th>
+        </tr>
+        </thead>
+        <tbody >
+        {% for ligne_vol in ligne_tab_generaux %}
+            <tr>
+                <td data-order="{{ ligne_vol.date|date('U') }}">{{ ligne_vol.date|date('d-M-Y') }}</td>
+                <td>{{ ligne_vol.vols }}</td>
+                <td>{{ ligne_vol.sieges }}</td>
+                <td>{{ ligne_vol.heures }}</td>
+            </tr>
+            {% set totalVol = totalVol + ligne_vol.vols %}
+            {% set totalSiege = totalSiege + ligne_vol.sieges %}
+            {% set totalHeure = totalHeure + ligne_vol.heures %}
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr style="background-color: #DEDEDE;">
+            <th>TOTAUX</th>
+            <th>{{ totalVol }}</th>
+            <th>{{ totalSiege }}</th>
+            <th>{{ totalHeure }}</th>
+        </tr>
+        </tfoot>
+    </table>
+</div>

@@ -1,0 +1,91 @@
+planningvol_show:
+    path:     /
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PlanningVol:show" }
+    methods:  GET
+    options:
+        expose: true
+
+planningvol_getavionsasjson:
+    path:     /getavionsasjson
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PlanningVol:getavionsasjson" }
+    methods:  POST
+    options:
+            expose: true
+
+planningvol_gettodayvolsasjson:
+    path:     /gettodayvolsasjson
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PlanningVol:gettodayvolsasjson" }
+    methods:  POST
+    options:
+        expose: true
+
+planningvol_populatevolinmodifponctuellemodal:
+    path:     /populatevolinmodifponctuellemodal
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PlanningVol:populatevolinmodifponctuellemodal" }
+    methods:  POST
+    options:
+        expose: true
+
+planningvol_populatevolinvisualisationinfosmodal:
+    path:     /populatevolinvisualisationinfosmodal
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PlanningVol:populatevolinvisualisationinfosmodal" }
+    methods:  POST
+    options:
+        expose: true
+
+planningvol_getmodalnewatterrisagetimeandtempdevol:
+    path:     /getmodalnewatterrisagetimeandtempdevol
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PlanningVol:getmodalnewatterrisagetimeandtempdevol" }
+    methods:  POST
+    options:
+        expose: true
+
+planningvol_settemplatechangesessionvar:
+    path:     /settemplatechangesessionvar
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PlanningVol:settemplatechangesessionvar" }
+    methods:  POST
+    options:
+        expose: true
+
+planningvol_setparametresplanningvol:
+    path:     /setparametresplanningvol
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PlanningVol:setparametresplanningvol" }
+    methods:  POST
+    options:
+        expose: true
+
+planningvol_printPDFPlanningVols:
+    path:       /printPDFPlanningVols
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PlanningVol:printPDFPlanningVols" }
+    methods: GET
+    options:
+        expose: true
+
+
+#planningvol_savemultivolsmodificationavion:
+#    path:     /savemultivolsmodificationavion
+#    defaults: { _controller: "AirCorsicaXKPlanBundle:PlanningVol:savemultivolsmodificationavion" }
+#    methods:  POST
+#    options:vol_modification_ponctuel
+#        expose: true
+
+planningvol_savemodificationavionvolponctuelle:
+    path:     /savemodificationavionvolponctuelle
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PlanningVol:savemodificationavionvolponctuelle" }
+    methods:  POST
+    options:
+        expose: true
+
+planningvol_savemodificationavionvolsaisoncouranteoucustomperiode:
+    path:     /savemodificationavionvolsaisoncouranteoucustomperiode
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PlanningVol:savemodificationavionvolsaisoncouranteoucustomperiode" }
+    methods:  POST
+    options:
+        expose: true
+
+planningvol_majponctuellevol:
+    path:     /majvolponctuelle
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PlanningVol:majponctuellevol" }
+    methods:  POST
+    options:
+        expose: true

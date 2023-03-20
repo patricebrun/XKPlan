@@ -1,0 +1,469 @@
+{#% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %#}
+{#% extends 'AirCorsicaXKPlanBundle::modal.html.twig' %#}
+{% extends app.request.xmlHttpRequest
+? 'AirCorsicaXKPlanBundle::modal.html.twig'
+: 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+
+{% form_theme form _self %}
+{% block _aircorsica_xkplanbundle_vol_codesShareVol_row %}
+    {% set force_error = true %}
+    <div class="form-group{% if (not compound or force_error|default(false)) and not valid %} has-error{% endif %}">
+        {{- form_label(form) -}}
+        <div class="col-lg-7">
+            <div class="bs-component">
+                {{- form_widget(form) -}}
+                {{- form_errors(form) -}}
+            </div>
+        </div>
+        <div class="col-lg-1">
+            <button id="load_code_share" type="button" class="btn btn-default" data-toggle="button" aria-pressed="false" autocomplete="off">
+                ?
+            </button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block _aircorsica_xkplanbundle_vol_periodeDeVol_joursDeValidite_row %}
+    {% spaceless %}
+        <div class="form-group{% if not valid %} has-error{% endif %}">
+            {{- form_label(form) -}}
+            <div class="col-lg-8">
+                <div class="input-group">
+                    {%- for key, child in form %}
+                        <span class="input-group-addon prn pln">
+                            <input type="checkbox" name="{{ child.vars.full_name }}" id="{{ child.vars.id }}" value="{{ child.vars.value }}" {% if child.vars.checked  %} checked {% endif %} class="checkbox-jour-semaine {% if key > 4 %} jour-week {% endif %}">
+                            {{ child.vars.label }}
+                        </span>
+                    {% endfor -%}
+
+                    <div class="input-group-btn prn pln">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a class="check-jours" data-role="jour_all" href="#">Tous les jours</a></li>
+                            <li><a class="check-jours" data-role="semaine" href="#">Les jours de la semaine</a></li>
+                            <li><a class="check-jours" data-role="weekend" href="#">Les Week Ends</a></li>
+                            <li class="divider"></li>
+                            <li><a class="check-jours" data-role="jour_none" href="#">Aucun jour de la semaine</a></li>
+                        </ul>
+                    </div>
+                </div>
+                {{ form_errors(form) }}
+            </div>
+        </div>
+    {% endspaceless %}
+{% endblock %}
+
+
+{#% block modal %}
+    <div class="modal fade bs-example-modal-lg"  role="dialog" id="myModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Modal title</h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+{% endblock %#}
+
+{% block stylesheets %}
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/assets/admin-tools/admin-forms/less/admin-forms.less'
+    filter='less'
+    %}
+
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+
+    {% endstylesheets %}
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/css/select2.css'
+    output='css/compiled/core.css'
+    %}
+
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+
+    {% endstylesheets %}
+
+{% endblock %}
+
+{% block title %}
+    {% set titre = 'Vol' %}
+    {{ titre }} - {{ parent() }}
+{% endblock %}
+
+{% block body_class %}
+    {% set attributes = 'admin-elements-page' %}
+    {{ attributes }}
+{% endblock %}
+
+{% block titre_contenu %}
+    {% set titre_contenu = 'Vol' %}
+    {{ titre_contenu }}
+{% endblock %}
+
+{% block btn_actions %}
+    <div class="topbar-right">
+        <div class="ib topbar-dropdown">
+            <a href="{{ path('vol_liste') }}" class="btn btn-success btn-gradient dark btn-block"><i class="glyphicon glyphicon-circle-arrow-left"></i> Retour</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <!-- cas de l'action du bouton "+ Nouveau vol" -->
+    {% if edition is not defined %}{% set edition = false %}{% endif %}
+    <!-- Begin: Content -->
+    <div id="content" class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="theme-primary mw1100 center-block">
+                    <!-- Input Fields -->
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <span class="panel-icon">
+                              <i class="glyphicon {% if edition == true %}glyphicon-edit{% else %}glyphicon-plus{% endif %}"></i>
+                            </span>
+                            <span class="panel-title">{% if edition == true %}Edition du vol {{ vol.numero }} {% else %}Création de vol{% endif %}</span>
+                        </div>
+                        {% block content %}
+                            {% if form.id.vars.value %}
+                                {{ form_start(form) }}
+                            {% else %}
+                                {{ form_start(form,{'action': path('vol_new'), 'method': 'POST'}) }}
+                            {% endif %}
+                            {{ form_widget(form.id) }}
+                            {{ form_widget(form.id_precedent) }}
+                            {{ form_widget(form.dates2_precedent) }}
+                            {{ form_widget(form.ligne) }}
+                            {{ form_widget(form._token) }}
+                            <input type="hidden" name="route_to_redirect" id="route_to_redirect">
+                            <input type="hidden" name="aeroport_depart" id="aeroport_depart" value="{% if id_aeroport_depart is defined %}{{ id_aeroport_depart }}{% endif %}">
+                            <input type="hidden" name="aeroport_arrivee" id="aeroport_arrivee" value="{% if id_aeroport_arrivee is defined %}{{ id_aeroport_arrivee }}{% endif %}">
+                            <div class="panel-body">
+
+                                {# Les erreurs générales du formulaire. #}
+                                {% if not form.vars.valid %}
+                                    <ul>
+                                        {# Loop through every form item #}
+                                        {% for child in form.children %}
+                                            {# Display the errors of the form item #}
+                                            {%for error in child.vars.errors%}
+                                                <li>{{error.message}}</li>
+                                            {%endfor%}
+                                        {%endfor%}
+                                    </ul>
+                                {% endif %}
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <fieldset>
+                                            <legend>Identification</legend>
+                                            <div class="form-group">
+
+                                                <label class="col-md-3 control-label">Ligne</label>
+
+                                                {# Affichage des erreurs pour ce champ précis. #}
+                                                {{ form_errors(form.ligne) }}
+
+                                                <div class="col-md-9">
+                                                    <div class="bs-component">
+                                                        {# Génération de l'input. #}
+                                                        {{ form_widget(form.aeroport_depart) }}
+                                                        {#<span style="float: left;margin-right: 22px;padding-top: 10px;">Vers :</span>#}
+                                                        {# Génération de l'input. #}
+                                                        {{ form_widget(form.aeroport_arrivee) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% if edition == true and (volHistoriqueRoot.periodeDeVol.etat == 'send' or volHistoriqueRoot.periodeDeVol.etat == 'cancel')%}
+                                                {{ form_row(form.numero, { 'attr':{'readonly':'readonly'} }) }}
+                                            {% else %}
+                                                {{ form_row(form.numero) }}
+                                            {% endif %}
+                                            {{ form_row(form.codesShareVol) }}
+                                            {#{{ form_row(form.naturesDeVol) }}#}
+                                            {% if edition == true and 'send' in vol.periodeDeVol.etat %}
+                                                {{ form_row(form.typeDeVol, { 'attr':{'disabled':'disabled'} }) }}
+                                            {% else %}
+                                                {{ form_row(form.typeDeVol) }}
+                                            {% endif %}
+                                            {{ form_row(form.compagnie) }}
+                                            {{ form_row(form.affretement) }}
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <fieldset>
+                                            <legend>Caratéristiques</legend>
+                                            {{ form_row(form.avion) }}
+                                            {{ form_row(form.temps_demi_tour) }}
+
+                                            <div class="wrapperDatePicker-modal">
+                                                <div class="form-group">
+                                                    <label class="col-lg-3 control-label required">Période de validité</label>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="col-lg-6">
+                                                                <div class="bs-component">
+                                                                    {{ form_widget(form.periodeDeVol.dateDebut) }}
+                                                                    {{ form_errors(form.periodeDeVol.dateDebut) }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <div class="bs-component">
+                                                                    {{ form_widget(form.periodeDeVol.dateFin) }}
+                                                                    {{ form_errors(form.periodeDeVol.dateFin) }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {% if app.request.attributes.get('_route') == 'vol_modal_new' %}
+                                                {{ form_row(form.periode2) }}
+                                                <div class="wrapperDatePicker-modal">
+                                                    <div class="periode2" style="display: none;">
+                                                        <div class="form-group">
+                                                            <label class="col-lg-3 control-label">Période de validité 2</label>
+                                                            <div class="col-lg-9">
+                                                                <div class="form-group">
+                                                                    <div class="col-lg-6">
+                                                                        <div class="bs-component">
+                                                                            {{ form_widget(form.periodeDeVol2.dateDebut) }}
+                                                                            {{ form_errors(form.periodeDeVol2.dateDebut) }}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-6">
+                                                                        <div class="bs-component">
+                                                                            {{ form_widget(form.periodeDeVol2.dateFin) }}
+                                                                            {{ form_errors(form.periodeDeVol2.dateFin) }}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+
+                                            <div class="form-group">
+                                                    <p class="help-block col-lg-offset-3" id="infos-tdv" style="padding-left: 10px;"></p>
+                                                    <label class="col-lg-3 control-label required">Décollage</label>
+                                                    <div class="col-lg-3">
+                                                        <div class="bs-component">
+                                                            {{ form_widget(form.periodeDeVol.decollage) }}
+                                                        </div>
+                                                    </div>
+                                                    <label class="col-lg-3 control-label required">Attérissage</label>
+                                                    <div class="col-lg-3">
+                                                        <div class="bs-component">
+                                                        {{ form_widget(form.periodeDeVol.atterissage) }}
+                                                    </div>
+                                                    </div>
+                                            </div>
+                                            {{ form_row(form.periodeDeVol.joursDeValidite) }}
+                                        </fieldset>
+                                    </div>
+                                </div>
+
+                                {#<div class="row">#}
+                                {#<div class="col-md-12">#}
+                                {#{{ form_row(form.commentaire) }}#}
+                                {#</div>#}
+                                {#</div>#}
+                            </div>
+                            <div class="panel-footer text-right">
+                                    <a href="#" id ="rec" class="validForm btn-default btn" name="valider" >{% if edition == true %}Modifier{% else %}Enregistrer{% endif %}</a>
+                                {% if edition != true %}
+                                    <a href="#" class="validForm btn-default btn" id="bt-poursuivre" name="poursuivre" >Enregistrer et poursuivre</a>
+                                {% endif %}
+                            </div>
+                            {{ form_end(form, {'render_rest': false}) }}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End: Content -->
+{% endblock %}
+
+
+{% block jquery_custom %}
+
+    /*  Initialisation des datepickers de la modal */
+    opened_modal();
+
+    if( $('#aeroport_arrivee').val() && $('#aeroport_depart').val() ){
+    $('#aircorsica_xkplanbundle_vol_aeroport_depart').val($('#aeroport_depart').val()).trigger('change');
+    $('#aircorsica_xkplanbundle_vol_aeroport_arrivee').val($('#aeroport_arrivee').val()).trigger('change');
+    }
+
+    // Init Select2
+    $("#form_vol_edit .select2-single").select2({
+    language: "fr",
+    allowClear: true
+    }).on("change", function(e) {
+        if("aircorsica_xkplanbundle_vol_aeroport_arrivee" == e.target.id){
+            $('#aircorsica_xkplanbundle_vol_numero').focus();
+        }
+    });
+
+    $("#form_vol_edit .select2-multiple").select2({
+    language: "fr"
+    });
+
+    $("#form_vol_edit .select2-multiple-add").select2({
+    language: "fr",
+    tags: "true"
+    });
+
+    $('#aircorsica_xkplanbundle_vol_periodeDeVol_decollage_hour').addClass('inputs');
+    $('#aircorsica_xkplanbundle_vol_periodeDeVol_decollage_minute').addClass('inputs');
+    $('#aircorsica_xkplanbundle_vol_periodeDeVol_atterissage_hour').addClass('inputs');
+    $('#aircorsica_xkplanbundle_vol_periodeDeVol_atterissage_minute').addClass('inputs');
+
+    $('.inputs').on('change', function(){
+        $(this).next().focus();
+    });
+
+    $('body').delegate('.combine','change', function(){
+        loadIdLigne($(this).parent().children('select'));
+    });
+
+    $('body').delegate('#aircorsica_xkplanbundle_vol_aeroport_depart,#aircorsica_xkplanbundle_vol_aeroport_arrivee','change',function(e){
+        setValues();
+    });
+
+    $('#aircorsica_xkplanbundle_vol_aeroport_depart').on('select2:close', function (evt) {
+        $('#aircorsica_xkplanbundle_vol_aeroport_arrivee').focus();
+        $('#aircorsica_xkplanbundle_vol_aeroport_arrivee').select2('open');
+    });
+
+    $('#aircorsica_xkplanbundle_vol_aeroport_arrivee').on('select2:close', function (evt) {
+        var temp = $('#aircorsica_xkplanbundle_vol_numero').val();
+        $('#aircorsica_xkplanbundle_vol_numero').val('')
+        $('#aircorsica_xkplanbundle_vol_numero').focus().val(temp);
+    });
+
+
+    $.mask.definitions['H'] = "[0-2]";
+    $.mask.definitions['h'] = "[0-9]";
+    $.mask.definitions['M'] = "[0-5]";
+    $.mask.definitions['m'] = "[0-9]";
+
+    $('#aircorsica_xkplanbundle_vol_periodeDeVol_decollage').mask("Hh:Mm", {
+        completed: function() {
+            var currentMask = $(this).mask();
+            if (isNaN(parseInt(currentMask))) {
+                $(this).val("");
+            } else if (parseInt(currentMask) > 2359) {
+                $(this).val("23:59");
+            };
+
+            $('#aircorsica_xkplanbundle_vol_periodeDeVol_atterissage').focus();
+        }
+    });
+
+    $('#aircorsica_xkplanbundle_vol_periodeDeVol_atterissage').mask("Hh:Mm", {
+        completed: function() {
+            var currentMask = $(this).mask();
+            if (isNaN(parseInt(currentMask))) {
+                $(this).val("");
+            } else if (parseInt(currentMask) > 2359) {
+                $(this).val("23:59");
+            };
+        }
+    });
+
+    $('#aircorsica_xkplanbundle_vol_numero').on('keypress',function(event){
+        if ( event.which == 13 ) {
+            event.preventDefault();
+            $('#load_code_share').focus();
+        }
+    });
+
+    $('#load_code_share').on('keypress',function(event){
+        if ( event.which == 13 ) {
+            $('#aircorsica_xkplanbundle_vol_typeDeVol').focus();
+            $('#aircorsica_xkplanbundle_vol_typeDeVol').select2('open');
+        }
+    });
+
+    $('#aircorsica_xkplanbundle_vol_typeDeVol').on('select2-open', function () {
+        if( this.selectedIndex > 0) {
+            var viewport = $('#aircorsica_xkplanbundle_vol_typeDeVol .select2-results');
+            var itemTop = viewport.find('.select2-highlighted').position().top;
+            viewport.scrollTop(itemTop + viewport.scrollTop());
+        }
+    });
+
+    $('#aircorsica_xkplanbundle_vol_typeDeVol').on('select2:close', function () {
+        $('#aircorsica_xkplanbundle_vol_compagnie').focus();
+        $('#aircorsica_xkplanbundle_vol_compagnie').select2('open');
+    });
+
+    $('#aircorsica_xkplanbundle_vol_compagnie').on('select2:close', function () {
+        $('#aircorsica_xkplanbundle_vol_affretement').focus();
+        $('#aircorsica_xkplanbundle_vol_affretement').select2('open');
+    });
+
+    $('#aircorsica_xkplanbundle_vol_affretement').on('select2:close', function () {
+        $('#aircorsica_xkplanbundle_vol_avion').focus();
+        $('#aircorsica_xkplanbundle_vol_avion').select2('open');
+    });
+
+    $('#aircorsica_xkplanbundle_vol_avion').on('select2:close', function () {
+        $('#aircorsica_xkplanbundle_vol_periodeDeVol_dateDebut').datepicker("show");
+    });
+
+    {#$('#aircorsica_xkplanbundle_vol_periodeDeVol_dateDebut').on('change',function(){#}
+        {#$('#aircorsica_xkplanbundle_vol_periodeDeVol_dateFin').focus();#}
+    {#});#}
+
+    //$('#aircorsica_xkplanbundle_vol_periodeDeVol_decollage').mask('99:99');
+    //$('#aircorsica_xkplanbundle_vol_periodeDeVol_atterissage').mask('99:99');
+
+    {#if($('.panel-title').html().indexOf("Edition") == -1){#}
+        {#$('#aircorsica_xkplanbundle_vol_aeroport_depart').select2('open');#}
+    {#}#}
+
+{% endblock %}
+
+{% block javascripts_libs %}
+    <!-- Theme Javascript LIBS -->
+    {% javascripts
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/js/select2.full.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/js/i18n/fr.js'
+    'bundles/aircorsicaxkplan/assets/admin-tools/admin-forms/js/jquery-ui-monthpicker.min.js'
+    'bundles/aircorsicaxkplan/assets/admin-tools/admin-forms/js/jquery-ui-datepicker.min.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {# modification de la bibliotheque moment.js chargée  pour la compatibilité avec le planning vol #}
+    <script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/vendor/plugins/fullcalendar/lib/moment.min.js') }}"></script>
+    {#<script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/vendor/plugins/moment/moment.js') }}"></script>#}
+
+    <script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/vendor/plugins/jquerymask/jquery.maskedinput.min.js') }}"></script>
+    {% endjavascripts %}
+
+{% endblock %}
+
+{% block javascripts_custom %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/assets/js/vol.js') }}"></script>
+{% endblock %}

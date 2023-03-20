@@ -1,0 +1,58 @@
+parameters:
+    app.amos.xsd.path: '%kernel.root_dir%/../web/AMOS/transferFutureFlights_0.3.xsd'
+
+services:
+#    air_corsica_xk_plan.example:
+#        class: AirCorsica\XKPlanBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]
+
+    air_corsica_xk_plan.form.type.color:
+        class: AirCorsica\XKPlanBundle\Form\Type\ColorTyp
+        tags:
+            - { name: form.type }
+
+    air_corsica_xk_plan.form.type.datePicker:
+        class: AirCorsica\XKPlanBundle\Form\Type\DatePickerType
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: form.type, alias: datePicker }
+
+    kernel.listener.accessDenied:
+        class: AirCorsica\XKPlanBundle\Listener\AccessDeniedListener
+        scope: request
+        arguments: ["@session", "@router", "@request_stack"]
+        tags:
+           - { name: kernel.event_listener, event: kernel.exception, method: onAccessDeniedException }
+
+    security.interactive_login.listener:
+         class: AirCorsica\XKPlanBundle\Listener\SecurityListener
+         #arguments: ['@security.context', '@session']
+         tags:
+             - { name: kernel.event_listener, event: security.interactive_login, method: onSecurityInteractiveLogin }
+
+    air_corsica_xk_plan.form.type.vol:
+         class: AirCorsica\XKPlanBundle\Form\VolType
+         arguments: ["@doctrine.orm.entity_manager"]
+         tags:
+              - { name: form.type }
+
+    air_corsica_xk_plan.form.type.adressesita:
+         class: AirCorsica\XKPlanBundle\Form\AdresseSITAType
+         arguments: ["@doctrine.orm.entity_manager"]
+         tags:
+              - { name: form.type }
+
+
+    air_corsica_xk_plan.form.type.codessharesprecharge:
+        class: AirCorsica\XKPlanBundle\Form\CodeSharePrechargeType
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: form.type }
+
+    air_corsica_xk_plan.amos_manager:
+        class: AirCorsica\XKPlanBundle\Amos\AmosManager
+        arguments: ["@doctrine.orm.entity_manager","@air_corsica_xk_plan.xml_validator"]
+
+    air_corsica_xk_plan.xml_validator:
+        class: AirCorsica\XKPlanBundle\Utils\XmlValidator
+        arguments: ['%app.amos.xsd.path%']

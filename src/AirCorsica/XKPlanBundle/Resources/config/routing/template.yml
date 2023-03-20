@@ -1,0 +1,57 @@
+template_index:
+    path:     /gestion
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Template:index" }
+    methods:  [GET, POST]
+
+template_show:
+    path:     /{id}/show
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Template:show" }
+    methods:  GET
+
+template_new:
+    path:     /new
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Template:new" }
+    methods:  [GET, POST]
+
+template_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Template:edit" }
+    methods:  [GET, POST]
+
+template_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Template:delete" }
+    methods:  [GET,DELETE]
+
+template_switch:
+    path:     /{id}/switch
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Template:switch" }
+    methods:  [GET]
+    options:
+        expose: true
+
+template_copie:
+    path:     /copie
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Template:copie" }
+    methods:  POST
+
+template_purge:
+    path:     /{id}/purge
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Template:purge" }
+    methods:  [GET]
+    options:
+        expose: true
+
+template_garder:
+    path:     garder
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Template:garder" }
+    methods:  [POST]
+    options:
+        expose: true
+
+template_corriger:
+    path:     corriger
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Template:corriger" }
+    methods:  [POST]
+    options:
+        expose: true

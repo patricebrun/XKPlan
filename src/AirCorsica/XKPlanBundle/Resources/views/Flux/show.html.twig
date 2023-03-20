@@ -1,0 +1,68 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block body %}
+    <h1>Flux</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ flux.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ flux.nom }}</td>
+            </tr>
+            <tr>
+                <th>Pathsmb</th>
+                <td>{{ flux.pathSMB }}</td>
+            </tr>
+            <tr>
+                <th>Loginsmb</th>
+                <td>{{ flux.loginSMB }}</td>
+            </tr>
+            <tr>
+                <th>Passwordsmb</th>
+                <td>{{ flux.passwordSMB }}</td>
+            </tr>
+            <tr>
+                <th>Emailcible</th>
+                <td>{{ flux.emailCible }}</td>
+            </tr>
+            <tr>
+                <th>Fluxactif</th>
+                <td>{% if flux.fluxActif %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Pathcopielocale</th>
+                <td>{{ flux.pathCopieLocale }}</td>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <td>{{ flux.type }}</td>
+            </tr>
+            <tr>
+                <th>Datetimemodification</th>
+                <td>{% if flux.dateTimeModification %}{{ flux.dateTimeModification|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Datetimecreation</th>
+                <td>{% if flux.dateTimeCreation %}{{ flux.dateTimeCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('flux_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('flux_edit', { 'id': flux.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

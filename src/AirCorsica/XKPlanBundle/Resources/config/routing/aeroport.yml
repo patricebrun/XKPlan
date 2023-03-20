@@ -1,0 +1,29 @@
+aeroport_index:
+    path:     /
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Aeroport:index" }
+    methods:  GET
+
+aeroport_show:
+    path:     /{id}/show
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Aeroport:show" }
+    methods:  GET
+
+aeroport_new:
+    path:     /new
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Aeroport:new" }
+    methods:  [GET, POST]
+
+aeroport_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Aeroport:edit" }
+    methods:  [GET, POST]
+
+aeroport_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Aeroport:delete" }
+    #methods:  DELETE
+
+aeroport_deletemasse:
+    path:     /deletemasse
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Aeroport:deletemasse" }
+    methods:  [GET, POST]

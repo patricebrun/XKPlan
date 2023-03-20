@@ -1,0 +1,118 @@
+<h1 style="text-align: center;">Imprimé le {{ "now"|date("d/m/Y H:i:s") }}</h1>
+<div class="panel-body">
+    <table cellpadding="10" width="100%" style="text-align: center;">
+        <thead>
+        <tr>
+            <th style="width:16%;">Ligne</th>
+            <th>Aéroport Départ</th>
+            <th>Aéroport Arrivée</th>
+            <th style="width:18%;">Compagnie</th>
+            <th style="width:10%;">Avion</th>
+            <th># Etapes</th>
+            <th># Sièges</th>
+            <th># Heures de Vol</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {#{% for ligne_vol in ligne_tab_lignes %}#}
+            {#&#123;&#35;% if loop.index%3 == 0 %&#35;&#125;#}
+            {#{% if ligne_vol.type == 'empty' %}#}
+
+            {#{% elseif ligne_vol.type == 'total' %}#}
+                {#<tr style="background-color: #efefef;">#}
+                    {#<td>TOTAL A/R</td>#}
+                    {#<td></td>#}
+                    {#<td></td>#}
+                    {#<td>{{ ligne_vol.etapes }}</td>#}
+                    {#<td>{{ ligne_vol.sieges }}</td>#}
+                    {#<td>{{ ligne_vol.heures }}</td>#}
+                {#</tr>#}
+            {#{% elseif ligne_vol.type == 'total_global' %}#}
+                {#<tr style="background-color: #DEDEDE;">#}
+                    {#<td>TOTAL GLOBAL</td>#}
+                    {#<td></td>#}
+                    {#<td></td>#}
+                    {#<td>{{ ligne_vol.etapes }}</td>#}
+                    {#<td>{{ ligne_vol.sieges }}</td>#}
+                    {#<td>{{ ligne_vol.heures }}</td>#}
+                {#</tr>#}
+            {#{% else %}#}
+                {# <tr>#}
+                    {#<td>{{ ligne_vol.aeroportDepart }}</td>#}
+                    {#<td>{{ ligne_vol.aeroportArrivee }}</td>#}
+                    {#<td>{{ ligne_vol.compagnie }}</td>#}
+                    {#&#123;&#35;<td>{{ ligne_vol.appareil }}</td>&#35;&#125;#}
+                    {#<td>{{ ligne_vol.etapes }}</td>#}
+                    {#<td>{{ ligne_vol.sieges }}</td>#}
+                    {#<td>{{ ligne_vol.heures }}</td>#}
+                {#</tr>#}
+    {#        {% endif %}#}
+        {#{% endfor %}#}
+
+        {#=========================#}
+        {# Nouvel Algo JJo like V1 #}
+        {#=========================#}
+
+        {% set myInc = 0 %}
+        {% for ligne_vol in ligne_tab_lignes %}
+            {% if ligne_vol.type == 'empty' %}
+
+            {% elseif ligne_vol.type == 'soustotal' %}
+                {% set myInc = 0 %}
+                <tr style="background-color: #efefef;">
+                    <td style="width:16%;">&nbsp;TOTAL</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{ ligne_vol.etapes }}</td>
+                    <td>{{ ligne_vol.sieges }}</td>
+                    <td>{{ ligne_vol.heures }}</td>
+                </tr>
+            {% elseif ligne_vol.type == 'total' %}
+                {% set myInc = 0 %}
+                <tr style="background-color: #dfdfdf;">
+                    <td style="width:16%;">&nbsp;TOTAL A/R</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{ ligne_vol.etapes }}</td>
+                    <td>{{ ligne_vol.sieges }}</td>
+                    <td>{{ ligne_vol.heures }}</td>
+                </tr>
+            {% elseif ligne_vol.type == 'total_global' %}
+                <tr style="background-color: #DEDEDE;">
+                    <td style="width:16%;">TOTAL GLOBAL</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{ ligne_vol.etapes }}</td>
+                    <td>{{ ligne_vol.sieges }}</td>
+                    <td>{{ ligne_vol.heures }}</td>
+                </tr>
+            {% else %}
+                 <tr>
+                    <td style="width:16%;{% if myInc > 0 %}color:#FFFFFF;{% endif %}">{{ ligne_vol.ligne }}</td>
+                    <td {% if myInc > 0 %} style="color:#FFFFFF;"{% endif %}>{{ ligne_vol.aeroportDepart }}</td>
+                    <td {% if myInc > 0 %} style="color:#FFFFFF;"{% endif %}>{{ ligne_vol.aeroportArrivee }}</td>
+                    <td style="width:18%;">{{ ligne_vol.compagnie }}</td>
+                    <td style="width:10%;">{{ ligne_vol.appareil }}</td>
+                    <td>{{ ligne_vol.etapes }}</td>
+                    <td>{{ ligne_vol.sieges }}</td>
+                    <td>{{ ligne_vol.heures }}</td>
+                </tr>
+                {% set myInc = myInc + 1 %}
+            {% endif %}
+
+        {% endfor %}
+
+        {#=====================#}
+        {#Fin Nouvel Algo JJo #}
+        {#=====================#}
+
+        </tbody>
+    </table>
+</div>

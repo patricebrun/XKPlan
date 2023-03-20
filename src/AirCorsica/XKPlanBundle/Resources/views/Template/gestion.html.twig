@@ -1,0 +1,526 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+
+{% block stylesheets %}
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/assets/admin-tools/admin-forms/less/admin-forms.less'
+    filter='less'
+    output='css/compiled/admin-forms.css' %}
+
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+
+    {% endstylesheets %}
+
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/css/select2.css'
+    output='css/compiled/core.css'
+    %}
+
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+
+    {% endstylesheets %}
+
+{% endblock %}
+
+{% block title %}
+    {% set titre = 'Gestion des Templates' %}
+    {{ titre }} - {{ parent() }}
+{% endblock %}
+
+{% block body_class %}
+    {% set attributes = 'admin-elements-page' %}
+    {{ attributes }}
+{% endblock %}
+
+{% block titre_contenu %}
+    {% set titre_contenu = 'Préférences' %}
+    {{ titre_contenu }}
+{% endblock %}
+
+{% block body %}
+
+    {% set template_id = app.request.session.get("template") %}
+
+    <style type="text/css">
+
+        .loader {
+            border: 12px solid #f3f3f3; /* Light grey */
+            border-top: 12px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+    </style>
+
+    <!-- Begin: Content -->
+    <div id="content" class="animated fadeIn">
+        <div class="row">
+            <!-- Begin: Content -->
+            <div class="col-md-12">
+                <!-- Begin .page-tabs -->
+                <div class="page-tabs">
+                    <ul class="nav nav-tabs">
+                        <li {% if request.attributes.get('_route') == 'template_index' %}class="active"{% endif %}>
+                            <a href="{{ path('template_index') }}?id={{ template_id }}">Gestion des templates</a>
+                        </li>
+                        <li {% if request.attributes.get('_route') == 'utilisateur_index' %}class="active"{% endif %}>
+                            <a href="{{ path('utilisateur_index') }}">Gestion Utilisateurs</a>
+                        </li>
+                        <li {% if request.attributes.get('_route') == 'parametres_index' %}class="active"{% endif %}>
+                            <a href="{{ path('parametres_index') }}">Paramètres Globaux</a>
+                        </li>
+                        <!--<li>
+                            <a href="#">Obligation de service public</a>
+                        </li>-->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <!-- Sidebar Liste Template -->
+            <div class="theme-primary col-md-4">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <span class="panel-icon">
+                            <i class="glyphicon glyphicon-tasks"></i>
+                        </span>
+                        <span class="panel-title">Listing des Templates</span>
+                    </div>
+                    <div class="panel-body panel-scroller scroller-template-list scroller-pn pn">
+                        <!--<table class="table table-striped">-->
+                        <table class="table table-striped table-hover admin-form fs13" cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th>Nom du template</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for template in templates %}
+                                <tr>
+                                    <td>{{ template.libelle }}</td>
+                                    <td>
+                                        <div class="btn-group pull-right">
+                                            <a title="Editer  le template"  {% if currentTemplate.id == template.id or template.id == 1 %} disabled {% endif %} href="{% if currentTemplate.id != template.id and template.id != 1 %}  {{ path('template_index', { 'id': template.id }) }} {% endif %}" class="btn btn-sm btn-default">
+                                                <i class="glyphicon glyphicon-edit"></i>
+                                            </a>
+
+                                            <a title="Détruire les données de vols" {% if currentTemplate.id == template.id or template.id == 1 %} disabled {% endif %} href="{% if currentTemplate.id != template.id and template.id != 1 %} {{ path('template_purge',{'id' : template.id}) }} {% endif %}" class="btn btn-sm btn-warning confirm">
+                                                <i class="glyphicon glyphicon-retweet"></i>
+                                            </a>
+
+                                            <a title="Supprimer le template " {% if currentTemplate.id == template.id or template.id == 1 %} disabled {% endif %} href="{% if currentTemplate.id != template.id and template.id != 1 %} {{ path('template_delete',{'id' : template.id}) }} {% endif %}" class="btn btn-sm btn-danger confirm">
+                                                <i class="glyphicon glyphicon-trash"></i>
+                                            </a>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="row mb15">
+                            <div class="col-md-12">
+                                <a href="{{ path('template_new') }}" class="btn-primary btn pull-left fluid-width">Créer un nouveau Template</a>
+                            </div>
+                        </div>
+                        {#<div class="row">#}
+                            {#<div class="col-md-12">#}
+                                {#<a {% if currentTemplate.id %} href="{{ path('template_purge',{'id' : currentTemplate.id}) }}" {% endif %} {% if not (currentTemplate.id and 1 != currentTemplate.id) %}disabled{% endif %} class="btn-default confirm btn pull-left">Détruire les données de vols</a>#}
+                                {#<a {% if currentTemplate.id %} href="{{ path('template_delete',{'id' : currentTemplate.id}) }}" {% endif %} {% if not (currentTemplate.id and 1 != currentTemplate.id) %}disabled{% endif %} class="btn-danger confirm btn pull-right">Supprimer le template: {{ currentTemplate.libelle }}</a>#}
+                            {#</div>#}
+                        {#</div>#}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Begin: Content -->
+            <div class="theme-primary col-md-8">
+                {{ form_start(form,{'action': path('template_edit',{'id' : currentTemplate.id}), 'method': 'POST'}) }}
+                {#{ form_widget(form.id) }#}
+                {{ form_widget(form._token) }}
+                <!-- Input Fields -->
+                <div class="panel">
+                    <form action="#" method="post" role="form" class="form-horizontal">
+                        <div class="panel-heading">
+                                    <span class="panel-icon">
+                                      <i class="glyphicon glyphicon-edit"></i>
+                                    </span>
+                            <span class="panel-title">Modication Template</span>
+                        </div>
+
+                        <div class="panel-body">
+                            {% if not form.vars.valid %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                    <i class="fa fa-bug pr10"></i><!--<i class="fa fa-remove pr10"></i>-->
+                                    {{ form_errors(form) }}
+                                </div>
+                            {% endif %}
+
+                            <fieldset>
+                                <legend>Paramètres : </legend>
+                                <!--<div class="form-group">
+                                    <label class="col-md-3 control-label" for="libelle_template">Libellé Template :</label>
+                                    <div class="col-md-9">
+                                        <div class="bs-component">
+                                            <input type="text" id="libelle_template" name="libelle_template" disabled placeholder="Saisir Libellé Template" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>-->
+                                {{ form_row(form.libelle) }}
+                                {#{ form_row(form.production) }#}
+                            </fieldset>
+
+                            {% if currentTemplate.id == 1 %}
+                                <fieldset>
+                                    <legend>Flux de Transmission : </legend>
+                                    <div class="form-group">
+
+                                        <div class="col-md-12">
+                                            <div class="panel pn mn">
+                                                <div class="panel-heading">
+                                                    <ul class="nav panel-tabs panel-tabs-left">
+                                                        <li class="active">
+                                                            <a href="#tab1_1" data-toggle="tab">ROCADE</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#tab1_2" data-toggle="tab">ALTEA</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="tab-content pn br-n">
+
+                                                        {% for flux in form.flux %}
+
+                                                            <div id="tab1_{{ loop.index }}" class="tab-pane {% if loop.first %}active{% endif %}">
+
+
+                                                                {# Génération manuelle et éclatée : #}
+                                                                <div class="form-group">
+                                                                    {# Génération du label. #}
+
+                                                                    {{ form_label(flux.pathSMB, "Dossier Partagé :", {'label_attr': {'class': 'col-md-3 control-label'}}) }}
+
+                                                                    {# Affichage des erreurs pour ce champ précis. #}
+                                                                    {{ form_errors(flux.pathSMB) }}
+
+                                                                    <div class="col-md-5">
+                                                                        {# Génération de l'input. #}
+                                                                        {{ form_widget(flux.pathSMB, {'attr': {'class': 'form-control','placeholder': 'Saisir Chemin dossier'}}) }}
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <div class="bs-component">
+                                                                            <button type="button"  class="btn-default fluid-width btn">Tester l'accès</button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-1"></div>
+                                                                </div>
+
+                                                                {# Génération manuelle et éclatée : #}
+                                                                <div class="form-group">
+                                                                    {# Génération du label. #}
+                                                                    {{ form_label(flux.loginSMB, "Login SMB :", {'label_attr': {'class': 'col-md-3 control-label'}}) }}
+
+                                                                    {# Affichage des erreurs pour ce champ précis. #}
+                                                                    {{ form_errors(flux.loginSMB) }}
+
+                                                                    <div class="col-md-8">
+                                                                        <div class="bs-component">
+                                                                            {# Génération de l'input. #}
+                                                                            {{ form_widget(flux.loginSMB, {'attr': {'class': 'form-control','placeholder': 'Saisir Login SMB'}}) }}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-1 text-center">Messagerie SITA</div>
+                                                                </div>
+
+                                                                {# Génération manuelle et éclatée : #}
+                                                                <div class="form-group">
+                                                                    {# Génération du label. #}
+                                                                    {{ form_label(flux.passwordSMB, "Password SMB :", {'label_attr': {'class': 'col-md-3 control-label'}}) }}
+
+                                                                    {# Affichage des erreurs pour ce champ précis. #}
+                                                                    {{ form_errors(flux.passwordSMB) }}
+
+                                                                    <div class="col-md-8">
+                                                                        <div class="bs-component">
+                                                                            {# Génération de l'input. #}
+                                                                            {{ form_widget(flux.passwordSMB, {'attr': {'class': 'form-control','placeholder': 'Saisir Password SMB'}}) }}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-1 text-center"></div>
+                                                                </div>
+
+                                                                {# Génération manuelle et éclatée : #}
+                                                                <div class="form-group">
+                                                                    {# Génération du label. #}
+                                                                    {{ form_label(flux.emailCible, "Email Cible :", {'label_attr': {'class': 'col-md-3 control-label'}}) }}
+
+                                                                    {# Affichage des erreurs pour ce champ précis. #}
+                                                                    {{ form_errors(flux.emailCible) }}
+
+                                                                    <div class="col-md-5">
+                                                                        <div class="bs-component">
+                                                                            {# Génération de l'input. #}
+                                                                            {{ form_widget(flux.emailCible, {'attr': {'class': 'form-control','placeholder': 'Saisir email'}}) }}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <div class="bs-component">
+                                                                            <button type="button" class="btn-default fluid-width btn" data-toggle="modal" data-target="#topologieMessage">Paramètres Généraux</button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-1 text-center">Messagerie SMTP</div>
+                                                                </div>
+
+                                                                {# Génération manuelle et éclatée : #}
+                                                                <div class="form-group">
+
+
+                                                                    <label class="col-md-3 control-label">Flux Actif :</label>
+                                                                    <div class="col-md-9">
+                                                                        <div class="bs-component">
+                                                                            {# Affichage des erreurs pour ce champ précis. #}
+                                                                            {{ form_errors(flux.fluxActif) }}
+                                                                            {# Génération de l'input. #}
+                                                                            {{ form_label(flux.fluxActif, 'OUI : Les messages SSIM7 seront transférés à la messagerie paramétrée.') }}
+                                                                            {{ form_widget(flux.fluxActif, {'attr': {'class': 'form-control'}}) }}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                {# Génération manuelle et éclatée : #}
+                                                                <div class="form-group">
+                                                                    {# Génération du label. #}
+                                                                    {{ form_label(flux.pathCopieLocale, "Garder une copie locale des messages :", {'label_attr': {'class': 'col-md-3 control-label'}}) }}
+
+                                                                    {# Affichage des erreurs pour ce champ précis. #}
+                                                                    {{ form_errors(flux.pathCopieLocale) }}
+
+                                                                    <div class="col-md-8">
+                                                                        <div class="bs-component">
+                                                                            {# Génération de l'input. #}
+                                                                            {{ form_widget(flux.pathCopieLocale, {'attr': {'class': 'form-control','placeholder': 'Saisir chemin local'}}) }}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-1 text-center"></div>
+                                                                </div>
+
+                                                            </div>
+                                                        {% endfor %}
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            {% endif %}
+                        </div>
+
+                        <div class="panel-footer text-right">
+                            <button type="submit" {% if not currentTemplate.id %}disabled{% endif %} class="btn-default btn">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+
+                {{ form_end(form, {'render_rest': false}) }}
+            </div>
+        </div>
+
+        <div class="row">
+
+            <!-- Begin: Content -->
+            <div class="theme-primary col-md-12">
+                <div class="panel">
+                    <div class="panel-heading">
+                                <span class="panel-icon">
+                                  <i class="glyphicon glyphicon-transfer"></i>
+                                </span>
+                        <span class="panel-title">Recopie Template</span>
+                    </div>
+
+                    <div class="panel-body">
+                        <form action="{{ path("template_copie") }}" method="post" role="form" class="form-horizontal" id="form_copie">
+                            <input type="hidden" name="templateCible" value="{{ app.request.get('idCible') }}" />
+                            <input type="hidden" name="templateSource" value="{{ app.request.get('id') }}" />
+                            {#<input type="hidden" id="duplicationTemplateAction" name="duplicationTemplateAction" value="0" />#}
+                            <div class="col-md-4">
+                                <p class="text-justify">Recopier les données de ce template avec les paramètres suivants :</p>
+                                <fieldset>
+                                    <legend>1 : Données Sources</legend>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">Template :</label>
+                                        <div class="col-md-9">
+                                            <div class="bs-component">
+                                                <input type="hidden" name="templateSource" value="{{ currentTemplate.id }}">
+                                                <p class="form-control-static text-muted">{{ currentTemplate.libelle }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label" for="saison_source">Saison :</label>
+                                        <div class="col-md-9">
+                                            <div class="bs-component">
+                                                <select {% if not currentTemplate.id %}disabled{% endif %} name="saisonSource" id="saison_source" class="select2-single form-control" data-placeholder="Sélectionnez Saison Source">
+                                                    <option value=""></option>
+                                                    {% for saison in saisons %}
+                                                        {#% for periode in saison.periodesSaison %}
+                                                            <option value="{{ periode.id }}">{{ periode.nom }}</option>
+                                                        {% endfor %#}
+                                                        <option value="{{ saison.id }}">{{ saison.nom }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <legend>2 : Données Cibles</legend>
+                                    <div class="form-group">
+                                        <label for="template_cible" class="control-label col-md-3">Template :</label>
+                                        <div class="col-md-9">
+                                            <div class="bs-component">
+                                                <select {% if not currentTemplate.id %}disabled{% endif %} name="templateCible" id="template_cible" class="select2-single form-control" data-placeholder="Sélectionnez Template Cible">
+                                                    <option value=""></option>
+                                                    {% for template in templates %}
+                                                        <option value="{{ template.id }}">{{ template.libelle }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label" for="saison_cible">Saison :</label>
+                                        <div class="col-md-9">
+                                            <div class="bs-component">
+                                                <select {% if not currentTemplate.id %}disabled{% endif %} name="saisonCible" id="saison_cible" class="select2-single form-control" data-placeholder="Sélectionnez Saison Cible">
+                                                    <option value=""></option>
+                                                    {% for saison in saisons %}
+                                                        <option value="{{ saison.id }}">{{ saison.nom }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </form>
+                        <div class="col-md-8" id="results">
+                            <p class="text-justify">Résultats recopie :</p>
+                            <div class="panel-body panel-scroller scroller-md scroller-pn pn">
+
+                                {% for flash_message in app.session.flashBag.get('copie_template') %}
+                                    <div class="alert alert-success" role="alert">
+                                        {{ flash_message|raw }}
+                                    </div>
+                                {% endfor %}
+
+                                {% for flash_message in app.session.flashBag.get('copie_template_errors') %}
+                                    <div class="alert alert-danger" role="alert">
+                                        {{ flash_message|raw }}
+                                    </div>
+                                {% endfor %}
+
+                                {% if errorsDates is defined and errors|length != 0 %}
+                                    <form action="" method="post" id="corrections">
+                                        <input type="hidden" value="{{ app.request.get('id_cible') }}" name="id_periode_cible">
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>N° de vol</th>
+                                                <th>Ligne</th>
+                                                <th>Date début</th>
+                                                <th>Date fin</th>
+                                                <th>H. Début</th>
+                                                <th>H. Fin</th>
+                                                <th>Avion</th>
+                                                <th>Type Vol</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for key, vol in errors %}
+                                                <tr>
+                                                    <td><input type="hidden" name="id[{{ vol.id }}]" value="{{ vol.id }}">{{ vol.numero }}</td>
+                                                    <td>{{ vol.ligne }}</td>
+                                                    <td><input type="text" name="dateDebut[{{ vol.id }}]" value="{{ errorsDates[key].0|date("d-m-y") }}" class="datepicker form-control" placeholder="Date début"></td>
+                                                    <td><input type="text"  name="dateFin[{{ vol.id }}]" value="{{ errorsDates[key].1|date("d-m-y") }}" class="datepicker form-control" placeholder="Date début"></td>
+                                                    <td>{{ vol.periodeDeVol.decollage|date('H:i') }}</td>
+                                                    <td>{{ vol.periodeDeVol.atterissage|date('H:i') }}</td>
+                                                    <td>{{ vol.avion.nom }}</td>
+                                                    <td>{{ vol.typeDeVol.codeType }}  {{ vol.typeDeVol.codeService }}</td>
+                                                </tr>
+                                            {%  endfor %}
+                                            </tbody>
+                                        </table>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-footer text-right">
+                        {% if errors is defined and errors|length != 0 %}
+                            {#<button type="button"  id="garder" class="btn-default btn">Garder les dates ambigues</button>#}
+                            <button type="button"  id="valider_modifs" class="btn-default btn">Valider les modifications</button>
+                        {% endif %}
+                        <button type="button" currentTemplateid="{{  currentTemplate.id }}" {#{% if not currentTemplate.id %}#}disabled{#{% endif %}#} class="btn-default btn" id="copie">Recopier les données de vol</button>
+                        {#<button type="button" disabled class="btn-default btn" templatesourceid="{{  currentTemplate.id }}" id="duplication">Dupliquer les données de vol sur une saison identique</button>#}
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    <!-- vue modal caché pour le spinner d'attente de la copie de template -->
+    <div class="modal" id="mySpinnerModal" role="dialog" aria-labelledby="mySpinnerModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="top:45%;left:15%;padding-bottom:45%;">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="text-center" style="height:50px;"><div class="loader" style="float:left;"></div><div id="mySpinnerlabel" style="padding-top:10px;float:right;font-size:1.2em;">Recopie en cours...</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% include("@AirCorsicaXKPlan/Vol/formModalTopologie.html.twig") %}
+{% endblock %}
+
+{% block jquery_custom %}
+$(".select2-single").select2({
+placeholder: " ",
+language: "fr",
+allowClear: true
+});
+{% endblock %}
+
+{% block javascripts_libs %}
+<!-- Theme Javascript LIBS -->
+{% javascripts
+'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/js/select2.full.js'
+'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/js/i18n/fr.js'
+%}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+{% endblock %}
+
+{% block javascripts_custom %}
+{{ parent() }}
+<script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/assets/js/template.js') }}"></script>
+{% endblock %}

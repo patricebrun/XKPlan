@@ -1,0 +1,69 @@
+{% block stylesheets %}
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/assets/skin/default_skin/less/theme.less'
+    filter='less'
+    output='css/compiled/theme.css'
+    %}
+
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+
+{% endstylesheets %}
+{% endblock %}
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/assets/skin/default_skin/less/theme.less'
+    filter='less'
+    output='css/compiled/theme.css'
+    %}
+
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+
+{% endstylesheets %}
+
+{% block body %}{% endblock body %}
+
+<!-- jQuery -->
+{% javascripts
+'bundles/aircorsicaxkplan/vendor/jquery/jquery-1.11.1.min.js'
+'bundles/aircorsicaxkplan/vendor/jquery/jquery_ui/jquery-ui.min.js'
+%}
+
+
+
+<script type="text/javascript" src="{{ asset_url }}"></script>
+
+{% endjavascripts %}
+
+<!-- Theme Javascript -->
+{% javascripts
+'bundles/aircorsicaxkplan/assets/js/utility/utility.js'
+'bundles/aircorsicaxkplan/assets/js/demo/demo.js'
+'bundles/aircorsicaxkplan/assets/js/main.js'
+'bundles/aircorsicaxkplan/vendor/plugins/hotkeys/jquery.hotkeys.js'
+%}
+
+<script type="text/javascript" src="{{ asset_url }}"></script>
+
+{% endjavascripts %}
+
+{% block javascripts_libs %}
+
+{% endblock %}
+
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        {% block jquery_custom %}{% endblock %}
+    });
+</script>
+<!-- END: PAGE SCRIPTS -->
+
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+
+{% block javascripts_custom %}
+
+{% endblock %}
+

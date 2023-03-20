@@ -1,0 +1,24 @@
+codesharevol_index:
+    path:     /
+    defaults: { _controller: "AirCorsicaXKPlanBundle:CodeShareVol:index" }
+    methods:  GET
+
+codesharevol_show:
+    path:     /{id}/show
+    defaults: { _controller: "AirCorsicaXKPlanBundle:CodeShareVol:show" }
+    methods:  GET
+
+codesharevol_new:
+    path:     /new
+    defaults: { _controller: "AirCorsicaXKPlanBundle:CodeShareVol:new" }
+    methods:  [GET, POST]
+
+codesharevol_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AirCorsicaXKPlanBundle:CodeShareVol:edit" }
+    methods:  [GET, POST]
+
+codesharevol_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AirCorsicaXKPlanBundle:CodeShareVol:delete" }
+    methods:  DELETE

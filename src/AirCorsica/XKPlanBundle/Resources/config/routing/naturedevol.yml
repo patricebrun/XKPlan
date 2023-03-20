@@ -1,0 +1,29 @@
+naturedevol_index:
+    path:     /
+    defaults: { _controller: "AirCorsicaXKPlanBundle:NatureDeVol:index" }
+    methods:  GET
+
+naturedevol_show:
+    path:     /{id}/show
+    defaults: { _controller: "AirCorsicaXKPlanBundle:NatureDeVol:show" }
+    methods:  GET
+
+naturedevol_new:
+    path:     /new
+    defaults: { _controller: "AirCorsicaXKPlanBundle:NatureDeVol:new" }
+    methods:  [GET, POST]
+
+naturedevol_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AirCorsicaXKPlanBundle:NatureDeVol:edit" }
+    methods:  [GET, POST]
+
+naturedevol_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AirCorsicaXKPlanBundle:NatureDeVol:delete" }
+    #methods:  DELETE
+
+naturedevol_deletemasse:
+    path:     /deletemasse
+    defaults: { _controller: "AirCorsicaXKPlanBundle:NatureDeVol:deletemasse" }
+    methods:  [GET, POST]

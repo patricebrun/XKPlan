@@ -1,0 +1,59 @@
+                    <h1>Imprimé le {{ "now"|date("d/m/Y H:i:s") }} {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %} par {{ app.user.username }}{% endif %}</h1>
+                    <div>
+                        <table cellspacing="2" cellpadding="6" width="100%">
+                            <thead>
+                            <tr>
+                                <th style="width: 50px;text-align: center">N° Vol</th>
+                                <th style="width: 60px;text-align: center">Début</th>
+                                <th style="width: 60px;text-align: center">Fin</th>
+                                <th style="width: 100px;text-align: center">Heures Dép/Arr</th>
+                                <th style="width: 80px;text-align: center">J. validié</th>
+                                <th style="width: 50px;text-align: center">Départ</th>
+                                <th style="width: 50px;text-align: center">Arrivée</th>
+                                <th style="width: 40px;text-align: center">Avion</th>
+                                <th style="width: 40px;text-align: center">1/2 T</th>
+                                <th style="width: 230px;text-align: center">Message</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for coherence in aCoherence %}
+                                {#<span class="h2">Numéro de vol {{ coherence.vol.numero }} du {{ coherence.vol.periodeDeVol.dateDebut|date("d/m/y") }} au {{ coherence.vol.periodeDeVol.dateFin|date("d/m/y") }}</span>#}
+
+                                <tr style="background-color:black;color: white;">
+                                    <td style="width: 50px;text-align: center">{{ coherence.vol.numero }}</td>
+                                    <td style="width: 60px;text-align: center">{{ coherence.vol.periodeDeVol.dateDebut|date("d/m/y") }}</td>
+                                    <td style="width: 60px;text-align: center">{{ coherence.vol.periodeDeVol.dateFin|date("d/m/y") }}</td>
+                                    <td style="width: 100px;text-align: center">{{ coherence.vol.periodeDeVol.decollage|date("H:i") }} - {{ coherence.vol.periodeDeVol.atterissage|date("H:i") }}</td>
+                                    <td style="width: 80px;text-align: center">{{ coherence.vol.periodeDeVol.JoursDeValidite|join(' ') }}</td>
+                                    <td style="width: 50px;text-align: center">{{ coherence.vol.ligne.aeroportDepart.codeIATA }}</td>
+                                    <td style="width: 50px;text-align: center">{{ coherence.vol.ligne.aeroportArrivee.codeIATA }}</td>
+                                    <td style="width: 40px;text-align: center">{{ coherence.vol.avion.typeAvion.codeIATA }}</td>
+                                    <td style="width: 40px;text-align: center">{{ coherence.vol.avion.typeAvion.tempsDemiTour }}</td>
+                                    <td style="width: 230px;text-align: left"></td>
+                                </tr>
+                                {% for volErreurCoherence in coherence.aVolsErreurs %}
+                                    {% if loop.index is even %}
+                                        {% set backgroundcolor = "#FFFFFF" %}
+                                    {% else %}
+                                        {% set backgroundcolor = "#DDDDDD" %}
+                                    {% endif %}
+                                    <tr style="color:red;background-color: {{ backgroundcolor }}">
+                                        <td style="width: 50px;text-align: center">{{ volErreurCoherence.vol.numero }}</td>
+                                        <td style="width: 60px;text-align: center">{{ volErreurCoherence.vol.periodeDeVol.dateDebut|date("d/m/y") }}</td>
+                                        <td style="width: 60px;text-align: center">{{ volErreurCoherence.vol.periodeDeVol.dateFin|date("d/m/y") }}</td>
+                                        <td style="width: 100px;text-align: center">{{ volErreurCoherence.vol.periodeDeVol.decollage|date("H:i") }} - {{ volErreurCoherence.vol.periodeDeVol.atterissage|date("H:i") }}</td>
+                                        <td style="width: 80px;text-align: center">{{ volErreurCoherence.vol.periodeDeVol.JoursDeValidite|join(' ') }}</td>
+                                        <td style="width: 50px;text-align: center">{{ volErreurCoherence.vol.ligne.aeroportDepart.codeIATA }}</td>
+                                        <td style="width: 50px;text-align: center">{{ volErreurCoherence.vol.ligne.aeroportArrivee.codeIATA }}</td>
+                                        <td style="width: 40px;text-align: center">{{ volErreurCoherence.vol.avion.typeAvion.codeIATA }}</td>
+                                        <td style="width: 40px;text-align: center">{{ volErreurCoherence.vol.avion.typeAvion.tempsDemiTour }}</td>
+                                        <td style="width: 230px;text-align: left">{{ volErreurCoherence.recommandations[0] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <!--<table class="table fs13 datatable" id="datatable1" cellspacing="0" width="100%">-->
+
+                    </div>

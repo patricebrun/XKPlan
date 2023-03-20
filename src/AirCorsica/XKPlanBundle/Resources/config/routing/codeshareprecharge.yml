@@ -1,0 +1,24 @@
+codeshareprecharge_index:
+    path:     /
+    defaults: { _controller: "AirCorsicaXKPlanBundle:CodeSharePrecharge:index" }
+    methods:  GET
+
+codeshareprecharge_show:
+    path:     /{id}/show
+    defaults: { _controller: "AirCorsicaXKPlanBundle:CodeSharePrecharge:show" }
+    methods:  GET
+
+codeshareprecharge_new:
+    path:     /{codeinterne_id}/new
+    defaults: { _controller: "AirCorsicaXKPlanBundle:CodeSharePrecharge:new" }
+    methods:  [GET, POST]
+
+codeshareprecharge_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AirCorsicaXKPlanBundle:CodeSharePrecharge:edit" }
+    methods:  [GET, POST]
+
+codeshareprecharge_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AirCorsicaXKPlanBundle:CodeSharePrecharge:delete" }
+    #methods:  DELETE

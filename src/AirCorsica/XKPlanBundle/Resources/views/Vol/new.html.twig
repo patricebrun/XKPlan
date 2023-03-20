@@ -1,0 +1,24 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block body %}
+    <h1>Vol creation</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+
+        {#<h3>Tags</h3>#}
+        {#<ul class="tags">#}
+            {#{% for periodeDeVol in form.periodesDeVol %}#}
+                {#<li>{{ form_row(periodeDeVol.id) }}</li>#}
+            {#{% endfor %}#}
+        {#</ul>#}
+
+        <input type="submit" value="Create" />
+    {{ form_end(form) }}
+
+    <ul>
+        <li>
+            <a href="{{ path('vol_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

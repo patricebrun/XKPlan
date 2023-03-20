@@ -1,0 +1,29 @@
+compagnie_index:
+    path:     /
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Compagnie:index" }
+    methods:  GET
+
+compagnie_show:
+    path:     /{id}/show
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Compagnie:show" }
+    methods:  GET
+
+compagnie_new:
+    path:     /new
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Compagnie:new" }
+    methods:  [GET, POST]
+
+compagnie_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Compagnie:edit" }
+    methods:  [GET, POST]
+
+compagnie_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Compagnie:delete" }
+    #methods:  DELETE
+
+compagnie_deletemasse:
+    path:     /deletemasse
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Compagnie:deletemasse" }
+    methods:  [GET, POST]

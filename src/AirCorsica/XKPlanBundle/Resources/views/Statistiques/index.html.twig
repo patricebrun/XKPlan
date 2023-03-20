@@ -1,0 +1,564 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/assets/admin-tools/admin-forms/less/admin-forms.less'
+    filter='less'
+    %}
+
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+
+    {% endstylesheets %}
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/DataTables-1.10.13/css/dataTables.bootstrap.css'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/Buttons-1.2.4/css/buttons.bootstrap.min.css'
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/css/select2.css'
+    %}
+
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+
+    {% endstylesheets %}
+
+{% endblock %}
+
+{% block title %}
+    {% set titre = 'Statistiques' %}
+    {{ titre }} - {{ parent() }}
+{% endblock %}
+
+{% block body_class %}
+    {% set attributes = 'admin-elements-page' %}
+    {{ attributes }}
+{% endblock %}
+
+{% block titre_contenu %}
+    {% set titre_contenu = 'Statistiques' %}
+    {{ titre_contenu }}
+{% endblock %}
+
+{% block body %}
+
+    <!-- Begin: Content -->
+    <div id="content" class="animated fadeIn">
+        <div class="row">
+            <form class="form-horizontal" role="form" action="">
+                <div class="theme-primary col-md-3">
+                    <!-- Input Fields -->
+                    <div class="panel">
+                        <div class="panel-heading">
+                                <span class="panel-icon">
+                                  <i class="glyphicon glyphicon-edit"></i>
+                                </span>
+                            <span class="panel-title">Filtres</span>
+                        </div>
+                        <div class="panel-body">
+
+                            <div class="wrapperDatePicker">
+                                <div class="form-group">
+                                    <input type="hidden" name="filtre_date_debut" value="1">
+                                    <label for="date_debut" class="col-md-4 control-label">Période du</label>
+                                    <div class="col-md-8">
+                                        <div class="input-group">
+                                            <input type="text" id="date_debut" required="required" name="date_debut" class="form-control input-inline datepicker" placeholder="Date Début" data-provide="datepicker" data-key="dates-periode-sidebar_modif" data-type="debut" data-date-format="dd-mm-yyyy"  value="{{ request.get('date_debut') }}">
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></button>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    {% for saison in saisons %}
+                                                        <li class="dropdown-submenu">
+                                                            <a href="#" class="no-click" class="set-date" data-datedebut="{{ saison.periode.dateDebut|date("d-m-Y") }}" data-datefin="{{ saison.periode.dateFin|date("d-m-Y") }}">{{ saison.nom }}</a>
+                                                            {% if saison.periodesSaison|length %}
+                                                                <ul class="dropdown-menu">
+                                                                    {% for periode in saison.periodesSaison('IATA') %}
+                                                                        <li><a class="set-date" data-key="dates-periode-sidebar_modif" href="#" data-datedebut="{{ periode.dateDebut|date("d-m-Y") }}" data-datefin="{{ periode.dateFin|date("d-m-Y") }}">{{ saison.nom }} : {{ periode.nom }}</a></li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            {% endif %}
+                                                        </li>
+                                                        {% if not loop.last %}
+                                                            <li role="separator" class="divider"></li>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </ul>
+                                            </div><!-- /btn-group -->
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            <div class="form-group">
+                                <input type="hidden" name="filtre_date_fin" value="1">
+                                <label for="date_fin" class="col-md-4 control-label">Au</label>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <input type="text" id="date_fin" required="required" name="date_fin" class="form-control input-inline datepicker" placeholder="Date Fin" data-provide="datepicker" data-key="dates-periode-sidebar_modif" data-type="fin" data-date-format="dd-mm-yyyy" value="{{ request.get('date_fin') }}">
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></button>
+                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                {% for saison in saisons %}
+                                                    <li class="dropdown-submenu">
+                                                        <a href="#" class="no-click" class="set-date" data-datedebut="{{ saison.periode.dateDebut|date("d-m-Y") }}" data-datefin="{{ saison.periode.dateFin|date("d-m-Y") }}">{{ saison.nom }}</a>
+                                                        {% if saison.periodesSaison|length %}
+                                                            <ul class="dropdown-menu">
+                                                                {% for periode in saison.periodesSaison('IATA') %}
+                                                                    <li><a class="set-date" href="#" data-key="dates-periode-sidebar_modif" data-datedebut="{{ periode.dateDebut|date("d-m-Y") }}" data-datefin="{{ periode.dateFin|date("d-m-Y") }}">{{ saison.nom }} : {{ periode.nom }}</a></li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        {% endif %}
+                                                    </li>
+                                                    {% if not loop.last %}
+                                                        <li role="separator" class="divider"></li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </ul>
+                                        </div><!-- /btn-group -->
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <label class="control-label mb15">Vols :</label>
+                                    <div class="form-group">
+                                        <div class="col-sm-12 pl15">
+                                            {% for key, affretement in affretements %}
+                                                {% if loop.index0 != 0 %}
+                                                    <div class="bs-component">
+                                                        <div class="checkbox-custom mb5">
+                                                            <input id="affretement{{ key }}" {% if request.get('affretement') and affretement.id in request.get('affretement')  %} checked {% endif %}  type="checkbox"  name="affretement[]" value="{{ affretement.id }}">
+                                                            <label for="affretement{{ key }}">{{ affretement.nom }}</label>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="control-label mb15">Types Vols :</label>
+                                    <div class="form-group">
+                                        <div class="col-sm-12 pl15">
+                                            {% for key, type in type_vol %}
+                                                <div class="bs-component">
+                                                    <div class="checkbox-custom mb5">
+                                                        {% set checked = "" %}
+                                                        {% if "régulier" in type.nom or "supplémentaire" in type.nom %}
+                                                            {% if request.get('type_vol')|length == 0 %}
+                                                                {% set checked = "checked" %}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                        {% if request.get('type_vol') and type.id in request.get('type_vol')%}
+                                                            {% set checked = "checked" %}
+                                                        {% endif %}
+                                                        <input id="type_vol{{ key }}" {{ checked }}  type="checkbox"  name="type_vol[]" value="{{ type.id }}">
+                                                        <label for="type_vol{{ key }}">{{ type.nom }}</label>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="lignes" class="col-md-4 control-label">Lignes</label>
+                                <div class="col-md-8">
+                                    <select id="lignes" class="form-control" multiple="multiple" name="ligne[]">
+                                        {% for ligne in lignes %}
+                                            <option value="{{ ligne.id }}" {% if request.get('ligne') and ligne.id in request.get('ligne') %} selected {% endif %}>{{ ligne }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-9" style="padding-top: 3px;">
+                                    <div class="checkbox-custom mb5">
+                                        Inclure : <input {% if  request.get('allerRetour') %}checked{% endif %} id="allerRetour" name="allerRetour" type="checkbox">
+                                        <label for="allerRetour">Allers/Retours</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="avion" class="col-md-4 control-label">Types Avion</label>
+                                <div class="col-md-8">
+                                    <select  class="select2-single form-control " name="type_avion"  data-placeholder="Sélectionner un type d'Avion">
+                                        <option value=""></option>
+                                        {% for type_avion in types_avion %}
+                                            <option {% if request.get('type_avion') and request.get('type_avion') ==  type_avion.id %} selected {% endif %} value="{{ type_avion.id }}">{{ type_avion.codeIATA }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="avion" class="col-md-4 control-label">Compagnie</label>
+                                <div class="col-md-8">
+                                    <select  class="select2-single form-control " name="compagnie"  data-placeholder="Sélectionner un type d'Avion">
+                                        <option value=""></option>
+                                        {% for compagnie in compagnies %}
+                                            <option {% if request.get('compagnie') and request.get('compagnie') ==  compagnie.id %} selected {% endif %} value="{{ compagnie.id }}">{{ compagnie.nom }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="panel-footer text-right">
+                            <button type="submit" class="btn-default btn" value="rafraichir" name="rafraichir">Rechercher</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="theme-primary col-md-9">
+
+                <!-- Input Fields -->
+                <div class="panel">
+
+                    <div class="panel-heading">
+                            <span class="panel-icon">
+                              <i class="glyphicon glyphicon-list"></i>
+                            </span>
+                        <span class="panel-title">Résultats</span>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="panel-heading">
+                            <ul class="nav panel-tabs-border panel-tabs panel-tabs-left">
+                                <li class="active">
+                                    <a href="#tab10_1" data-toggle="tab">Résultat par ligne</a>
+                                </li>
+                                <li>
+                                    <a href="#tab10_2" data-toggle="tab">Résultat par avion</a>
+                                </li>
+                                <li>
+                                    <a href="#tab10_3" data-toggle="tab">Résultat généraux</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="tab-content pn br-n">
+                                <div id="tab10_1" class="tab-pane active">
+                                    <table class="table fs13 datatable" id="datatable1" cellspacing="0" width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th>Ligne</th>
+                                            <th>Aéroport Départ</th>
+                                            <th>Aéroport Arrivée</th>
+                                            <th>Compagnie</th>
+                                            <th>Avion</th>
+                                            <th># Etapes</th>
+                                            <th># Sièges</th>
+                                            <th># Heures de Vol</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tfoot style="display: table-header-group;">
+                                        <tr>
+                                            <th></th>
+                                            <th>Départ</th>
+                                            <th>Arrivée</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                        </tfoot>
+
+                                        <tbody>
+
+                                        {#{% for ligne_vol in ligne_tab_lignes %}#}
+                                            {#&#123;&#35;% if loop.index%3 == 0 %&#35;&#125;#}
+                                            {#{% if ligne_vol.type == 'empty' %}#}
+
+                                            {#{% elseif ligne_vol.type == 'total' %}#}
+                                                {#<tr class="success">#}
+                                                    {#<td>TOTAL A/R</td>#}
+                                                    {#<td></td>#}
+                                                    {#<td></td>#}
+                                                    {#&#123;&#35;<td></td>&#35;&#125;#}
+                                                    {#<td>{{ ligne_vol.etapes }}</td>#}
+                                                    {#<td>{{ ligne_vol.sieges }}</td>#}
+                                                    {#<td>{{ ligne_vol.heures }}</td>#}
+                                                {#</tr>#}
+                                            {#{% elseif ligne_vol.type == 'total_global' %}#}
+                                                {#<tr class="info">#}
+                                                    {#<td>TOTAL GLOBAL</td>#}
+                                                    {#<td></td>#}
+                                                    {#<td></td>#}
+                                                    {#&#123;&#35;<td></td>&#35;&#125;#}
+                                                    {#<td>{{ ligne_vol.etapes }}</td>#}
+                                                    {#<td>{{ ligne_vol.sieges }}</td>#}
+                                                    {#<td>{{ ligne_vol.heures }}</td>#}
+                                                {#</tr>#}
+                                            {#{% else %}#}
+                                                {# <tr>#}
+                                                    {#<td>{{ ligne_vol.aeroportDepart }}</td>#}
+                                                    {#<td>{{ ligne_vol.aeroportArrivee }}</td>#}
+                                                    {#<td>{{ ligne_vol.compagnie }}</td>#}
+                                                    {#&#123;&#35;<td>{{ ligne_vol.appareil }}</td>&#35;&#125;#}
+                                                    {#<td>{{ ligne_vol.etapes }}</td>#}
+                                                    {#<td>{{ ligne_vol.sieges }}</td>#}
+                                                    {#<td>{{ ligne_vol.heures }}</td>#}
+                                                {#</tr>#}
+                                    {#        {% endif %}#}
+
+                                        {#{% endfor %}#}
+
+                                        {#=========================#}
+                                        {# Nouvel Algo JJo like V1 #}
+                                        {#=========================#}
+
+                                        {% set myInc = 0 %}
+                                        {% for ligne_vol in ligne_tab_lignes %}
+                                            {% if ligne_vol.type == 'empty' %}
+
+                                            {% elseif ligne_vol.type == 'soustotal' %}
+                                                {% set myInc = 0 %}
+                                                <tr class="warning">
+                                                    <td>&nbsp;TOTAL</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>{{ ligne_vol.etapes }}</td>
+                                                    <td>{{ ligne_vol.sieges }}</td>
+                                                    <td>{{ ligne_vol.heures }}</td>
+                                                </tr>
+                                            {% elseif ligne_vol.type == 'total' %}
+                                                {% set myInc = 0 %}
+                                                <tr class="success">
+                                                    <td>&nbsp;TOTAL A/R</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>{{ ligne_vol.etapes }}</td>
+                                                    <td>{{ ligne_vol.sieges }}</td>
+                                                    <td>{{ ligne_vol.heures }}</td>
+                                                </tr>
+                                            {% elseif ligne_vol.type == 'total_global' %}
+                                                <tr class="info">
+                                                    <td>TOTAL GLOBAL</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>{{ ligne_vol.etapes }}</td>
+                                                    <td>{{ ligne_vol.sieges }}</td>
+                                                    <td>{{ ligne_vol.heures }}</td>
+                                                </tr>
+                                            {% else %}
+                                                 <tr>
+                                                    <td {% if myInc > 0 %} style="color:#FFFFFF;"{% endif %}>{{ ligne_vol.ligne }}</td>
+                                                    <td {% if myInc > 0 %} style="color:#FFFFFF;"{% endif %}>{{ ligne_vol.aeroportDepart }}</td>
+                                                    <td {% if myInc > 0 %} style="color:#FFFFFF;"{% endif %}>{{ ligne_vol.aeroportArrivee }}</td>
+                                                    <td>{{ ligne_vol.compagnie }}</td>
+                                                    <td>{{ ligne_vol.appareil }}</td>
+                                                    <td>{{ ligne_vol.etapes }}</td>
+                                                    <td>{{ ligne_vol.sieges }}</td>
+                                                    <td>{{ ligne_vol.heures }}</td>
+                                                </tr>
+                                                {% set myInc = myInc + 1 %}
+                                            {% endif %}
+
+                                        {% endfor %}
+
+                                        {#=====================#}
+                                         {#Fin Nouvel Algo JJo #}
+                                        {#=====================#}
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div id="tab10_2" class="tab-pane">
+                                    {% set totalVol = 0 %}
+                                    {% set totalSiege = 0 %}
+                                    {% set totalHeure = 0 %}
+
+                                    {% set totalVolAvion = 0 %}
+                                    {% set totalSiegeAvion = 0 %}
+                                    {% set totalHeureAvion = 0 %}
+
+                                    {% set typeAvion = null %}
+                                    <table class="table fs13 datatable" id="datatable2" cellspacing="0" width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th>Appareil</th>
+                                            <th>Avion</th>
+                                            <th>Compagnie</th>
+                                            <th># Etapes</th>
+                                            <th># Sièges</th>
+                                            <th># Heures de Vol</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+
+                                        {% for ligne_vol in ligne_tab_vol %}
+                                            {% if typeAvion is null %}
+                                                {% set typeAvion  = ligne_vol.appareil %}
+                                            {% endif %}
+                                            {% set totalVol = totalVol + ligne_vol.etapes %}
+                                            {% set totalSiege = totalSiege + ligne_vol.sieges %}
+                                            {% set totalHeure = totalHeure + ligne_vol.heures %}
+
+
+                                            {% if  typeAvion != ligne_vol.appareil %}
+                                                <tr class="success">
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td> {{ totalVolAvion }} </td>
+                                                    <td> {{ totalSiegeAvion }} </td>
+                                                    <td> {{ totalHeureAvion }} </td>
+                                                </tr>
+                                                {% set totalVolAvion = 0 %}
+                                                {% set totalSiegeAvion = 0 %}
+                                                {% set totalHeureAvion = 0 %}
+                                                {% set typeAvion  = ligne_vol.appareil %}
+                                            {% endif %}
+
+                                            {% set totalVolAvion = totalVolAvion + ligne_vol.etapes %}
+                                            {% set totalSiegeAvion = totalSiegeAvion + ligne_vol.sieges %}
+                                            {% set totalHeureAvion = totalHeureAvion + ligne_vol.heures %}
+
+                                            <tr>
+                                                <td>&nbsp;  {{ ligne_vol.appareil }}</td>
+                                                <td>{{ ligne_vol.avion }}</td>
+                                                <td>{{ ligne_vol.compagnie }}</td>
+                                                <td>{{ ligne_vol.etapes }}</td>
+                                                <td>{{ ligne_vol.sieges }}</td>
+                                                <td>{{ ligne_vol.heures }}</td>
+                                            </tr>
+                                            {% if loop.last or typeAvion != ligne_vol.appareil %}
+                                                <tr class="success">
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td> {{ totalVolAvion }} </td>
+                                                    <td> {{ totalSiegeAvion }} </td>
+                                                    <td> {{ totalHeureAvion }} </td>
+                                                </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                        <tr style="background-color: #DEDEDE;">
+                                            <td>TOTAL GLOBAL</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>{{ totalVol }}</td>
+                                            <td>{{ totalSiege }}</td>
+                                            <td>{{ totalHeure }}</td>
+                                        </tr>
+                                        </tbody>
+                                        {#<tfoot>#}
+
+                                        {#</tfoot>#}
+                                    </table>
+                                </div>
+                                <div id="tab10_3" class="tab-pane">
+                                    <table class="table fs13 datatable" id="datatable3" cellspacing="0" width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Nbre de Vols</th>
+                                            <th>Nbre d'offres en sièges</th>
+                                            <th>Temps de vol</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% set totalVolG = 0 %}
+                                        {% set totalSiegeG = 0 %}
+                                        {% set totalHeureG = 0 %}
+                                        {% for ligne_vol in ligne_tab_generaux %}
+                                            <tr>
+                                                <td data-order="{{ ligne_vol.date|date('U') }}">{{ ligne_vol.date|date('d-M-Y') }}</td>
+                                                <td>{{ ligne_vol.vols }}</td>
+                                                <td>{{ ligne_vol.sieges }}</td>
+                                                <td>{{ ligne_vol.heures }}</td>
+                                            </tr>
+                                            {% set totalVolG = totalVolG + ligne_vol.vols %}
+                                            {% set totalSiegeG = totalSiegeG + ligne_vol.sieges %}
+                                            {% set totalHeureG = totalHeureG + ligne_vol.heures %}
+                                        {% endfor %}
+                                        <tr style="background-color: #DEDEDE;">
+                                            <td data-order="2561714328">TOTAUX</td>
+                                            <td>{{ totalVolG }}</td>
+                                            <td>{{ totalSiegeG }}</td>
+                                            <td>{{ totalHeureG }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End: Content -->
+
+{% endblock %}
+
+{% block javascripts_libs %}
+    <!-- Theme Javascript LIBS -->
+    {% javascripts
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/JSZip-2.5.0/jszip.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/pdfmake-0.1.18/build/pdfmake.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/pdfmake-0.1.18/build/vfs_fonts.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/DataTables-1.10.13/js/jquery.dataTables.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/DataTables-1.10.13/js/dataTables.bootstrap.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/Buttons-1.2.4/js/dataTables.buttons.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/Buttons-1.2.4/js/buttons.bootstrap.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/Buttons-1.2.4/js/buttons.html5.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/js/select2.full.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/js/i18n/fr.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block jquery_custom %}
+    // Init Select2 - Basic Single
+    $(".select2-single").select2({
+    language: "fr",
+    allowClear: true
+    });
+
+    // Init multiselect - Multiple list
+    $('#lignes').multiselect({
+        buttonWidth: '100%',
+        enableFiltering: true,
+        filterPlaceholder: 'Chercher une ligne',
+        maxHeight: 200,
+        nonSelectedText: 'Sélectionner une ligne',
+        allSelectedText: 'Tout selectionné',
+        selectAllText: 'Tout selectionner',
+        numberDisplayed: 1,
+        nSelectedText: ' - selectionné',
+        includeSelectAllOption: false,
+        //buttonContainer: '<div class="btn-group open multiselect-list" />'
+    });
+
+    /*$('.multiselect-list').on('click', function(event) {
+        event.stopPropagation();
+        console.log(event);
+    });
+    $('.multiselect-list').on({
+        "shown.bs.dropdown": function() { this.closable = false; },
+        "click":             function() { this.closable = false; },
+        "hide.bs.dropdown":  function() { return this.closable; }
+    });*/
+{% endblock %}
+
+{% block javascripts_custom %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/assets/js/custom_datatables_stats.js') }}"></script>
+{% endblock %}

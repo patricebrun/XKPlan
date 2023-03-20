@@ -1,0 +1,44 @@
+<!-- Begin: Content -->
+<div id="content" class="animated fadeIn">
+    <div class="row">
+
+        <div class="theme-primary mw1000 center-block">
+
+            <!-- Input Fields -->
+            <div class="panel">
+
+                {{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'fos_user_profile_edit' } }) }}
+
+                <div class="panel-heading">
+                            <span class="panel-icon">
+                                  <i class="fa fa-male"></i>
+                            </span>
+                    <span class="panel-title">Modification Profil</span>
+                </div>
+                <div class="panel-body">
+                    {# Les erreurs générales du formulaire. #}
+                    {% if not form.vars.valid %}
+                        <ul>
+                            {# Loop through every form item #}
+                            {% for child in form.children %}
+                                {# Display the errors of the form item #}
+                                {%for error in child.vars.errors%}
+                                    <li>{{error.message}}</li>
+                                {%endfor%}
+                            {%endfor%}
+                        </ul>
+                    {%endif%}
+
+                    {{ form_widget(form) }}
+                </div>
+
+                <div class="panel-footer text-right">
+                    <button type="submit" class="btn-default btn">Modifier</button>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End: Content -->

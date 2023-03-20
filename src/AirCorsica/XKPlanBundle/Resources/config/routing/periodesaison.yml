@@ -1,0 +1,33 @@
+periodesaison_index:
+    path:     /
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PeriodeSaison:index" }
+    methods:  GET
+
+periodesaison_show:
+    path:     /{id}/show
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PeriodeSaison:show" }
+    methods:  GET
+
+periodesaison_new:
+    path:     /new
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PeriodeSaison:new" }
+    methods:  [GET, POST]
+
+periodesaison_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PeriodeSaison:edit" }
+    methods:  [GET, POST]
+
+periodesaison_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PeriodeSaison:delete" }
+    methods:  [DELETE, GET]
+
+periodesaison_new_from_modal:
+    path:     /newfrommodal
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PeriodeSaison:newFromModal" }
+    methods:  [POST]
+periodesaison_edit_from_modal:
+    path:     /editfrommodal/{id}
+    defaults: { _controller: "AirCorsicaXKPlanBundle:PeriodeSaison:editfromModal" }
+    methods:  [POST]

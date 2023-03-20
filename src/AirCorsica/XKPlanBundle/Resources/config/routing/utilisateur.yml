@@ -1,0 +1,19 @@
+utilisateur_index:
+    path:     /
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Utilisateur:index" }
+    methods:  GET
+
+utilisateur_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Utilisateur:edit" }
+    methods:  [GET, POST]
+
+utilisateur_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Utilisateur:delete" }
+    #methods:  DELETE
+
+utilisateur_deletemasse:
+    path:     /deletemasse
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Utilisateur:deletemasse" }
+    methods:  [GET, POST]

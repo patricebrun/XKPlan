@@ -1,0 +1,109 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/assets/admin-tools/admin-forms/less/admin-forms.less'
+    filter='less'
+    output='css/compiled/admin-forms.css'
+    %}
+
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+
+    {% endstylesheets %}
+{% endblock %}
+
+{% block title %}
+    {% set titre = 'Affretement' %}
+    {{ titre }} - {{ parent() }}
+{% endblock %}
+
+{% block body_class %}
+    {% set attributes = 'admin-elements-page' %}
+    {{ attributes }}
+{% endblock %}
+
+{% block titre_contenu %}
+    {% set titre_contenu = 'Affretement' %}
+    {{ titre_contenu }}
+{% endblock %}
+
+{% block btn_actions %}
+    <div class="topbar-right">
+        <div class="ib topbar-dropdown">
+            <a href="{{ path('affretement_index') }}" class="btn btn-success btn-gradient dark btn-block"><i class="glyphicon glyphicon-circle-arrow-left"></i> Retour</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+
+    {#{ dump(edit_form) }#}
+    <!-- Begin: Content -->
+    <div id="content" class="animated fadeIn">
+        <div class="row">
+
+            <div class="theme-primary mw1000 center-block">
+                <div class="form-horizontal">
+                    <!-- Input Fields -->
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <span class="panel-icon">
+                              <i class="glyphicon glyphicon-edit"></i>
+                            </span>
+                            <span class="panel-title">Consultation Affretement</span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">Id</label>
+                                <div class="col-lg-8">
+                                    <div class="bs-component">
+                                        <input type="text" id="affretement_id" name="affretement_id" class="form-control" value="{{ affretement.id }}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">Nom</label>
+                                <div class="col-lg-8">
+                                    <div class="bs-component">
+                                        <input type="text" id="affretement_nom" name="affretement_nom" class="form-control" value="{{ affretement.nom }}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">Elément verrouillé</label>
+                                <div class="col-lg-8">
+                                    <div class="bs-component">
+                                        <input type="text" id="affretement_verrouille" name="affretement_verrouille" class="form-control" value="{% if affretement.verrouille %}Oui{% else %}Non{% endif %}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">Date modification</label>
+                                <div class="col-lg-8">
+                                    <div class="bs-component">
+                                        <input type="text" id="affretement_dateTimeModification" name="affretement_dateTimeModification" class="form-control" value="{% if affretement.dateTimeModification %}{{ affretement.dateTimeModification|date('Y-m-d H:i:s') }}{% endif %}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">Date création</label>
+                                <div class="col-lg-8">
+                                    <div class="bs-component">
+                                        <input type="text" id="affretement_dateTimeCreation" name="affretement_dateTimeCreation" class="form-control" value="{% if affretement.dateTimeCreation %}{{ affretement.dateTimeCreation|date('Y-m-d H:i:s') }}{% endif %}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End: Content -->
+{% endblock %}
+

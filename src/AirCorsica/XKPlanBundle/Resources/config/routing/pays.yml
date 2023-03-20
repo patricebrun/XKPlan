@@ -1,0 +1,29 @@
+pays_index:
+    path:     /
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Pays:index" }
+    methods:  GET
+
+pays_show:
+    path:     /{id}/show
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Pays:show" }
+    methods:  GET
+
+pays_new:
+    path:     /new
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Pays:new" }
+    methods:  [GET, POST]
+
+pays_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Pays:edit" }
+    methods:  [GET, POST]
+
+pays_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Pays:delete" }
+    #methods:  DELETE
+
+pays_deletemasse:
+    path:     /deletemasse
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Pays:deletemasse" }
+    methods:  [GET, POST]

@@ -1,0 +1,55 @@
+typeavion_deleteAll:
+    path:     deleteall/{id}
+    defaults: { _controller: "AirCorsicaXKPlanBundle:TypeAvion:deleteTDV" }
+    methods:  [GET, POST]
+    options:
+        expose: true
+
+typeavion_copie:
+    path:     copie/{id}
+    defaults: { _controller: "AirCorsicaXKPlanBundle:TypeAvion:copie" }
+    methods:  [GET, POST]
+    options:
+        expose: true
+
+typeavion_index:
+    path:     /
+    defaults: { _controller: "AirCorsicaXKPlanBundle:TypeAvion:index" }
+    methods:  GET
+
+typeavion_show:
+    path:     /{id}/show
+    defaults: { _controller: "AirCorsicaXKPlanBundle:TypeAvion:show" }
+    methods:  GET
+
+typeavion_new:
+    path:     /new
+    defaults: { _controller: "AirCorsicaXKPlanBundle:TypeAvion:new" }
+    methods:  [GET, POST]
+
+typeavion_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AirCorsicaXKPlanBundle:TypeAvion:edit" }
+    methods:  [GET, POST]
+
+typeavion_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AirCorsicaXKPlanBundle:TypeAvion:delete" }
+    #methods:  DELETE
+
+typeavion_deletemasse:
+    path:     /deletemasse
+    defaults: { _controller: "AirCorsicaXKPlanBundle:TypeAvion:deletemasse" }
+    methods:  [GET, POST]
+
+typeavion_typeavioncsv:
+    path:     /typeavioncsv
+    defaults: { _controller: "AirCorsicaXKPlanBundle:TypeAvion:typeavioncsv" }
+    methods:  GET
+
+#typeavion_typeaviontocsv:
+#    path:     /typeaviontocsv
+#    defaults: { _controller: "AirCorsicaXKPlanBundle:TypeAvion:typeaviontocsv" }
+#    methods:  [GET]
+#    options:
+#        expose: true

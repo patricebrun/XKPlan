@@ -1,0 +1,44 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+    <h1>Periodesaison</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ periodeSaison.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ periodeSaison.nom }}</td>
+            </tr>
+            <tr>
+                <th>descriptif</th>
+                <td>{{ periodeSaison.descriptif }}</td>
+            </tr>
+            <tr>
+                <th>Datetimemodification</th>
+                <td>{% if periodeSaison.dateTimeModification %}{{ periodeSaison.dateTimeModification|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Datetimecreation</th>
+                <td>{% if periodeSaison.dateTimeCreation %}{{ periodeSaison.dateTimeCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('periodesaison_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('periodesaison_edit', { 'id': periodeSaison.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

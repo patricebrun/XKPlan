@@ -1,0 +1,158 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/assets/admin-tools/admin-forms/less/admin-forms.less'
+    filter='less'
+    output='css/compiled/admin-forms.css' %}
+
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+
+    {% endstylesheets %}
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/DataTables-1.10.13/css/dataTables.bootstrap.css'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/Buttons-1.2.4/css/buttons.bootstrap.min.css'
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/css/select2.css'
+    output='css/compiled/core.css'
+    %}
+
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+
+    {% endstylesheets %}
+
+{% endblock %}
+
+{% block title %}
+    {% set titre = 'Timetable' %}
+    {{ titre }} - {{ parent() }}
+{% endblock %}
+
+{% block titre_contenu %}
+    {% set titre_contenu = 'Timetable' %}
+    {{ titre_contenu }}
+{% endblock %}
+
+{% block body %}
+    <!-- Begin: Content -->
+    <div id="content" class="animated fadeIn">
+        <div class="row">
+
+            {#% embed "AirCorsicaXKPlanBundle:Vol:sidebar_vol.html.twig" %}{% endembed %#}
+            {{ render(controller('AirCorsicaXKPlanBundle:Vol:sidebar', {'request': app.request})) }}
+
+            <div class="theme-primary col-md-9">
+
+                <!-- Input Fields -->
+                <div class="panel">
+
+                    <div class="panel-heading">
+                            <span class="panel-icon">
+                              <i class="glyphicon glyphicon-list"></i>
+                            </span>
+                        <span class="panel-title">Timetable</span>
+                    </div>
+                    <div class="panel-body">
+                        <!--<table class="table fs13 datatable" id="datatable1" cellspacing="0" width="100%">-->
+                        <table class="table admin-form fs13 datatable" id="datatable1" cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th class="no-sort" style="width: 2%;padding-left: 10px;padding-right: 10px;text-align: center">N° Vol</th>
+                                <th class="no-sort" style="width: 15%;padding-left: 10px;padding-right: 10px;text-align: center">Ligne</th>
+                                <th class="no-sort" style="width: 3%;padding-left: 10px;padding-right: 10px;text-align: center">Cie.</th>
+                                <th class="no-sort" style="width: 25%;padding-left: 10px;padding-right: 10px;text-align: center">Période Validité</th>
+                                <th class="no-sort" style="width: 19%;padding-left: 10px;padding-right: 10px;text-align: center">Heures Dép/Arr</th>
+                                <th class="no-sort" style="width: 11%;padding-left: 10px;padding-right: 10px;text-align: center">J. semaine</th>
+                                <th class="no-sort" style="width: 4%;padding-left: 10px;padding-right: 10px;text-align: center">Avion</th>
+                                <th class="no-sort" style="width: 5%;padding-left: 10px;padding-right: 10px;text-align: center">Type</th>
+                                <th class="no-sort" style="width: 3%;padding-left: 10px;padding-right: 10px;text-align: center">Sièges</th>
+                                <th class="no-sort" style="width: 17%;padding-left: 10px;padding-right: 10px;text-align: center">Codes Shares</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for vol in aVols %}
+                                {% set periodeDeVol = vol.periodeDeVol %}
+                                <tr class="{% if vol.periodeDeVol.etat in ['pendingCancel','pendingSend'] %}orange{% elseif loop.index is divisibleby(2) %}odd{% else %}even{% endif %}">
+                                    <td style="text-align: center">
+                                        <a href="{{ path('vol_edit',{'id':periodeDeVol.vol.id}) }}">{{ periodeDeVol.vol.numero }}</a>
+                                    </td>
+                                    <td style="text-align: center">
+                                        {{ periodeDeVol.vol.ligne }}
+                                    </td>
+                                    <td style="text-align: center">
+                                        {{ vol.compagnie.codeIATA }}
+                                    </td>
+                                    <td style="text-align: center">
+                                        {% if formatDate == "num" %}
+                                            {{ periodeDeVol.dateDebut|date("dmy") }} - {{ periodeDeVol.dateFin|date("dmy") }}
+                                        {% else %}
+                                                {{ periodeDeVol.dateDebut|date("dMy")|upper }} - {{ periodeDeVol.dateFin|date("dMy")|upper }}
+                                        {% endif %}
+                                    </td>
+                                    <td style="text-align: center">
+                                        {{ periodeDeVol.decollage|date('H:i') }} - {{ periodeDeVol.atterissage|date('H:i') }}
+                                    </td>
+                                    <td style="text-align: center">
+                                        <span style="white-space: nowrap;">{{ periodeDeVol.joursDeValidite|join(' ') }}</span>
+                                    </td>
+                                    <td style="text-align: center">
+                                        <span style="white-space: nowrap;">{{ periodeDeVol.vol.avion.typeAvion.codeIATA }}</span>
+                                    </td>
+                                    <td style="text-align: center">
+                                        <span style="white-space: nowrap;">{{ periodeDeVol.vol.typeDeVol }}</span>
+                                    </td>
+                                    <td style="text-align: center">
+                                        <span style="white-space: nowrap;">{{ periodeDeVol.vol.avion.typeAvion.capaciteSiege }}</span>
+                                    </td>
+                                    <td style="text-align: center">{% for codeshare in periodeDeVol.vol.codesShareVol %}{{- codeshare|trim -}}{% if not loop.last %},{% endif %}{% endfor %}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- End: Content -->
+
+{% endblock %}
+
+{% block jquery_custom %}
+    // Init Select2 - Basic Single
+    $(".select2-single").select2({
+    language: "fr",
+    allowClear: true
+    });
+{% endblock %}
+
+{% block javascripts_libs %}
+    <!-- Theme Javascript LIBS -->
+    {% javascripts
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/JSZip-2.5.0/jszip.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/pdfmake-0.1.18/build/pdfmake.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/pdfmake-0.1.18/build/vfs_fonts.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/DataTables-1.10.13/js/jquery.dataTables.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/DataTables-1.10.13/js/dataTables.bootstrap.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/Buttons-1.2.4/js/dataTables.buttons.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/Buttons-1.2.4/js/buttons.bootstrap.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/datatables1.10.13/Buttons-1.2.4/js/buttons.html5.min.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/js/select2.full.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/js/i18n/fr.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block javascripts_custom %}
+    {{ parent() }}
+    <!-- Pas utiliser ici???
+        <script type="text/javascript" src="{#}{ asset('bundles/aircorsicaxkplan/assets/js/vol.js') }#}"></script>
+    -->
+    <script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/assets/js/liste.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/assets/js/custom_datatables_timetable.js') }}"></script>
+{% endblock %}

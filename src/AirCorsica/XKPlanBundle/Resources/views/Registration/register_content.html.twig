@@ -1,0 +1,47 @@
+<!-- Begin: Content -->
+<div id="content" class="animated fadeIn">
+    <div class="row">
+
+        <div class="theme-primary mw1000 center-block">
+
+            <!-- Input Fields -->
+            <div class="panel">
+
+                {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
+
+                <div class="panel-heading">
+                            <span class="panel-icon">
+                                  <i class="glyphicon glyphicon-plus"></i>
+                            </span>
+                    <span class="panel-title">Création Utilisateur</span>
+                </div>
+                <div class="panel-body">
+
+                    {# Les erreurs générales du formulaire. #}
+                    {% if not form.vars.valid %}
+                        <ul>
+                            {# Loop through every form item #}
+                            {% for child in form.children %}
+                                {# Display the errors of the form item #}
+                                {%for error in child.vars.errors%}
+                                    <li>{{error.message}}</li>
+                                {%endfor%}
+                            {%endfor%}
+                        </ul>
+                    {%endif%}
+
+                    {{ form_widget(form) }}
+
+                    {{ form_rest(form) }}
+
+                </div>
+                <div class="panel-footer text-right">
+                    <button type="submit" class="btn-default btn">Ajouter</button>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End: Content -->

@@ -1,0 +1,54 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block body %}
+    <h1>Fluxes list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Pathsmb</th>
+                <th>Loginsmb</th>
+                <th>Passwordsmb</th>
+                <th>Emailcible</th>
+                <th>Fluxactif</th>
+                <th>Pathcopielocale</th>
+                <th>Type</th>
+                <th>Datetimemodification</th>
+                <th>Datetimecreation</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for flux in fluxes %}
+            <tr>
+                <td>{{ flux.id }}</td>
+                <td>{{ flux.nom }}</td>
+                <td>{{ flux.pathSMB }}</td>
+                <td>{{ flux.loginSMB }}</td>
+                <td>{{ flux.passwordSMB }}</td>
+                <td>{{ flux.emailCible }}</td>
+                <td>{% if flux.fluxActif %}Yes{% else %}No{% endif %}</td>
+                <td>{{ flux.pathCopieLocale }}</td>
+                <td>{{ flux.type }}</td>
+                <td>{% if flux.dateTimeModification %}{{ flux.dateTimeModification|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if flux.dateTimeCreation %}{{ flux.dateTimeCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('flux_edit', { 'id': flux.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('flux_new') }}">Create a new flux</a>
+        </li>
+    </ul>
+{% endblock %}

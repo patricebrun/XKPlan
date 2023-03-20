@@ -1,0 +1,24 @@
+adressesita_index:
+    path:     /
+    defaults: { _controller: "AirCorsicaXKPlanBundle:AdresseSITA:index" }
+    methods:  GET
+
+adressesita_show:
+    path:     /{id}/show
+    defaults: { _controller: "AirCorsicaXKPlanBundle:AdresseSITA:show" }
+    methods:  GET
+
+adressesita_new:
+    path:     /{groupe_id}/new
+    defaults: { _controller: "AirCorsicaXKPlanBundle:AdresseSITA:new" }
+    methods:  [GET, POST]
+
+adressesita_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AirCorsicaXKPlanBundle:AdresseSITA:edit" }
+    methods:  [GET, POST]
+
+adressesita_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AirCorsicaXKPlanBundle:AdresseSITA:delete" }
+    methods:  [GET, DELETE]

@@ -1,0 +1,115 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+
+{% block stylesheets %}
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/assets/admin-tools/admin-forms/less/admin-forms.less'
+    filter='less'
+    output='css/compiled/admin-forms.css' %}
+
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+
+    {% endstylesheets %}
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/vendor/plugins/fancytree/skin-win8/ui.fancytree.min.css'
+    output='css/compiled/fancytree.css' %}
+
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}"/>
+
+    {% endstylesheets %}
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/vendor/plugins/contextmenu/jquery.contextMenu.min.css'
+    output='css/compiled/contextmenu.css' %}
+
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}"/>
+
+    {% endstylesheets %}
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/css/select2.css'
+    output='css/compiled/core.css'
+    %}
+
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}"/>
+
+    {% endstylesheets %}
+
+{% endblock %}
+
+{% block title %}
+    {% set titre = 'Liste des vols' %}
+    {{ titre }} - {{ parent() }}
+{% endblock %}
+
+{% block titre_contenu %}
+    {% set titre_contenu = 'Liste des vols' %}
+    {{ titre_contenu }}
+{% endblock %}
+
+{% block body %}
+
+    <!-- Begin: Content -->
+    <div id="content" class="animated fadeIn">
+        <div class="row">
+
+            {#% embed "AirCorsicaXKPlanBundle:Vol:sidebar_vol.html.twig" %}{% endembed %#}
+            {{ render(controller('AirCorsicaXKPlanBundle:Vol:sidebar', {'request': app.request})) }}
+
+            <div class="theme-primary col-md-9">
+
+                <!-- Input Fields -->
+                <div class="panel">
+                    <div class="panel-heading">
+                        <span class="panel-icon">
+                          <i class="fa fa-history" aria-hidden="true"></i>
+                        </span>
+                        <span class="panel-title">Historique des modifications des vols filtrés</span>
+                    </div>
+                    <div class="panel-body pn">
+                        <div id="tree">
+                            <ul id="treeData" style="display: none;">
+                                <li class="fancy-no-icon" data-expanded="true"><i class="fa fa-plane" aria-hidden="true"></i>
+                                    Historique des modifications des vols
+                                    {{ htmlTree|raw }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- End: Content -->
+
+{% endblock %}
+
+{% block javascripts_libs %}
+    <!-- Select2 Plugin Plugin -->
+    <script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/js/select2.full.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/js/i18n/fr.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/vendor/jquery/jquery_ui/jquery-ui.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/vendor/plugins/fancytree/jquery.fancytree-all.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/vendor/plugins/contextmenu/jquery.contextMenu.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/vendor/plugins/contextmenu/jquery.ui.position.js') }}"></script>
+{% endblock %}
+
+{% block jquery_custom %}
+    // Init Select2 - Basic Single
+    $(".select2-single").select2({
+    language: "fr",
+    allowClear: true
+    });
+{% endblock %}
+
+{% block javascripts_custom %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/assets/js/liste.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/assets/js/historique.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block body %}
+    <!-- Begin: Content -->
+    <div id="content" class="animated fadeIn">
+
+        <div class="center-block mt200 mw600">
+            <div class="row table-layout">
+                <a href="{{ path('air_corsica_xk_plan_homepage') }}" title="Retour à l'accueil">
+                    <img src="{{ asset('bundles/aircorsicaxkplan/assets/img/logos/logo.png') }}" title="Logo Air Corsica" alt="Logo Air Corsica" class="center-block img-responsive br-home-logo mb30 mw600" />
+                </a>
+            </div>
+
+
+            <div class="panel panel-default heading-border">
+
+                <div class="panel-body p25">
+                    <div class="section row">
+                        <div class="col-md-12">
+                            <p>Veuillez utiliser le menu de gauche afin d'accèder à une fonction de l'application</p>
+                        </div>
+                        <!-- end section -->
+                    </div>
+                    <div class="section row">
+                        <div class="col-md-6">
+                            <img src="{{ asset('bundles/aircorsicaxkplan/assets/img/logos/logo_sitec_noir.png') }}" title="Logo Sitec" alt="Logo Sitec" class="center-block img-responsive mw300" />
+                        </div>
+                        <!-- end section -->
+
+                        <div class="col-md-6">
+                            <p><strong>Auteur :</strong> SITEC</p>
+                            <p><strong>Site WEB :</strong> <a href="http://www.sitec.fr" target="_blank">http://www.sitec.fr</a></p>
+                            <p><strong>Email :</strong> <a href="mailto:contact@sitec.fr">contact@sitec.fr</a></p>
+                            <p><strong>Hotline :</strong> +33 495 236 800</p>
+                        </div>
+                        <!-- end section -->
+
+                    </div>
+                    <!-- end section row section -->
+                </div>
+                <!-- end .form-body section -->
+            </div>
+            <!-- end: .panel -->
+
+        </div>
+
+    </div>
+    <!-- End: Content -->
+{% endblock %}

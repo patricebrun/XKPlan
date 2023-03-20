@@ -1,0 +1,84 @@
+{% set totalVol = 0 %}
+{% set totalSiege = 0 %}
+{% set totalHeure = 0 %}
+
+{% set totalVolAvion = 0 %}
+{% set totalSiegeAvion = 0 %}
+{% set totalHeureAvion = 0 %}
+
+{% set typeAvion = null %}
+
+<h1 style="text-align: center;">Imprimé le {{ "now"|date("d/m/Y H:i:s") }}</h1>
+<div class="panel-body">
+    <table cellpadding="10" width="100%" style="text-align: center;">
+            <thead>
+            <tr>
+                <th>Appareil</th>
+                <th>Avion</th>
+                <th>Compagnie</th>
+                <th># Etapes</th>
+                <th># Sièges</th>
+                <th># Heures de Vol</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            {% for ligne_vol in ligne_tab_vol %}
+                {% if typeAvion is null %}
+                    {% set typeAvion  = ligne_vol.appareil %}
+                {% endif %}
+                {% set totalVol = totalVol + ligne_vol.etapes %}
+                {% set totalSiege = totalSiege + ligne_vol.sieges %}
+                {% set totalHeure = totalHeure + ligne_vol.heures %}
+
+
+                {% if  typeAvion != ligne_vol.appareil %}
+                    <tr style="background-color: #efefef;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td> {{ totalVolAvion }} </td>
+                        <td> {{ totalSiegeAvion }} </td>
+                        <td> {{ totalHeureAvion }} </td>
+                    </tr>
+                    {% set totalVolAvion = 0 %}
+                    {% set totalSiegeAvion = 0 %}
+                    {% set totalHeureAvion = 0 %}
+                    {% set typeAvion  = ligne_vol.appareil %}
+                {% endif %}
+
+                {% set totalVolAvion = totalVolAvion + ligne_vol.etapes %}
+                {% set totalSiegeAvion = totalSiegeAvion + ligne_vol.sieges %}
+                {% set totalHeureAvion = totalHeureAvion + ligne_vol.heures %}
+
+                <tr>
+                    <td>{{ ligne_vol.appareil }}</td>
+                    <td>{{ ligne_vol.avion }}</td>
+                    <td>{{ ligne_vol.compagnie }}</td>
+                    <td>{{ ligne_vol.etapes }}</td>
+                    <td>{{ ligne_vol.sieges }}</td>
+                    <td>{{ ligne_vol.heures }}</td>
+                </tr>
+                {% if loop.last or typeAvion != ligne_vol.appareil %}
+                    <tr style="background-color: #efefef;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td> {{ totalVolAvion }} </td>
+                        <td> {{ totalSiegeAvion }} </td>
+                        <td> {{ totalHeureAvion }} </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr style="background-color: #DEDEDE;">
+                <th colspan="3">TOTAL GLOBAL</th>
+                <th>{{ totalVol }}</th>
+                <th>{{ totalSiege }}</th>
+                <th>{{ totalHeure }}</th>
+            </tr>
+            </tfoot>
+        </table>
+</div>

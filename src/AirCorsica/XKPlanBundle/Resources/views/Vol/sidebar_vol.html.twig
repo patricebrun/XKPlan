@@ -1,0 +1,671 @@
+{% if request.attributes.get('_route') == 'vol_timetable' and is_granted('ROLE_ADMIN') %}
+    <div class="theme-primary col-md-3 sticky" id="sidebar_vol">
+{% else %}
+        <div class="theme-primary col-md-3" id="sidebar_vol">
+{% endif %}
+    <div class="panel">
+        <form class="form-horizontal" role="form" action="" method="get">
+            <div class="panel-heading">
+                <span class="panel-icon">
+                    <i class="glyphicon glyphicon-edit"></i>
+                </span>
+                <span class="panel-title">Filtres</span>
+            </div>
+
+            <div class="panel-body">
+
+                {% if request.attributes.get('_route') == 'vol_timetable' and is_granted('ROLE_ADMIN') %}
+
+                    <div class="panel-group accordion" id="accordion0">
+
+                        <div class="panel panel-primary panel-border top">
+
+                            <div class="panel-heading">
+                                <a class="accordion-toggle accordion-icon link-unstyled" data-toggle="collapse" data-parent="#accordion0" href="#accord0">
+                                    Timetable :
+                                </a>
+                            </div>
+
+                            <div id="accord0" class="panel-collapse collapse in" style="height: auto;">
+
+                                <div class="panel-body" style="margin: 20px 0; padding: 0;">
+
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="bs-component">
+                                                <div class="checkbox-custom mb5">
+                                                    {%  set format = request.query.get("format") %}
+                                                    <input {%  if format == "num" %}checked="checked"{% endif %} id="dateNum" type="checkbox" value="num" name="format"/>
+                                                    <label for="dateNum">Dates au format numérique</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="bs-component">
+                                                <div class="checkbox-custom mb5">
+                                                    {%  set fusionnerPeriode = request.query.get("fusionnerPeriode") %}
+                                                    <input {%  if fusionnerPeriode == 1 %}checked="checked"{% endif %} id="fusionnerPeriode" type="checkbox" name="fusionnerPeriode" value="1"/>
+                                                    <label for="fusionnerPeriode">Fusionner périodes compatibles</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="GMT" class="col-md-3 control-label">GMT :</label>
+                                        <div class="col-md-9">
+                                            {%  set GMT = request.query.get("GMT") %}
+                                            <select id="GMT" class="select2-single form-control" data-placeholder="GMT" name="GMT">
+                                                {%  for i in -12..13 %}
+                                                    {% if i > 0 %}
+                                                        <option {% if GMT==i %} selected="selected" {% endif %}value="{{ i }}">GMT+{{ i }}</option>
+                                                    {% elseif i==0 %}
+                                                        <option {% if GMT==i %} selected="selected" {% endif %}value="{{ i }}">GMT</option>
+                                                    {% else %}
+                                                        <option {% if GMT==i %} selected="selected" {% endif %}value="{{ i }}">GMT{{ i }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="panel-group accordion" id="accordion1">
+                    <div class="panel panel-primary panel-border top">
+                        <div class="panel-heading">
+                            <a class="accordion-toggle accordion-icon link-unstyled" data-toggle="collapse" data-parent="#accordion1" href="#accord1">
+                                Filtres de sélection :
+                            </a>
+                        </div>
+                        <div id="accord1" class="panel-collapse collapse in" style="height: auto;">
+                            <div class="panel-body" style="margin: 20px 0; padding: 0;">
+
+                                <div class="form-group">
+                                    <label for="numerodevol" class="col-md-3 control-label">N° de vol :</label>
+                                    <div class="col-md-5">
+                                        <input type="text" class="form-control" name="numerodevol" id="numerodevol" value="{{ request.get('numerodevol') }}">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="checkbox-custom mb5">
+                                            <input {% if  request.get('exact') %}checked{% endif %} id="exact" name="exact" type="checkbox">
+                                            <label for="exact">Exact</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group ligne_combine">
+                                    <label class="col-md-3 control-label">Ligne :</label>
+                                    <div class="col-md-9">
+                                        <select  class="select2-single form-control combine aller" name="aeroport_aller" data-placeholder="Ligne Aller" style="width: 100px;float: left;margin-right: 30px;">
+                                            <option value=""></option>
+                                            {% for aeroport in aeroports %}
+                                                <option data-aeroport-depart="{{ aeroport.id }}" {% if request.get('aeroport_aller') and request.get('aeroport_aller') ==  aeroport.codeIATA %} selected {% endif %} value="{{ aeroport.codeIATA }}">{{ aeroport.codeIATA }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        Vers :
+                                        <select  class="select2-single form-control combine retour" name="aeroport_retour" data-placeholder="Ligne Retour" style="width: 115px;">
+                                            <option value=""></option>
+                                            {% for aeroport in aeroports %}
+                                                <option data-aeroport-arrivee="{{ aeroport.id }}" {% if request.get('aeroport_retour') and request.get('aeroport_retour') ==  aeroport.codeIATA %} selected {% endif %} value="{{ aeroport.codeIATA }}">{{ aeroport.codeIATA }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-4" style="padding-top: 3px;">
+                                        <div class="checkbox-custom mb5">
+                                            {% set checked = "" %}
+                                            {% if request.get('aller')|length == 0 and  request.get('retour')|length == 0 %}
+                                                {% set checked = "checked" %}
+                                            {%elseif request.get('aller') %}
+                                                {% set checked = "checked" %}
+                                            {% endif %}
+                                            <input {{ checked }} id="aller" name="aller" type="checkbox">
+                                            <label for="aller">Allers</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" style="padding-top: 3px;">
+                                        <div class="checkbox-custom mb5">
+                                            <input {% if  request.get('retour') %}checked{% endif %} id="retour" name="retour" type="checkbox">
+                                            <label for="retour">Retours</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="avion" class="col-md-3 control-label">Avion :</label>
+                                    <div class="col-md-9">
+                                        <select  class="select2-single form-control " name="avion" id="avion" data-placeholder="Sélectionner Avion">
+                                            <option value=""></option>
+                                            {% for avion in avions %}
+                                                <option {% if request.get('avion') and request.get('avion') ==  avion.id %} selected {% endif %} value="{{ avion.id }}">{{ avion.nom }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Message :</label>
+
+                                    <div class="col-md-4">
+                                        <div class="checkbox-custom mb5">
+                                            <input {% if  request.get('msg_envoye') %}checked{% endif %} id="msg_envoye" name="msg_envoye" type="checkbox">
+                                            <label for="msg_envoye">Envoyé</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-5">
+                                        <div class="checkbox-custom mb5">
+                                            <input {% if  request.get('msg_non_envoye') %}checked{% endif %} id="msg_non_envoye" name="msg_non_envoye" type="checkbox">
+                                            <label for="msg_non_envoye">Non envoyé</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {#% if request.attributes.get('_route') == 'vol_liste' %}
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="checkbox-custom mb5">
+                                                <input {% if  request.get('modif') %}checked{% endif %} id="modif" name="modif" type="checkbox">
+                                                <label for="modif">Vols modifiés entre</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="date_debut_modif" class="col-md-3 control-label">Le :</label>
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+                                                <input {% if not request.get('modif') %}disabled{% endif %} type="text" id="date_debut_modif" name="date_debut_modif" class="form-control input-inline datepicker" placeholder="Date Début" data-provide="datepicker" data-key="dates-periode-sidebar_modif" data-type="debut" data-date-format="dd-mm-yyyy" value="{{ request.get('date_debut_modif') }}">
+                                                <div class="input-group-btn">
+                                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></button>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        {% for saison in saisons %}
+                                                            <li class="dropdown-submenu">
+                                                                <a href="#" class="no-click">{{ saison.nom }}</a>
+                                                                {% if saison.periodesSaison|length %}
+                                                                    <ul class="dropdown-menu">
+                                                                        {% for periode in saison.periodesSaison %}
+                                                                            <li><a class="set-date" data-key="dates-periode-sidebar_modif" href="#" data-datedebut="{{ periode.dateDebut|date("d-m-Y") }}" data-datefin="{{ periode.dateFin|date("d-m-Y") }}">{{ saison.nom }} : {{ periode.nom }}</a></li>
+                                                                        {% endfor %}
+                                                                    </ul>
+                                                                {% endif %}
+                                                            </li>
+                                                            {% if not loop.last %}
+                                                                <li role="separator" class="divider"></li>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div><!-- /btn-group -->
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="date_fin_modif" class="col-md-3 control-label">Et le :</label>
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+                                                <input {% if not request.get('modif') %}disabled{% endif %} type="text" id="date_fin_modif"  name="date_fin_modif" class="form-control input-inline datepicker" placeholder="Date Fin" data-provide="datepicker" data-key="dates-periode-sidebar_modif" data-type="fin" data-date-format="dd-mm-yyyy" value="{{ request.get('date_fin_modif') }}">
+                                                <div class="input-group-btn">
+                                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></button>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        {% for saison in saisons %}
+                                                            <li class="dropdown-submenu">
+                                                                <a href="#" class="no-click">{{ saison.nom }}</a>
+                                                                {% if saison.periodesSaison|length %}
+                                                                    <ul class="dropdown-menu">
+                                                                        {% for periode in saison.periodesSaison %}
+                                                                            <li><a class="set-date" href="#" data-key="dates-periode-sidebar_modif" data-datedebut="{{ periode.dateDebut|date("d-m-Y") }}" data-datefin="{{ periode.dateFin|date("d-m-Y") }}">{{ saison.nom }} : {{ periode.nom }}</a></li>
+                                                                        {% endfor %}
+                                                                    </ul>
+                                                                {% endif %}
+                                                            </li>
+                                                            {% if not loop.last %}
+                                                                <li role="separator" class="divider"></li>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div><!-- /btn-group -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %#}
+
+                                <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="checkbox-custom mb5">
+                                                <input {% if  request.get('jours') %}checked{% endif %} id="etat_jours" name="etat_jours" type="checkbox">
+                                                <label for="etat_jours">Jours de validité</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="input-group">
+                                                <span class="input-group-addon prn pln">
+                                                    <input type="checkbox" class="checkbox-jour-semaine" name="jours[]" {% if not request.get('jours') %} disabled {% elseif 1 in request.get('jours') %} checked{% endif %}  value="1"> 1
+                                                </span>
+                                                <span class="input-group-addon prn pln">
+                                                    <input type="checkbox" class="checkbox-jour-semaine" name="jours[]" {% if not request.get('jours') %} disabled {% elseif 2 in request.get('jours') %} checked{% endif %} value="2"> 2
+                                                </span>
+                                                <span class="input-group-addon prn pln">
+                                                    <input type="checkbox" class="checkbox-jour-semaine" name="jours[]" {% if not request.get('jours') %} disabled {% elseif 3 in request.get('jours') %} checked{% endif %} value="3"> 3
+                                                </span>
+                                                <span class="input-group-addon prn pln">
+                                                    <input type="checkbox" class="checkbox-jour-semaine" name="jours[]" {% if not request.get('jours') %} disabled {% elseif 4 in request.get('jours') %} checked{% endif %} value="4"> 4
+                                                </span>
+                                                <span class="input-group-addon prn pln">
+                                                    <input type="checkbox" class="checkbox-jour-semaine" name="jours[]" {% if not request.get('jours') %} disabled {% elseif 5 in request.get('jours') %} checked{% endif %} value="5"> 5
+                                                </span>
+                                                <span class="input-group-addon prn pln">
+                                                    <input type="checkbox" class="checkbox-jour-semaine jour-week" name="jours[]" {% if not request.get('jours') %} disabled {% elseif 6 in request.get('jours') %} checked{% endif %} value="6"> 6
+                                                </span>
+                                                <span class="input-group-addon prn pln">
+                                                    <input type="checkbox" class="checkbox-jour-semaine jour-week" name="jours[]" {% if not request.get('jours') %} disabled {% elseif 7 in request.get('jours') %} checked{% endif %} value="7"> 7
+                                                </span>
+                                                <div class="input-group-btn prn pln">
+                                                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        <li><a class="check-jours" data-role="jour_all" href="#">Tous les jours</a></li>
+                                                        <li><a class="check-jours" data-role="semaine" href="#">Les jours de la semaine</a></li>
+                                                        <li><a class="check-jours" data-role="weekend" href="#">Les Week Ends</a></li>
+                                                        <li class="divider"></li>
+                                                        <li><a class="check-jours" data-role="jour_none" href="#">Aucun jour de la semaine</a></li>
+                                                    </ul>
+                                                </div>
+                                                <input type="text" class="form-control dn">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                {#<div class="form-group">
+                                        <label for="type_vol" class="col-md-4 control-label">Type vol :</label>
+                                        <div class="col-md-8">
+                                            <select  class="select2-single form-control " name="type_vol" id="type_vol" data-placeholder="Sélectionner Type Vol" style="width: 100%;">
+                                                <option value=""></option>
+                                                {% for typevol in type_vol %}
+                                                    <option {% if request.get('type_vol') and request.get('type_vol') ==  typevol.id %} selected {% endif %} value="{{ typevol.id }}">{{ typevol.nom }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="nature_vol" class="col-md-4 control-label">Nature vol :</label>
+                                        <div class="col-md-8">
+                                            <select  class="select2-single form-control " name="nature_vol" id="nature_vol" data-placeholder="Sélectionner Nature Vol" style="width: 100%;">
+                                                <option value=""></option>
+                                                {% for naturevol in nature_vol %}
+                                                    <option {% if request.get('nature_vol') and request.get('nature_vol') ==  naturevol.id %} selected {% endif %} value="{{ naturevol.id }}">{{ naturevol.nom }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>#}
+                            <div class="wrapperDatePicker">
+                                <div class="form-group">
+                                    {#<div class="col-md-5">
+                                        <div class="checkbox-custom">
+                                            <input {% if  request.get('filtre_date_debut') %}checked{% endif %} id="modif_date_deb" name="filtre_date_debut" type="checkbox">
+                                            <label for="modif_date_deb">Date début :</label>
+                                        </div>
+                                    </div>#}
+                                    <label for="date_debut" class="col-md-4 control-label">Date Début :</label>
+                                    <div class=" col-md-8">
+                                        <div class="input-group">
+                                            <input {#% if not request.get('filtre_date_debut') %}disabled{% endif %#} type="text"  id="date_debut" name="date_debut" class="form-control input-inline datepicker" placeholder="Date Début" data-provide="datepicker" data-key="dates-periode-sidebar" data-type="debut" data-date-format="dd-mm-yyyy" value="{{ request.get('date_debut') }}">
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></button>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    {% for saison in saisons %}
+                                                        {% if saison.visibleMenuPopup %}
+                                                            <li class="dropdown-submenu">
+                                                                <a href="#" class="set-date" data-datedebut="{{ saison.periode.dateDebut|date("d-m-Y") }}" data-datefin="{{ saison.periode.dateFin|date("d-m-Y") }}">{{ saison.nom }}</a>
+                                                                {% if saison.periodesSaison|length %}
+                                                                    <ul class="dropdown-menu">
+                                                                        {% for periode in saison.periodesSaison('IATA') %}
+                                                                            {% if periode.isVisible %}
+                                                                                <li><a class="set-date" href="#" data-key="dates-periode-sidebar" data-datedebut="{{ periode.dateDebut|date("d-m-Y") }}" data-datefin="{{ periode.dateFin|date("d-m-Y") }}">{{ saison.nom }} : {{ periode.nom }}</a></li>
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    </ul>
+                                                                {% endif %}
+                                                            </li>
+                                                            {% if not loop.last %}
+                                                                <li role="separator" class="divider"></li>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    {#<div class="col-md-5">
+                                        <div class="checkbox-custom">
+                                            <input {% if  request.get('filtre_date_fin') %}checked{% endif %} id="modif_date_fin" name="filtre_date_fin" type="checkbox">
+                                            <label for="modif_date_fin">Date fin :</label>
+                                        </div>
+                                    </div>#}
+                                    <label for="date_fin" class="col-md-4 control-label">Date fin :</label>
+                                    <div class="col-md-8">
+                                        <div class="input-group">
+                                            <input {#% if not request.get('filtre_date_fin') %}disabled{% endif %#} type="text" id="date_fin" name="date_fin" class="form-control input-inline datepicker" placeholder="Date Fin" data-provide="datepicker" data-key="dates-periode-sidebar" data-type="fin" data-date-format="dd-mm-yyyy" value="{{ request.get('date_fin') }}">
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></button>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    {% for saison in saisons %}
+                                                        <li class="dropdown-submenu">
+                                                            <a href="#" class="no-click" class="set-date" data-datedebut="{{ saison.periode.dateDebut|date("d-m-Y") }}" data-datefin="{{ saison.periode.dateFin|date("d-m-Y") }}">{{ saison.nom }}</a>
+                                                            {% if saison.periodesSaison|length %}
+                                                                <ul class="dropdown-menu">
+                                                                    {% for periode in saison.periodesSaison('IATA') %}
+                                                                        {% if periode.isVisible %}
+                                                                            <li><a class="set-date" href="#" data-key="dates-periode-sidebar"   data-datedebut="{{ periode.dateDebut|date("d-m-Y") }}" data-datefin="{{ periode.dateFin|date("d-m-Y") }}">{{ saison.nom }} : {{ periode.nom }}</a></li>
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            {% endif %}
+                                                        </li>
+                                                        {% if not loop.last %}
+                                                            <li role="separator" class="divider"></li>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        {# Pour être certain de ne pas interférer avec un autre code #}
+                                        {#<button type="button" class="btn-default btn pull-left" id="check-all">Tout cocher</button>#}
+                                        {% if request.attributes.get('_route') == 'vol_timetable' and is_granted('ROLE_ADMIN') %}
+                                            <button type="submit" id="timeTableRafraichir" class="btn-default btn pull-right" name="rafraichir" value="refresh">Rafraîchir</button>
+                                        {% else %}
+                                            <button type="submit" class="btn-default btn pull-right validForm" name="rafraichir" value="refresh">Rafraîchir</button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    {# Spécifique vue editeur vols #}
+    {% if request.attributes.get('_route') == 'vol_liste' and is_granted('ROLE_ADMIN') %}
+
+        <div class="panel">
+            <div class="panel-body">
+                <form class="form-horizontal" action="{{ path("vol_updatemasse") }}" method="post" id="form-ponc">
+                    <input type="hidden" name="ids_vol" class="ids_vol">
+                    <input type="hidden" name="type_vol_val" id="type_vol_val">
+                    <input type="hidden" name="nature_vol_val" id="nature_vol_val">
+                    <input type="hidden" name="jour_val" id="jour_val">
+                    <input type="hidden" name="debut_filtre" id="debut_filtre">
+                    <input type="hidden" name="fin_filtre" id="fin_filtre">
+
+                    <div class="panel-group accordion" id="accordion3">
+                        <div class="panel panel-primary panel-border top">
+                            <div class="panel-heading">
+                                <a class="accordion-toggle accordion-icon link-unstyled collapsed" data-toggle="collapse" data-parent="#accordion3" href="#accord3" aria-expanded="false">
+                                    Modifications :
+                                </a>
+                            </div>
+                            <div id="accord3" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                <div class="panel-body" style="margin: 10px 0; padding: 0;">
+
+                                     {#<div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="radio-custom mb5">
+                                                <input checked id="choix_rouge" value="choix_rouge" name="choix_ponctuel" type="radio">
+                                                <label for="choix_rouge">Restreindre les vols sélectionnés aux filtres rouges</label>
+                                            </div>
+                                        </div>
+                                    </div>#}
+
+                                    <div class="form-group">
+                                        <div class="col-md-4">
+                                            <div class="radio-custom mb5">
+                                                <input id="choix_avion" value="choix_avion" name="choix_ponctuel" type="radio">
+                                                <label for="choix_avion">Avion</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <select class="select2-single form-control" style="width: 100%;" name="avion_ponctuel" id="avion_ponctuel" data-placeholder="Sélectionner Avion">
+                                                <option value=""></option>
+                                                {% for avion in avions %}
+                                                    <option {% if request.get('avion_ponctuel') and request.get('avion_ponctuel') ==  avion.id %} selected {% endif %} value="{{ avion.id }}">{{ avion.nom }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-4">
+                                            <div class="radio-custom mb5">
+                                                <input id="choix_retarder" value="choix_retarder" name="choix_ponctuel" type="radio">
+                                                <label for="choix_retarder">Retarder</label>
+                                            </div>
+                                            <div class="radio-custom mb5">
+                                                <input id="choix_avancer" value="choix_avancer" name="choix_ponctuel" type="radio">
+                                                <label for="choix_avancer">Avancer</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="select-bg form-inline">
+                                                de
+                                                <select style="width: 70px;" class="select2-single form-control" data-placeholder="00" id="heure" name="heure">
+                                                    {% for i in 0..23 %}
+                                                        <option value="{% if  i <= 9 %} 0{{ i }}{%  else %}{{ i }}{% endif %}">{% if  i <= 9 %} 0{{ i }}{%  else %} {{ i }} {% endif %}</option>
+                                                    {% endfor %}
+                                                </select> H :
+                                                <select style="width: 70px;" class="select2-single form-control" data-placeholder="00" id="minute" name="minute">
+                                                    {% for i in 0..59 %}
+                                                        <option value="{% if  i <= 9 %} 0{{ i }}{%  else %}{{ i }}{% endif %}">{% if  i <= 9 %} 0{{ i }}{%  else %} {{ i }} {% endif %}</option>
+                                                    {% endfor %}
+                                                </select> M
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="radio-custom mb5">
+                                                <input id="choix_horaires" value="choix_horaires" name="choix_ponctuel" type="radio">
+                                                <label for="choix_horaires">Fixer les horaires</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="heure_depart" class="col-md-6 control-label">Départ :</label>
+                                        <div class="col-md-3">
+                                            <input type="text" name="heureminute_depart" id="heureminute_depart" value="" class="select-bg form-control">
+                                            {#<select style="width: 100px;" name="heure_depart" data-placeholder="00" class="select2-single form-control">#}
+                                                {#{% for i in 0..23 %}#}
+                                                    {#<option value="{% if  i <= 9 %}0{{ i }}{%  else %}{{i}}{% endif %}">{% if  i <= 9 %} 0{{ i }}{%  else %} {{ i }} {% endif %}</option>#}
+                                                {#{% endfor %}#}
+                                            {#</select> H :#}
+                                            {#<select style="width: 100px;" name="minute_depart" data-placeholder="00" class="select2-single form-control">#}
+                                                {#{% for i in 0..59 %}#}
+                                                    {#<option value="{% if  i <= 9 %}0{{ i }}{%  else %}{{ i }}{% endif %}">{% if  i <= 9 %} 0{{ i }}{%  else %} {{ i }} {% endif %}</option>#}
+                                                {#{% endfor %}#}
+                                            {#</select> M#}
+                                        </div>
+                                        <div class="col-md-offset-3"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="heure_arrivee" class="col-md-6 control-label">Arrivée :</label>
+                                        <div class="col-md-3">
+                                            <input type="text" name="heureminute_arrivee" id="heureminute_arrivee" value="" class="select-bg form-control">
+                                            {#<select style="width: 100px;" name="heureminute_arrivee" data-placeholder="00" class="select2-single form-control">#}
+                                                {#{% for i in 0..23 %}#}
+                                                    {#<option value="{% if  i <= 9 %}0{{ i }}{%  else %}{{ i }}{% endif %}">{% if  i <= 9 %} 0{{ i }}{%  else %} {{ i }} {% endif %}</option>#}
+                                                {#{% endfor %}#}
+                                            {#</select> H :#}
+                                            {#<select style="width: 100px;" name="minute_arrivee" data-placeholder="00" class="select2-single form-control">#}
+                                                {#{% for i in 0..59 %}#}
+                                                    {#<option value="{% if  i <= 9 %}0{{ i }}{%  else %}{{ i }}{% endif %}">{% if  i <= 9 %} 0{{ i }}{%  else %} {{ i }} {% endif %}</option>#}
+                                                {#{% endfor %}#}
+                                            {#</select> M#}
+                                        </div>
+                                        <div class="col-md-offset-3"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="radio-custom mb5">
+                                                <input id="choix_delestage" value="choix_delestage" name="choix_ponctuel" type="radio">
+                                                <label for="choix_delestage">Délestage des vols</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            {#<button type="button" class="btn-default btn pull-left" id="check-all">Tout cocher</button>#}
+                                            <button type="submit" class="btn-default btn pull-right" id="appliquer" name="appliquer" value="appliquer">Appliquer</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-body">
+                <form class="form-horizontal" action="{{ path('vol_messagerie') }}" method="post" id="form-message">
+                    <input type="hidden" name="ids_vol" class="ids_vol">
+                    <input type="hidden" name="filtre_date_debut" value="{{ request.get('filtre_date_debut') }}">
+                    <input type="hidden" name="filtre_date_fin" value="{{ request.get('filtre_date_fin') }}">
+                    <input type="hidden" name="date_debut"  value="{{ request.get('date_debut') }}">
+                    <input type="hidden" name="date_fin" value="{{ request.get('date_fin') }}">
+                    <div class="panel-group accordion" id="accordion4">
+                        <div class="panel panel-primary panel-border top">
+                            <div class="panel-heading">
+                                <a class="accordion-toggle accordion-icon link-unstyled" data-toggle="collapse" data-parent="#accordion4" href="#accord4">
+                                    Génération des Messages :
+                                </a>
+                            </div>
+                            <div id="accord4" class="panel-collapse collapse in" style="height: 0px;">
+                                <div class="panel-body" style="margin: 10px 0; padding: 0;">
+
+                                    <div class="form-group">
+                                        <div class="col-md-4">
+                                            <button type="submit" class="btn btn-default btn-block" id="appliquer_mess" name="appliquer_mess" value="appliquer_mess">
+                                                <i class="glyphicon glyphicon-envelope"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <p class="text-justify">Générer les messages pour les GDS</p>
+                                            <div class="checkbox-custom mb5">
+                                                <input checked id="asm_ssm" name="asm_ssm" type="checkbox">
+                                                <label for="asm_ssm">ASM/SSM</label>
+                                            </div>
+                                            <div class="checkbox-custom mb5">
+                                                <input checked id="scr" name="scr" type="checkbox">
+                                                <label for="scr">SCR</label>
+                                            </div>
+                                            <div class="checkbox-custom mb5">
+                                                <input {% if  request.get('ssim') %}checked{% endif %} id="ssim" name="ssim" type="checkbox">
+                                                <label for="ssim">SSIM</label>
+                                            </div>
+                                            <div class="checkbox-custom mb5">
+                                                <input {% if  request.get('amos') %}checked{% endif %} id="amos" name="amos" type="checkbox">
+                                                <label for="amos">AMOS</label>
+                                            </div>
+                                            <div><input type="hidden" id="arrayIdVolsPourGenererSCRASMSSM" name="arrayIdVolsPourGenererSCRASMSSM" value=""/></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-body">
+                <form class="form-horizontal" action="{{ path("vol_verificateurcoherence") }}" method="post" id="form-coherence-vol">
+                    <input type="hidden" name="ids_vol" class="ids_vol">
+                    <input type="hidden" name="filtre_date_debut" value="{{ request.get('filtre_date_debut') }}">
+                    <input type="hidden" name="filtre_date_fin" value="{{ request.get('filtre_date_fin') }}">
+                    <input type="hidden" name="date_debut"  value="{{ request.get('date_debut') }}">
+                    <input type="hidden" name="date_fin" value="{{ request.get('date_fin') }}">
+                    <div class="panel-group accordion" id="accordion5">
+                        <div class="panel panel-primary panel-border top">
+                            <div class="panel-heading">
+                                <a class="accordion-toggle accordion-icon link-unstyled" data-toggle="collapse" data-parent="#accordion5" href="#accord5">
+                                    Vérification Cohérence des vols :
+                                </a>
+                            </div>
+                            <div id="accord5" class="panel-collapse collapse in" style="height: 0px;">
+                                <div class="panel-body" style="margin: 10px 0; padding: 0;">
+
+                                    <div class="form-group">
+                                        <div class="col-md-4">
+                                            <button type="submit" class="btn btn-default btn-block" id="appliquer_coherence" name="appliquer_coherence" value="appliquer_coherence">
+                                                <i class="glyphicon glyphicon-ok"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <p class="text-justify">Vérifier la cohérence de la définition des vols sur le template courant.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{#<form action="{{ path('template_copie') }}" method="post">#}
+    {#<select name="templateSource" >#}
+        {#<option value="1">Prod</option>#}
+        {#<option value="2">Test</option>#}
+    {#</select>#}
+
+    {#<select name="periodeSource" >#}
+        {#<option value="30">S17 Avant pointe -</option>#}
+        {#<option value="3">Test</option>#}
+    {#</select>#}
+
+    {#<hr>#}
+
+    {#<select name="templateCible" >#}
+        {#<option value="1">Prod</option>#}
+        {#<option value="2">Test</option>#}
+    {#</select>#}
+
+    {#<select name="periodeCible" >#}
+        {#<option value="30">S17 Avant pointe -</option>#}
+        {#<option value="3">Test</option>#}
+    {#</select>#}
+
+    {#<input type="submit">#}
+{#</form>#}

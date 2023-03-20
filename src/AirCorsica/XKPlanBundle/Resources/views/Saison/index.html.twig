@@ -1,0 +1,325 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/assets/admin-tools/admin-forms/less/admin-forms.less'
+    filter='less'
+    %}
+
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+
+    {% endstylesheets %}
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/css/select2.css'
+    output='css/compiled/core.css'
+    %}
+
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+
+    {% endstylesheets %}
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/vendor/plugins/datepicker/css/bootstrap-datetimepicker.css'
+    %}
+
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+
+    {% endstylesheets %}
+
+{% endblock %}
+
+{% block title %}
+    {% set titre = 'Saison et périodes' %}
+    {{ titre }} - {{ parent() }}
+{% endblock %}
+
+{% block body_class %}
+    {% set attributes = 'admin-elements-page' %}
+    {{ attributes }}
+{% endblock %}
+
+{% block titre_contenu %}
+    {% set titre_contenu = 'Saison et périodes' %}
+    {{ titre_contenu }}
+{% endblock %}
+
+{% block btn_actions %}
+    <div class="topbar-right">
+        <div class="ib topbar-dropdown">
+            <a href="#" class="btn btn-success btn-gradient dark btn-block" data-toggle="modal" data-target="#modalSaison" {% if not is_granted('ROLE_ADMIN') %} disabled {% endif %}><i class="glyphicon glyphicon-plus"></i> Ajouter Saison</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <!-- Begin: Content -->
+    <div id="content" class="animated fadeIn">
+        <div class="row">
+            <!-- Begin: Content -->
+            <div class="col-md-8">
+                <div class="panel">
+
+                    <div class="panel-heading">
+                        <span class="panel-icon">
+                            <i class="glyphicon glyphicon-list"></i>
+                        </span>
+                        <span class="panel-title">Saison et périodes</span>
+
+                        {#<div class="panel-controls">#}
+                            {#<div class="pull-right">#}
+                                {#<a id="expandAll" href="#" class="btn btn-default" role="button">Ouvrir Tout</a>#}
+                                {#<a id="collapseAll" href="#" class="btn btn-default" role="button">Fermer Tout</a>#}
+                            {#</div>#}
+                        {#</div>#}
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="panel-group accordion accordion-lg" id="accordion">
+                            {% for saison in saisons %}
+                                <div class="panel">
+                                    <div class="panel-heading">
+                                        <span class="panel-title">
+                                            <a class="accordion-toggle accordion-icon link-unstyled collapsed" data-toggle="collapse" data-parent="#accordion" href="#groupe{{ loop.index }}">
+                                                <strong>{{ saison.nom }} : {{ saison.descriptif }} => {{ saison.periode.getNumberWeekAndDay().w }} semaine(s) et {{ saison.periode.getNumberWeekAndDay().d }} jour(s)</strong>
+                                            </a>
+                                        </span>
+
+                                        <div class="panel-controls">
+                                            <label style="padding-right: 50px;font-weight: normal">
+                                                <input {% if saison.visibleMenuPopup %} checked="checked" {% endif %} type="checkbox" class="saisonVisible" name="visible" data-id="{{ saison.id }}" value="visible"> Saison visible dans menu ?
+                                            </label>
+                                            <div class="btn-group">
+                                                <a {% if not is_granted('ROLE_ADMIN') %} disabled {% endif %} data-idsaison="{{ saison.id }}" data-codesaison="{{ saison.nom }}" href="#" class="btn btn-success add-periode" data-toggle="modal" data-target="#modalPeriodeSaison">
+                                                    <i class="glyphicon glyphicon-plus"></i> Ajouter Période
+                                                </a>
+                                            </div>
+                                            {#<div class="btn-group">#}
+                                                {#<a {% if not is_granted('ROLE_ADMIN') %} disabled {% endif %} href="{{ path("saison_delete", {'id':saison.id}) }}" class="btn btn-danger confirm">#}
+                                                    {#<i class="glyphicon glyphicon-trash"></i>#}
+                                                {#</a>#}
+                                            {#</div>#}
+                                        </div>
+                                    </div>
+                                    {#<div class="modal fade bs-example-modal-lg"  role="dialog" id="myModal-saison-{{ saison.id }}">#}
+                                        {#<div class="modal-dialog modal-lg" role="document">#}
+                                            {#<div class="modal-content">#}
+                                                {#<div class="modal-header">#}
+                                                    {#<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>#}
+                                                    {#<h4 class="modal-title" id="myModal-saison-{{ saison.id }}">Modification de la saison : {{ saison.nom }}</h4>#}
+                                                {#</div>#}
+                                                {#<div class="modal-body">#}
+                                                    {#<span class='text-success'>Mise à jour effectuée avec succés</span>#}
+                                                {#</div>#}
+
+                                            {#</div><!-- /.modal-content -->#}
+                                        {#</div><!-- /.modal-dialog -->#}
+                                    {#</div><!-- /.modal -->#}
+                                    <div id="groupe{{ loop.index }}" class="panel-collapse collapse" style="height: 0px;">
+                                        <div class="panel-body">
+                                            <div class="panel-group accordion accordion-lg" id="adresse1">
+                                                {% for periode in saison.periodesSaison('IATA') %}
+                                                    <div class="panel">
+                                                        <div class="panel-heading">
+                                                            <span class="panel-title">
+
+                                                                <!-- Modal -->
+                                                                <div class="modal fade" id="modal-periode-{{ periode.id }}" tabindex="-1" role="dialog" aria-labelledby="modallabel-periode-{{ periode.id }}">
+                                                                  <div class="modal-dialog" role="document">
+                                                                    <div class="modal-content">
+                                                                      <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                                        <h4 class="modal-title" id="modallabel-periode-{{ periode.id }}">Modification de la période : {{ periode.nom }}</h4>
+                                                                      </div>
+                                                                      <div class="modal-body">
+                                                                        <form method="post" action="{{ path("periodesaison_edit_from_modal",{"id":periode.id}) }}">
+                                                                            <div class="form-group">
+                                                                                <label class=" control-label">Nom</label>
+                                                                                <div >
+                                                                                    <div class="bs-component">
+                                                                                        <input type="text"  id="nom-PeriodeSaison" name="nomPeriodeSaison" required="required"  class="form-control" value="{{ periode.nom }}">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+
+                                                                            <div class="row wrapperDatePicker">
+                                                                                <div class="col-lg-6">
+                                                                                    <div class="form-group">
+                                                                                        <label class="control-label">Date de début</label>
+                                                                                        <div >
+                                                                                            <div class="bs-component ">
+                                                                                                <input type="text"  name="date-debut-periodeSaison" data-type="debut" required="required" class="form-control input-inline datepicker" value="{{ periode.dateDebut|date("d-m-Y") }}">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-lg-6">
+                                                                                    <div class="form-group">
+                                                                                        <label class="control-label">Date de fin</label>
+                                                                                        <div >
+                                                                                            <div class="bs-component">
+                                                                                                <input type="text"  name="date-fin-periodeSaison" data-type="fin" required="required" class="form-control input-inline datepicker" value="{{ periode.dateFin|date("d-m-Y") }}">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <label class="control-label">Descriptif</label>
+                                                                                <div >
+                                                                                    <div class="bs-component">
+                                                                                        <input type="text" name="descriptifPeriodeSaison"  class="form-control"  value="{{ periode.descriptif }}">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            {#<div class="form-group">#}
+                                                                                {#<div class="col-lg-7">#}
+                                                                                    {#<div class="checkbox-custom mb5">#}
+                                                                                        {#<input type="checkbox" id="visible_menu" name="visible_menu" value="1">#}
+                                                                                        {#<label for="visible_menu">Visible dans le menu</label>#}
+                                                                                    {#</div>#}
+                                                                                {#</div>#}
+                                                                            {#</div>#}
+
+                                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                                                            <button type="submit" class="btn-success btn">Valider</button>
+                                                                        </form>
+                                                                      </div>
+
+                                                                    </div>
+                                                                  </div>
+                                                                </div>
+
+                                                                {#<div class="modal fade bs-example-modal-lg"  role="dialog" id="myModal-{{ periode.id }}">#}
+                                                                    {#<div class="modal-dialog modal-lg" role="document">#}
+                                                                        {#<div class="modal-content">#}
+                                                                            {#<div class="modal-header">#}
+                                                                                {#<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>#}
+                                                                                {#<h4 class="modal-title" id="myModal-periode-{{ periode.id }}">Modification de la période : {{ periode.nom }}</h4>#}
+                                                                            {#</div>#}
+                                                                            {#<div class="modal-body">#}
+                                                                                {#<span class='text-success'>Mise à jour effectuée avec succés</span>#}
+                                                                            {#</div>#}
+
+                                                                        {#</div><!-- /.modal-content -->#}
+                                                                    {#</div><!-- /.modal-dialog -->#}
+                                                                {#</div><!-- /.modal -->#}
+
+                                                                {{ periode.nom }} => {{ periode.dateDebut|date("d/m/Y") }} - {{ periode.dateFin|date("d/m/Y") }} {{ periode.descriptif }} : {{ periode.getNumberWeekAndDay().w }} semaine(s) et {{ periode.getNumberWeekAndDay().d }} jour(s)
+
+                                                            </span>
+                                                            <div class="panel-controls">
+                                                                <label style="padding-right: 50px;font-weight: normal">
+                                                                    <input {% if periode.isVisible %} checked="checked" {% endif %} type="checkbox" class="periodeSaisonVisible" name="visible" data-id="{{ periode.id }}" value="visible"> Période saison visible dans menu ?
+                                                                </label>
+                                                                <div class="btn-group">
+                                                                    <a href="#" {% if not is_granted('ROLE_ADMIN') %} disabled {% endif %} class="btn btn-warning" data-toggle="modal" data-target="#modal-periode-{{ periode.id }}">
+                                                                        <i class="glyphicon glyphicon-edit"></i>
+                                                                    </a>
+                                                                </div>
+                                                                {#<div class="btn-group">#}
+                                                                    {#<a {% if not is_granted('ROLE_ADMIN') %} disabled {% endif %} href="{{ path('periodesaison_delete',{'id':periode.id}) }}" class="btn btn-danger confirm">#}
+                                                                        {#<i class="glyphicon glyphicon-trash"></i>#}
+                                                                    {#</a>#}
+                                                                {#</div>#}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <span class="panel-icon">
+                            <i class="glyphicon glyphicon-list"></i>
+                        </span>
+                        <span class="panel-title">Modèles de sous-périodes</span>
+                        <div class="ib topbar-dropdown pull-right" style="margin-top: 5px;">
+                            <a href="#" class="btn btn-success btn-gradient dark btn-block" {% if not is_granted('ROLE_ADMIN') %} disabled {% endif %}  data-toggle="modal" data-target="#modalModelePeriode"><i class="glyphicon glyphicon-plus"></i>Ajouter Modèle</a>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group">
+                            {% for modele in modeles %}
+                                <li class="list-group-item">
+                                    <form role="form"  method="post" action="{{ path("modelesousperiode_edit_from_modal",{'id':modele.id}) }}">
+                                        <div class="form-group">
+                                            <label class="control-label">Nom</label>
+                                            <div >
+                                                <div class="bs-component">
+                                                    <input type="text"  name="nomModeleSousPeriode" required="required"  class="form-control" value="{{ modele.nom }}">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label"  >Champ d'application</label>
+                                            <div>
+                                                <label class="checkbox-inline">
+                                                    <input type="checkbox" name="application-ete"  {% if modele.pourPeriodeEstivalle == 1 %}checked{% endif %} value="ete"> Périodes estivales IATA
+                                                </label>
+                                                <label class="checkbox-inline">
+                                                    <input type="checkbox" name="application-hiver"  value="hiver" {% if modele.pourPeriodeHivernalle == 1 %}checked{% endif %}> Périodes hivernales IATA
+                                                </label>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="btn-group pull-right">
+                                            <button {% if not is_granted('ROLE_ADMIN') %} disabled {% endif %} type="submit" class="btn-warning btn"><i class="glyphicon glyphicon-edit"></i> Modifier</button>
+                                            <a {% if not is_granted('ROLE_ADMIN') %} disabled {% endif %} href="{{ path('modelesousperiode_delete',{'id':modele.id}) }}" class="btn btn-danger confirm">
+                                                <i class="glyphicon glyphicon-trash"></i>
+                                            </a>
+                                        </div>
+                                        <p style="height: 35px;">&nbsp;</p>
+                                    </form>
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include("@AirCorsicaXKPlan/Saison/formModalCreate.html.twig") %}
+    {% include("@AirCorsicaXKPlan/Periodesaison/formModalCreate.html.twig") %}
+    {% include("@AirCorsicaXKPlan/Modelesousperiode/formModalCreate.html.twig") %}
+
+{% endblock %}
+
+{% block jquery_custom %}
+    $(".select2-single").select2({
+    language: "fr",
+    allowClear: true
+    });
+{% endblock %}
+
+{% block javascripts_libs %}
+    <!-- Theme Javascript LIBS -->
+    {% javascripts
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/js/select2.full.js'
+    'bundles/aircorsicaxkplan/vendor/plugins/select2-4.0.3/js/i18n/fr.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block javascripts_custom %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/assets/js/saison.js') }}"></script>
+{% endblock %}

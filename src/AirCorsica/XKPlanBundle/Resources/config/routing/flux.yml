@@ -1,0 +1,24 @@
+flux_index:
+    path:     /
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Flux:index" }
+    methods:  GET
+
+flux_show:
+    path:     /{id}/show
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Flux:show" }
+    methods:  GET
+
+flux_new:
+    path:     /new
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Flux:new" }
+    methods:  [GET, POST]
+
+flux_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Flux:edit" }
+    methods:  [GET, POST]
+
+flux_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AirCorsicaXKPlanBundle:Flux:delete" }
+    methods:  DELETE

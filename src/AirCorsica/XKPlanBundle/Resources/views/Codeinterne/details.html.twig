@@ -1,0 +1,68 @@
+<div class="panel-group accordion accordion-lg" id="accordion">
+    <div class="panel">
+        <div class="panel-heading">
+            <span class="panel-title">
+                <a class="accordion-toggle accordion-icon link-unstyled collapsed" data-toggle="collapse" data-parent="#accordion" href="#codeinterne-{{ codeInterne.id }}">
+                    {{ codeInterne.libelle }}
+                </a>
+            </span>
+            <div class="panel-controls">
+                <div class="btn-group">
+                    <a href="{{ path('codeshareprecharge_new', {'codeinterne_id':codeInterne.id}) }}" class="btn btn-success">
+                        <i class="glyphicon glyphicon-plus"></i> Ajouter Code Share
+                    </a>
+                </div>
+                <div class="btn-group">
+                    <a href="{{ path('codeinterne_edit', {'id' :  codeInterne.id}) }}" class="btn btn-warning">
+                        <i class="glyphicon glyphicon-edit"></i>
+                    </a>
+                </div>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <div class="btn-group">
+                        <a href="{{ path("codeinterne_delete", {'id':codeInterne.id}) }}" class="btn btn-danger confirm">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div id="codeinterne-{{ codeInterne.id }}" class="panel-collapse collapse" style="height: 0px;">
+            <div class="panel-body">
+                <div class="panel-group accordion accordion-lg" id="adresse1">
+                    {% for codesShare in codeInterne.codesShares %}
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <span class="panel-title">
+                                    <a class="accordion-toggle accordion-icon link-unstyled collapsed" data-toggle="collapse" data-parent="#codes_share" href="#codes_share_{{ codesShare.id }}">
+                                        {{ codesShare.libelle }}
+                                    </a>
+                                </span>
+                                <div class="panel-controls">
+                                    <div class="btn-group">
+                                        <a href="{{ path('codeshareprecharge_edit', {'id':codesShare.id}) }}" class="btn btn-warning">
+                                            <i class="glyphicon glyphicon-edit"></i>
+                                        </a>
+                                    </div>
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <div class="btn-group">
+                                            <a href="{{ path('codeshareprecharge_delete', {'id':codesShare.id}) }}" class="btn btn-danger confirm">
+                                                <i class="glyphicon glyphicon-trash"></i>
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div id="codes_share_{{ codesShare.id }}" class="panel-collapse collapse" style="height: 0px;">
+                                <div class="panel-body">
+                                    <ul>
+                                        <li>Libellé : {{ codesShare.libelle }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

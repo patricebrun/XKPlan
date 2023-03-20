@@ -1,0 +1,33 @@
+{% block aircorsica_xkplanbundle_datepicker_widget %}
+    <div class="input-group">
+        <input type="text" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} >
+        {% if saisons != null %}
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        {% for saison in saisons %}
+                            {% if saison.saison.visibleMenuPopup %}
+                                <li class="dropdown-submenu">
+                                    <a href="#"  class="set-date" data-datedebut="{{ saison.saison.periode.dateDebut|date("d-m-Y") }}" data-datefin="{{ saison.saison.periode.dateFin|date("d-m-Y") }}">{{ saison.saison.nom }}</a>
+                                    {% if saison.periodes|length %}
+                                        <ul class="dropdown-menu">
+                                            {% for periode in saison.periodes %}
+                                                {% if periode.isVisible %}
+                                                    <li><a class="set-date" href="#" data-datedebut="{{ periode.dateDebut|date("d-m-Y") }}" data-datefin="{{ periode.dateFin|date("d-m-Y") }}">{{ saison.saison.nom }} : {{ periode.nom }}</a></li>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </li>
+                                {% if not loop.last %}
+                                    <li role="separator" class="divider"></li>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+            </div><!-- /btn-group -->
+        {% endif %}
+    </div>
+    {#{{ dump() }}#}
+{% endblock aircorsica_xkplanbundle_datepicker_widget %}
+

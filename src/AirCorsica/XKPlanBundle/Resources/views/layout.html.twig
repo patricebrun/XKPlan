@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+
+    <title>{% block title %}XKPLAN - Air Corsica{% endblock %}</title>
+
+    <meta name="keywords" content="XKPLAN - Air Corsica" />
+    <meta name="description" content="XKPLAN - Air Corsica">
+    <meta name="author" content="XKPLAN - Air Corsica">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="robots" content="noindex">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ asset('bundles/aircorsicaxkplan/assets/img/favicon.ico') }}">
+    <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('bundles/aircorsicaxkplan/assets/img/apple-icon-57x57.png') }}">
+    <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('bundles/aircorsicaxkplan/assets/img/apple-icon-60x60.png') }}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('bundles/aircorsicaxkplan/assets/img/apple-icon-72x72.png') }}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('bundles/aircorsicaxkplan/assets/img/apple-icon-76x76.png') }}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{{ asset('bundles/aircorsicaxkplan/assets/img/apple-icon-114x114.png') }}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{{ asset('bundles/aircorsicaxkplan/assets/img/apple-icon-120x120.png') }}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{{ asset('bundles/aircorsicaxkplan/assets/img/apple-icon-144x144.png') }}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('bundles/aircorsicaxkplan/assets/img/apple-icon-152x152.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('bundles/aircorsicaxkplan/assets/img/apple-icon-180x180.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('bundles/aircorsicaxkplan/assets/img/android-icon-192x192.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('bundles/aircorsicaxkplan/assets/img/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('bundles/aircorsicaxkplan/assets/img/favicon-96x96.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('bundles/aircorsicaxkplan/assets/img/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ asset('bundles/aircorsicaxkplan/assets/img/manifest.json') }}">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="{{ asset('bundles/aircorsicaxkplan/assets/img/ms-icon-144x144.png') }}">
+    <meta name="theme-color" content="#ffffff">
+
+
+    <!-- Font CSS (Via CDN) -->
+    <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700'>
+
+    {% block stylesheets %}
+    {% endblock %}
+
+    {% stylesheets
+    filter='cssrewrite'
+    'bundles/aircorsicaxkplan/assets/skin/default_skin/less/theme.less'
+    filter='less'
+    output='css/compiled/theme.css'
+    %}
+
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+
+    {% endstylesheets %}
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body class="{% block body_class %}{% endblock %}" {% block body_attributes %}{% endblock %}>
+<div class="modal fade bs-example-modal-lg"  role="dialog" id="myModal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-------------------------------------------------------------+
+  <body> Helper Classes:
+---------------------------------------------------------------+
+  '.sb-l-o' - Sets Left Sidebar to "open"
+  '.sb-l-m' - Sets Left Sidebar to "minified"
+  '.sb-l-c' - Sets Left Sidebar to "closed"
+
+  '.sb-r-o' - Sets Right Sidebar to "open"
+  '.sb-r-c' - Sets Right Sidebar to "closed"
+---------------------------------------------------------------+
+ Example: <body class="example-page sb-l-o sb-r-c">
+ Results: Sidebar left Open, Sidebar right Closed
+--------------------------------------------------------------->
+
+{#% if is_granted("ROLE_ADMIN") %#}
+{% block modal %}
+
+{% endblock %}
+<!-- Start: Main -->
+<div id="main">
+    <!-- Start: Header -->
+    <!-----------------------------------------------------------------+
+       ".navbar" Helper Classes:
+    -------------------------------------------------------------------+
+       * Positioning Classes:
+        '.navbar-static-top' - Static top positioned navbar
+        '.navbar-static-top' - Fixed top positioned navbar
+
+       * Available Skin Classes:
+         .bg-dark    .bg-primary   .bg-success
+         .bg-info    .bg-warning   .bg-danger
+         .bg-alert   .bg-system
+    -------------------------------------------------------------------+
+      Example: <header class="navbar navbar-fixed-top bg-primary">
+      Results: Fixed top navbar with blue background
+    ------------------------------------------------------------------->
+
+    <!-- Start: Header -->
+    <header class="navbar navbar-fixed-top">
+        <div class="navbar-branding">
+            <a class="navbar-brand" href="{{ path('air_corsica_xk_plan_homepage') }}">
+                <img src="{{ asset('bundles/aircorsicaxkplan/assets/img/logos/logo.png') }}" title="Logo Air Corsica" alt="Logo Air Corsica" class="mw170" />
+            </a>
+            <span id="toggle_sidemenu_l" class="fa fa-align-justify"></span>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            {% set template_id = app.request.session.get("template") %}
+            <li><div class="navbar-btn fs14 fw700">Template : {{ render(controller('AirCorsicaXKPlanBundle:Template:displayTemplateName', { 'id': template_id })) }}</div></li>
+
+            <li class="dropdown menu-merge">
+                <a href="#" class="dropdown-toggle fw700 p15" data-toggle="dropdown">
+                    <span class="hidden-xs pl15 pr5">
+                        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                            {{ app.user.username }}
+                        {% else %}
+                            <a href="{{ path('fos_user_security_login') }}">Connexion</a>
+                        {% endif %}
+                    </span>
+                    <span class="fa fa-angle-down hidden-xs"></span>
+                </a>
+                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                    <ul class="dropdown-menu list-group dropdown-persist w250" role="menu">
+                        <li class="list-group-item">
+                            <a href="{{ path('fos_user_profile_edit') }}" class="animated animated-short fadeInUp">
+                                <span class="fa fa-male"></span> Gestion Profil </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{{ path('fos_user_change_password') }}" class="animated animated-short fadeInUp">
+                                <span class="fa fa-key"></span> Modifier Mot de passe </a>
+                        </li>
+                        <li class="dropdown-footer">
+                            <a href="{{ path("fos_user_security_logout") }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Déconnexion </a>
+                        </li>
+                    </ul>
+                {% endif %}
+            </li>
+        </ul>
+    </header>
+    <!-- End: Header -->
+
+    <!-- Start: Sidebar -->
+    <aside id="sidebar_left" class="nano nano-light affix sidebar-light">
+
+        <!-- Start: Sidebar Left Content -->
+        <div class="sidebar-left-content nano-content">
+
+            <!-- Start: Sidebar Menu -->
+            <ul class="nav sidebar-menu">
+                <li>
+                    <a href="{{ path('homepage') }}">
+                        <span class="fa fa-home"></span>
+                        <span class="sidebar-title"> Accueil </span>
+                        <span class="sidebar-title-tray"></span>
+                    </a>
+                </li>
+                <li>
+                    <a class="accordion-toggle menu-open" href="#">
+                        <span class="icon icon-flight fs20"></span>
+                        <span class="sidebar-title">Organisation Vols</span>
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="nav sub-nav">
+                        {#<li>#}
+                        {#<a href="#" class="modal-link">#}
+                        {#<span class="fa fa-"></span> Nouveau vol modal </a>#}
+                        {#</li>#}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li>
+                                <a href="#" class="new_vol_modal" data-route="{{ app.request.attributes.get('_route') }}">
+                                    <span class="fa fa-plus"></span> Nouveau vol </a>
+                            </li>
+                        {% endif %}
+                        <li>
+                            <a href="{{ path('planningvol_show') }}"> <!-- path('air_corsica_xk_plan_planning_vol') -->
+                                <span class="fa fa-calendar"></span> Planning Vols </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('vol_liste') }}?{{ app.session.get('queryString') }}"> <!-- path('vol_editeur') -->
+                                <span class="fa fa-list"></span> Liste Vols </a>
+
+                        </li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li>
+                                <a href="{{ path('vol_historique') }}?{{ app.session.get('queryString') }}"> <!-- path('vol_historique') -->
+                                    <span class="fa fa-historique fw700"></span> Historique Vols </a>
+                            </li>
+                        {% endif %}
+
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li>
+                                <a href="{{ path('vol_timetable') }}?fusionnerPeriode=1&GMT=0&{{ app.session.get('queryString') }}"> <!-- path('vol_timetable') -->
+                                    <span class="fa fa-clock-o"></span> Timetable </a>
+                            </li>
+                        {% endif %}
+
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li>
+                                <a href="{{ path('vol_messagerie') }}">
+                                    <span class="fa fa-envelope-o"></span> Messages SITA </a>
+                            </li>
+                        {% endif %}
+                        <li>
+                            <a href="{{ path('statistiques') }}">
+                                <span class="fa fa-bar-chart-o"></span> Statistiques </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a class="accordion-toggle menu-open" href="#">
+                        <span class="icon icon-aeroplane-3 fs20"></span>
+                        <span class="sidebar-title">Flotte</span>
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="nav sub-nav">
+                        <li>
+                            <a href="{{ path('typeavion_index') }}">
+                                <span class="fa fa-type-avion fw700"></span> Types avions </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('avion_index') }}">
+                                <span class="icon icon-aeroplane"></span> Avions </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('aeroport_index') }}">
+                                <span class="fa fa-building"></span> Aéroports </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a class="accordion-toggle menu-open" href="#">
+                        <span class="icon icon-departures fs20"></span>
+                        <span class="sidebar-title">Vols</span>
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="nav sub-nav">
+                        <li>
+                            <a href="{{ path('ligne_index') }}">
+                                <span class="fa fa-exchange"></span> Lignes </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('typedevol_index') }}">
+                                <span class="fa fa-types-vols fw700"></span> Types vols </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('naturedevol_index') }}">
+                                <span class="fa fa-natures-vols fw700"></span> Nature vols </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a class="accordion-toggle menu-open" href="#">
+                        <span class="fa fa-folder-open"></span>
+                        <span class="sidebar-title">Autres</span>
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="nav sub-nav">
+                        <li>
+                            <a href="{{ path('affretement_index') }}">
+                                <span class="fa fa-affretement fw700"></span> Affrètements </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('compagnie_index') }}">
+                                <span class="fa fa-compagnie fw700"></span> Compagnies </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('groupesita_index') }}">
+                                <span class="fa fa-address-card-o"></span> Contacts SITA </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('codeinterne_index') }}">
+                                <span class="fa fa-codes-shares fw700"></span> Codes Shares </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('pays_index') }}">
+                                <span class="fa fa-globe"></span> Pays </a>
+                        </li>
+                    </ul>
+                </li>
+
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li>
+                        <a href="{{ path('saison_index') }}">
+                            <span class="fa fa-sun-o"></span>
+                            <span class="sidebar-title">Editeur Saison</span>
+                            <span class="sidebar-title-tray"></span>
+                        </a>
+                    </li>
+                {% endif %}
+
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li>
+                        <a href="{{ path('template_index') }}?id={{ template_id }}">
+                            <span class="fa fa-cogs"></span>
+                            <span class="sidebar-title">Préférences</span>
+                            <span class="sidebar-title-tray"></span>
+                        </a>
+                    </li>
+                {% endif %}
+
+            </ul>
+            <!-- End: Sidebar Menu -->
+
+            <!-- Start: Sidebar Collapse Button -->
+            <div class="sidebar-toggle-mini">
+                <a href="#">
+                    <span class="fa fa-sign-out"></span>
+                </a>
+            </div>
+            <!-- End: Sidebar Collapse Button -->
+
+        </div>
+        <!-- End: Sidebar Left Content -->
+
+    </aside>
+    <!-- End: Sidebar Left -->
+
+    <!-- Start: Content-Wrapper -->
+    {% set isHome = app.request.get('_route') == 'air_corsica_xk_plan_homepage' %}
+    <section id="content_wrapper">
+        {% if not isHome %}
+            <!-- Start: Topbar -->
+            <header id="topbar" class="alt">
+                <div class="topbar-left">
+                    <ol class="breadcrumb">
+                        <li class="crumb-icon">
+                            <a href="{{ path('homepage') }}">
+                                <span class="glyphicon glyphicon-home"></span>
+                            </a>
+                        </li>
+                        <li class="crumb-active">
+                            <a href="{{ path('homepage') }}">Accueil</a>
+                        </li>
+                        <li class="crumb-trail">
+                            {% block titre_contenu %}{% endblock %}
+                        </li>
+                    </ol>
+                </div>
+
+                {% block btn_actions %}{% endblock %}
+
+            </header>
+            <!-- End: Topbar -->
+            {#{ apy_breadcrumb_trail_render() }#}
+        {% endif %}
+
+        {# On affiche les messages flash que définissent les contrôleurs du bundle #}
+        {#}% for key, messages in app.session.flashbag.all() %}
+            {% for message in messages %}
+                <div class="alert alert-{{ key }}">
+                    {{ message|trans({}, 'FOSUserBundle') }}
+                </div>
+            {% endfor %}
+        {% endfor %#}
+
+        {% include 'AirCorsicaXKPlanBundle::notifications.html.twig' %}
+
+        {# On définit ce block, dans lequel vont venir s'insérer les autres vues du bundle #}
+        {% block fos_user_content %}
+        {% endblock fos_user_content %}
+
+        {% block body %}
+
+        {% endblock %}
+
+    </section>
+
+</div>
+
+
+
+{#<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="myModal">#}
+    {#<div class="modal-dialog modal-dialog modal-lg" role="document">#}
+        {#<div class="modal-content">#}
+            {#<div class="modal-header">#}
+                {#<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>#}
+                {#<h4 class="modal-title">Modal title</h4>#}
+            {#</div>#}
+            {#<div class="modal-body">#}
+                {#<p>One fine body&hellip;</p>#}
+                {#{{ render(controller('AirCorsicaXKPlanBundle:Vol:new')) }}#}
+            {#</div>#}
+            {#<div class="modal-footer">#}
+                {#<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>#}
+                {#<button type="button" class="btn btn-primary">Save changes</button>#}
+            {#</div>#}
+        {#</div><!-- /.modal-content -->#}
+    {#</div><!-- /.modal-dialog -->#}
+{#</div><!-- /.modal -->#}
+
+{#% else %}
+    {% block login %}
+        {% include 'AirCorsicaXKPlanBundle:Login:login.html.twig' %}
+    {% endblock %}
+{% endif %#}
+
+<!-- BEGIN: PAGE SCRIPTS -->
+
+<!-- jQuery -->
+{% javascripts
+'bundles/aircorsicaxkplan/vendor/jquery/jquery-1.11.1.min.js'
+'bundles/aircorsicaxkplan/vendor/jquery/jquery_ui/jquery-ui.min.js'
+%}
+
+<script type="text/javascript" src="{{ asset_url }}"></script>
+
+{% endjavascripts %}
+
+<!-- Theme Javascript -->
+{% javascripts
+'bundles/aircorsicaxkplan/assets/js/utility/utility.js'
+'bundles/aircorsicaxkplan/assets/js/demo/demo.js'
+'bundles/aircorsicaxkplan/assets/js/main.js'
+'bundles/aircorsicaxkplan/vendor/plugins/hotkeys/jquery.hotkeys.js'
+%}
+
+<script type="text/javascript" src="{{ asset_url }}"></script>
+
+{% endjavascripts %}
+
+{% block javascripts_libs %}
+
+{% endblock %}
+
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+
+        "use strict";
+
+        // Init Theme Core
+        Core.init();
+
+        $(document).on('keydown', null,'alt+ctrl+n', function(){
+            alert('test');
+        });
+
+        /*  Initialisation des datepickers*/
+        init_datepicker(options);
+
+        {% block jquery_custom %}{% endblock %}
+
+    });
+</script>
+<!-- END: PAGE SCRIPTS -->
+
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+
+{% block javascripts_custom %}
+    <script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/assets/js/custom.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/aircorsicaxkplan/assets/js/datepicker.js') }}"></script>
+    <script type="text/javascript" >
+        $.fn.modal.Constructor.prototype.enforceFocus = function() {
+            modal_this = this
+            $(document).on('focusin.modal', function (e) {
+                if (modal_this.$element[0] !== e.target && !modal_this.$element.has(e.target).length
+                    // add whatever conditions you need here:
+                    && !$(e.target.parentNode).hasClass('select2-input') ) {
+                    modal_this.$element.focus()
+                }
+            })
+        };
+    </script>
+{% endblock %}
+
+
+
+
+
+
+
+</body>
+</html>

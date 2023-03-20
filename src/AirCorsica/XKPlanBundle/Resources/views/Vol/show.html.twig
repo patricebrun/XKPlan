@@ -1,0 +1,44 @@
+{% extends 'AirCorsicaXKPlanBundle::layout.html.twig' %}
+
+{% block body %}
+    <h1>Vol</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ vol.id }}</td>
+            </tr>
+            <tr>
+                <th>Numero</th>
+                <td>{{ vol.numero }}</td>
+            </tr>
+            <tr>
+                <th>Commentaire</th>
+                <td>{{ vol.commentaire }}</td>
+            </tr>
+            <tr>
+                <th>Datetimemodification</th>
+                <td>{% if vol.dateTimeModification %}{{ vol.dateTimeModification|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Datetimecreation</th>
+                <td>{% if vol.dateTimeCreation %}{{ vol.dateTimeCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vol_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('vol_edit', { 'id': vol.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

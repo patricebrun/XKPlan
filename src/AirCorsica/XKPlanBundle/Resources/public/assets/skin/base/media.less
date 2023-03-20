@@ -1,0 +1,63 @@
+/*==================================================
+  Media Groups
+==================================================== */
+
+.media {
+  color: @media-body-color;
+  font-weight: @media-font-weight;
+
+  // Proper spacing between instances of .media
+  margin-top: 20px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.media-right,
+.media > .pull-right {
+  padding-left: 10px;
+}
+
+.media-left,
+.media > .pull-left {
+  padding-right: 10px;
+}
+
+.media-left,
+.media-right,
+.media-body {
+  display: table-cell;
+  vertical-align: top;
+  line-height: 1.2;
+  h4{
+    small{
+      font-size: 14px;
+      color: inherit;
+    }
+  }
+}
+
+.media-middle {
+  vertical-align: middle;
+}
+
+.media-bottom {
+  vertical-align: bottom;
+}
+
+// Reset margins on headings for tighter default spacing
+.media-heading {
+  color: @media-heading-color;
+  margin-top: 0;
+  font-size: 17px;
+  margin-bottom: 5px;
+}
+
+// Media list variation
+//
+// Undo default ul/ol styles
+.media-list {
+  padding-left: 0;
+  list-style: none;
+}
